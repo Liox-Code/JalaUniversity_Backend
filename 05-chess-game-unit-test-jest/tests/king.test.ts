@@ -25,3 +25,8 @@ it('Should not move fordward more than 1 space', () => {
   const position = new Position('E', 3)
   expect(king.canMoveTo(position)).toBe(false)
 })
+
+it('Should move one space diagonally', () => {
+  const position = new Position('F', 2)
+  expect(king.canMoveTo(position)).toBe(true)
+})

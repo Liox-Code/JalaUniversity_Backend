@@ -8,9 +8,9 @@ export default abstract class Piece {
     this.position = new Position(file, rank)
   }
 
-  moveTo (position: Position) {
-    this.position = position
-  }
+  // moveTo (position: Position) {
+  //   this.position = position
+  // }
 
   abstract canMoveTo(position: Position):boolean
 }
