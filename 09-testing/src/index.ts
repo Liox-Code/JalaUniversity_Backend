@@ -3,4 +3,4 @@ import { PhotoService } from './services/photo.service'
 import { TYPES } from './type.core'
 
 const PhotoObj = container.get<PhotoService>(TYPES.Photo)
-PhotoObj.create()
+console.log(PhotoObj.read())

@@ -1,6 +1,8 @@
 import { IPhotoRepository } from '../repositories/IPhoto.repository'
 import PhotoEntity from '../entities/photo.entity'
+import { injectable } from 'inversify'
 
+@injectable()
 export class PhotoDataAccess implements IPhotoRepository {
   private photolList : PhotoEntity[] = [new PhotoEntity(1, 'Photo1', 'La primera photo', 'photo01.jpg'),
     new PhotoEntity(2, 'Photo2', 'La primera photo', 'photo02.jpg'),

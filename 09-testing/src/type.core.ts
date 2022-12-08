@@ -1,5 +1,5 @@
 const TYPES = {
   Photo: Symbol.for('Photo'),
-  PhotoController: Symbol.for('PhotoController')
+  PhotoService: Symbol.for('PhotoController')
 }
 export { TYPES }
