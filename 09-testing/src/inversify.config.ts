@@ -1,12 +1,12 @@
 import { Container } from 'inversify'
 import Photo from './entities/photo'
-import { IPhoto } from './interfaces/IPhoto'
-import { PhotoController } from './photo.controller'
+import { IPhotoRepository } from './repositories/IPhoto'
+import { PhotoService } from './services/photo.service'
 import { TYPES } from './type.core'
 
 const container = new Container()
 
-container.bind<IPhoto>(TYPES.Photo).to(Photo)
-container.bind<PhotoController>(TYPES.PhotoController).to(PhotoController)
+container.bind<IPhotoRepository>(TYPES.Photo).to(Photo)
+container.bind<PhotoService>(TYPES.PhotoController).to(PhotoService)
 
 export { container }

@@ -1,4 +1,4 @@
-export interface IPhoto {
+export interface IPhotoRepository {
   id:number
   name:string
   description: string

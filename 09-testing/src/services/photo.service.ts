@@ -1,13 +1,13 @@
-import { IPhoto } from './interfaces/IPhoto'
+import { IPhotoRepository } from '../repositories/IPhoto'
 import { inject, injectable } from 'inversify'
-import { TYPES } from './type.core'
+import { TYPES } from '../type.core'
 import 'reflect-metadata'
 
 @injectable()
-export class PhotoController {
-  private photo: IPhoto
+export class PhotoService {
+  private photo: IPhotoRepository
 
-  constructor (@inject(TYPES.Photo) photo:IPhoto) {
+  constructor (@inject(TYPES.Photo) photo:IPhotoRepository) {
     this.photo = photo
   }
 
