@@ -1,8 +1,12 @@
 import { Container } from 'inversify'
+import { PhotoDataAccess } from './database/photo'
+import { IPhotoRepository } from './repositories/IPhoto.repository'
+import { PhotoService } from './services/photo.service'
 import { TYPES } from './type.core'
-import { PhotoRepositoryImpl } from './repository/photoRepositoryImpl'
 
 const container = new Container()
 
-container.bind<PhotoRepositoryImpl>(TYPES.Photo).to(PhotoRepositoryImpl).inSingletonScope()
-export default container
+container.bind<IPhotoRepository>(TYPES.Photo).to(PhotoDataAccess)
+container.bind<PhotoService>(TYPES.PhotoService).to(PhotoService)
+
+export { container }

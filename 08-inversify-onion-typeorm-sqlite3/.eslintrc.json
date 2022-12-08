@@ -9,10 +9,5 @@
       "ecmaVersion": "latest"
     },
     "plugins": ["@typescript-eslint"],
-    "ignorePatterns": [".eslintrc.json"],
-    "rules": {
-      "quotes": ["error", "single"],
-      "indent": ["error", 4],
-      "no-multi-spaces": ["error"]
-    }
+    "rules": {}
   }

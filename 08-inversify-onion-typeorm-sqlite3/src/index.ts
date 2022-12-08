@@ -1,12 +1,6 @@
-import App from './app';
+import { container } from './inversify.config'
+import { PhotoService } from './services/photo.service'
+import { TYPES } from './type.core'
 
-(async () => {
-    try {
-        const app = new App()
-        app.initConfig()
-        app.build()
-        app.listen()
-    } catch (err) {
-        console.log(err)
-    }
-})()
+const PhotoObj = container.get<PhotoService>(TYPES.Photo)
+console.log(PhotoObj.read())
