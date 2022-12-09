@@ -1,6 +1,6 @@
 import { Container } from 'inversify'
-import { PhotoDataAccess } from './database/photo'
-import { IPhotoRepository } from './repositories/IPhoto.repository'
+import { PhotoDataAccess } from './database/photoDataAccess'
+import { IPhotoRepository } from './repositories/IPhotoRepository'
 import { PhotoService } from './services/photo.service'
 import { TYPES } from './type.core'
 

@@ -1,7 +1,7 @@
-import { IPhotoRepository } from '../repositories/IPhoto.repository'
+import { IPhotoRepository } from '../repositories/IPhotoRepository'
 import { inject, injectable } from 'inversify'
 import { TYPES } from '../type.core'
-import PhotoEntity from '../entities/photo.entity'
+import { IPhotoEntity } from '../repositories/IPhotoEntity'
 import 'reflect-metadata'
 
 @injectable()
@@ -12,19 +12,19 @@ export class PhotoService {
     this.photo = photo
   }
 
-  read (): PhotoEntity[] {
-    return this.photo.read()
+  read (id: number): Promise<IPhotoEntity> {
+    return this.photo.read(id)
   }
 
-  create (photo: PhotoEntity): number {
+  create (photo: IPhotoEntity): Promise<IPhotoEntity> {
     return this.photo.create(photo)
   }
 
-  update (id: number, photo: PhotoEntity): PhotoEntity {
+  update (id: number, photo: IPhotoEntity): Promise<IPhotoEntity> {
     return this.photo.update(id, photo)
   }
 
-  delete (id: number): PhotoEntity {
+  delete (id: number): void {
     return this.photo.delete(id)
   }
 }

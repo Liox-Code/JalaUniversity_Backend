@@ -1,8 +1,9 @@
+import { IPhotoEntity } from '../repositories/IPhotoEntity'
 import { Column, PrimaryColumn, Entity } from 'typeorm'
 import 'reflect-metadata'
 
 @Entity()
-export default class PhotoEntity {
+export class PhotoDataEntity implements IPhotoEntity {
   @PrimaryColumn()
     id!: number
 
@@ -14,11 +15,4 @@ export default class PhotoEntity {
 
   @Column()
     fileName!: string
-
-  constructor (id:number, name:string, description:string, fileName:string) {
-    this.id = id
-    this.name = name
-    this.description = description
-    this.fileName = fileName
-  }
 }
