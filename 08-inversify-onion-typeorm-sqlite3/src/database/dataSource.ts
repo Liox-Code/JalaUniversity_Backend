@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm'
-import { PhotoDataEntity } from './photoDataEntity'
+import PhotoDataEntity from './photoDataEntity'
 
 export const AppDataSource = new DataSource({
   type: 'sqlite',

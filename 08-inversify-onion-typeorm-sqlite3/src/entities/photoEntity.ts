@@ -1,5 +1,4 @@
 import { IPhotoEntity } from '../repositories/IPhotoEntity'
-import 'reflect-metadata'
 
 export class PhotoEntity implements IPhotoEntity {
   id!: number

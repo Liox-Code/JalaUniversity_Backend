@@ -1,29 +1,45 @@
+// import { Repository } from 'typeorm'
 import { IPhotoRepository } from '../repositories/IPhotoRepository'
-import { PhotoDataEntity } from './photoDataEntity'
 import { IPhotoEntity } from '../repositories/IPhotoEntity'
+import PhotoDataEntity from './photoDataEntity'
 import { AppDataSource } from './dataSource'
 import { injectable } from 'inversify'
+import 'reflect-metadata'
 
 @injectable()
 export class PhotoDataAccess implements IPhotoRepository {
-  async read (id: number): Promise<IPhotoEntity> {
-    const repository = AppDataSource.getRepository(PhotoDataEntity)
-    return await repository.findOneBy({ id })
+  // private readonly repository: Repository<PhotoDataEntity>
+
+  // constructor () {
+  //   this.repository = AppDataSource.getRepository(PhotoDataEntity)
+  // }
+
+  async initilizeDb (): Promise<void> {
+    await AppDataSource.initialize()
   }
 
-  async create (photo: IPhotoEntity): Promise<IPhotoEntity> {
-    const repository = AppDataSource.getRepository(PhotoDataEntity)
-    return await repository.save(photo)
+  async read (id: number): Promise<void> {
+    const repository = await AppDataSource.getRepository(PhotoDataEntity)
+    const data = await repository.findOneBy({ id })
+    console.log(data)
+    console.log('READ')
   }
 
-  async update (id: number, photo: IPhotoEntity): Promise<IPhotoEntity> {
+  async create (photo: IPhotoEntity): Promise<void> {
+    const repository = await AppDataSource.getRepository(PhotoDataEntity)
+    await repository.save(photo)
+    console.log('CREATE')
+  }
+
+  async update (id: number, photo: IPhotoEntity): Promise<void> {
     const repository = AppDataSource.getRepository(PhotoDataEntity)
-    return await repository.save(photo)
+    repository.save(photo)
+    console.log('UPDATE')
   }
 
   async delete (id: number): Promise<void> {
     const repository = AppDataSource.getRepository(PhotoDataEntity)
-    console.log(repository)
-    // return await repository.delete({ id })
+    await repository.delete({ id })
+    console.log('DELETE')
   }
 }

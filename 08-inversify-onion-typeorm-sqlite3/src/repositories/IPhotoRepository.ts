@@ -1,8 +1,9 @@
 import { IPhotoEntity } from './IPhotoEntity'
 
 export interface IPhotoRepository {
-  create: (photo: IPhotoEntity)=> Promise<IPhotoEntity>
-  read: (id: number)=> Promise<IPhotoEntity>
-  update: (id: number, photo: IPhotoEntity)=> Promise<IPhotoEntity>
-  delete: (id: number)=> void
+  initilizeDb: ()=> Promise<void>
+  create: (photo: IPhotoEntity)=> Promise<void>
+  read: (id: number)=> Promise<void>
+  update: (id: number, photo: IPhotoEntity)=> Promise<void>
+  delete: (id: number)=> Promise<void>
 }

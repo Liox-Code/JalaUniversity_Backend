@@ -1,9 +1,8 @@
-import { IPhotoEntity } from '../repositories/IPhotoEntity'
 import { Column, PrimaryColumn, Entity } from 'typeorm'
-import 'reflect-metadata'
+import { IPhotoEntity } from '../repositories/IPhotoEntity'
 
 @Entity()
-export class PhotoDataEntity implements IPhotoEntity {
+export default class PhotoDataEntity implements IPhotoEntity {
   @PrimaryColumn()
     id!: number
 
