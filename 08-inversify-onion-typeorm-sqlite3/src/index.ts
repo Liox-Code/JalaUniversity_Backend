@@ -9,36 +9,36 @@ class Test {
     const PhotoObj = await container.get<PhotoService>(TYPES.Photo)
     await PhotoObj.initilizeDb()
     const photo2:IPhotoEntity = {
-      id: 2,
-      name: 'Photo 2',
-      description: 'Second Photo',
-      fileName: 'Photo2.jpg'
+      photoId: 2,
+      photoName: 'Photo 2',
+      photoDescription: 'Second Photo',
+      photoFileName: 'Photo2.jpg'
     }
-    await PhotoObj.create(photo2)
+    console.log(await PhotoObj.create(photo2))
     const photo3:IPhotoEntity = {
-      id: 3,
-      name: 'Photo 3',
-      description: 'Third Photo',
-      fileName: 'Photo3.jpg'
+      photoId: 3,
+      photoName: 'Photo 3',
+      photoDescription: 'Third Photo',
+      photoFileName: 'Photo3.jpg'
     }
-    await PhotoObj.create(photo3)
-    // const photo4:IPhotoEntity = {
-    //   id: 4,
-    //   name: 'Photo 4',
-    //   description: 'Fourth Photo',
-    //   fileName: 'Photo4.jpg'
-    // }
-    // await PhotoObj.create(photo4)
+    console.log(await PhotoObj.create(photo3))
+    const photo4:IPhotoEntity = {
+      photoId: 4,
+      photoName: 'Photo 4',
+      photoDescription: 'Fourth Photo',
+      photoFileName: 'Photo4.jpg'
+    }
+    console.log(await PhotoObj.create(photo4))
 
-    await PhotoObj.read(2)
+    console.log(await PhotoObj.read(2))
 
-    photo3.description = 'UPDATED'
-    await PhotoObj.update(3, photo3)
+    photo3.photoDescription = 'UPDATED'
+    console.log(await PhotoObj.update(3, photo3))
 
-    // PhotoObj.delete(1)
-    // PhotoObj.delete(2)
-    // PhotoObj.delete(3)
-    PhotoObj.delete(4)
+    // await PhotoObj.delete(1)
+    // await PhotoObj.delete(2)
+    // await PhotoObj.delete(3)
+    await PhotoObj.delete(4)
   }
 }
 

@@ -15,16 +15,16 @@ export class PhotoService {
     await this.photo.initilizeDb()
   }
 
-  async read (id: number): Promise<void> {
-    await this.photo.read(id)
+  async read (id: number): Promise<IPhotoEntity> {
+    return await this.photo.read(id)
   }
 
-  async create (photo: IPhotoEntity): Promise<void> {
-    await this.photo.create(photo)
+  async create (photo: IPhotoEntity): Promise<IPhotoEntity> {
+    return await this.photo.create(photo)
   }
 
-  async update (id: number, photo: IPhotoEntity): Promise<void> {
-    await this.photo.update(id, photo)
+  async update (id: number, photo: IPhotoEntity): Promise<IPhotoEntity> {
+    return await this.photo.update(id, photo)
   }
 
   async delete (id: number): Promise<void> {

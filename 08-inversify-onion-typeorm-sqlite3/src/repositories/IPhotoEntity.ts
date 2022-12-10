@@ -1,7 +1,7 @@
 
 export interface IPhotoEntity {
-  id: number
-  name: string
-  description: string
-  fileName: string
+  photoId: number
+  photoName: string
+  photoDescription: string
+  photoFileName: string
 }

@@ -1,15 +1,15 @@
 import { IPhotoEntity } from '../repositories/IPhotoEntity'
 
 export class PhotoEntity implements IPhotoEntity {
-  id!: number
-  name!: string
-  description!: string
-  fileName!: string
+  photoId: number
+  photoName: string
+  photoDescription: string
+  photoFileName: string
 
-  constructor (id:number, name:string, description:string, fileName:string) {
-    this.id = id
-    this.name = name
-    this.description = description
-    this.fileName = fileName
+  constructor (photoId:number, photoName:string, photoDescription:string, photoFileName:string) {
+    this.photoId = photoId
+    this.photoName = photoName
+    this.photoDescription = photoDescription
+    this.photoFileName = photoFileName
   }
 }
