@@ -23,8 +23,8 @@ export class PhotoService {
     return await this.photo.create(photo)
   }
 
-  async update (id: number, photo: IPhotoEntity): Promise<IPhotoEntity> {
-    return await this.photo.update(id, photo)
+  async update (photo: IPhotoEntity): Promise<IPhotoEntity> {
+    return await this.photo.update(photo)
   }
 
   async delete (id: number): Promise<void> {

@@ -12,4 +12,15 @@ export class PhotoMapper {
 
     return photoEntity
   }
+
+  static toDataEntity (photo: IPhotoEntity): PhotoDataEntity {
+    const photoEntity: PhotoDataEntity = {
+      id: photo.photoId,
+      name: photo.photoName,
+      description: photo.photoDescription,
+      fileName: photo.photoFileName
+    }
+
+    return photoEntity
+  }
 }

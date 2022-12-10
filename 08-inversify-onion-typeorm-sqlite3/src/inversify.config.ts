@@ -2,7 +2,7 @@ import { Container } from 'inversify'
 import { TYPES } from './type.core'
 import { IPhotoRepository } from './repositories/IPhotoRepository'
 import { PhotoDataAccess } from './database/photoDataAccess'
-import { PhotoService } from './services/photo.service'
+import { PhotoService } from './services/photoService'
 
 const container = new Container()
 

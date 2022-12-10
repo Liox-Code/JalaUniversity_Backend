@@ -21,25 +21,21 @@ export class PhotoDataAccess implements IPhotoRepository {
   }
 
   async read (id: number): Promise<IPhotoEntity> {
-    await AppDataSource.getRepository(PhotoDataEntity)
     const data = await this.repository.findOneBy({ id })
     return PhotoMapper.toEntity(data)
   }
 
   async create (photo: IPhotoEntity): Promise<IPhotoEntity> {
-    await AppDataSource.getRepository(PhotoDataEntity)
-    const data = await this.repository.save(photo)
+    const data = await this.repository.save(PhotoMapper.toDataEntity(photo))
     return PhotoMapper.toEntity(data)
   }
 
-  async update (id: number, photo: IPhotoEntity): Promise<IPhotoEntity> {
-    AppDataSource.getRepository(PhotoDataEntity)
-    const data = await this.repository.save(photo)
+  async update (photo: IPhotoEntity): Promise<IPhotoEntity> {
+    const data = await this.repository.save(PhotoMapper.toDataEntity(photo))
     return PhotoMapper.toEntity(data)
   }
 
   async delete (id: number): Promise<void> {
-    AppDataSource.getRepository(PhotoDataEntity)
     await this.repository.delete({ id })
     console.log('DELETED')
   }
