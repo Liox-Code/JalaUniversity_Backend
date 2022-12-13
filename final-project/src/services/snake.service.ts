@@ -2,6 +2,7 @@ import { inject, injectable } from 'inversify'
 import { IPosition } from '../interfaces/IPosition'
 import { ISnakeRepository } from '../repositories/ISnake.repository'
 import { TYPES } from '../type.core'
+import { EDirection } from '../enums/EDirection'
 
 @injectable()
 export class SnakeService {
@@ -10,8 +11,12 @@ export class SnakeService {
     this.snake = snake
   }
 
-  async nextPosition (newPosition: IPosition) {
-    return await this.snake.nextPosition(newPosition)
+  async directionPosition (direction: EDirection, currentPosition: IPosition) {
+    return await this.snake.directionPosition(direction, currentPosition)
+  }
+
+  async updatePosition (newPosition: IPosition) {
+    return await this.snake.updatePosition(newPosition)
   }
 
   grow () {
