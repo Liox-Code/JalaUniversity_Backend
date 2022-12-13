@@ -4,6 +4,7 @@ import * as express from 'express'
 import { InversifyExpressServer } from 'inversify-express-utils'
 import { container } from './inversify.config'
 import './application/controller/snake.controller'
+import './application/controller/board.controller'
 
 class App {
   public port?: number

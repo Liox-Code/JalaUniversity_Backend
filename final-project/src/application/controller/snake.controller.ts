@@ -6,14 +6,14 @@ import { inject } from 'inversify'
 @controller('/')
 class IndexHandler extends BaseHttpController {
   constructor (
-    @inject(TYPES.SnakeService) private userService: SnakeService
+    @inject(TYPES.SnakeService) private snakeService: SnakeService
   ) {
     super()
   }
 
-    @httpGet('/')
+  @httpGet('/')
   public index (req: Request, res: Response, next: NextFunction) {
-    res.status(200).json({ msg: this.userService.grow() })
+    res.status(200).json({ msg: this.snakeService.grow() })
   }
 }
 
