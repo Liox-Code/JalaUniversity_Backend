@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express'
-import { controller, httpGet, BaseHttpController } from 'inversify-express-utils'
+import { controller, httpGet, BaseHttpController, requestParam, queryParam } from 'inversify-express-utils'
 import { TYPES } from '../../type.core'
 import { SnakeService } from '../../services/snake.service'
 import { inject } from 'inversify'
-@controller('/')
+@controller('/snake')
 class IndexHandler extends BaseHttpController {
   constructor (
     @inject(TYPES.SnakeService) private snakeService: SnakeService
@@ -11,9 +11,12 @@ class IndexHandler extends BaseHttpController {
     super()
   }
 
-  @httpGet('/')
-  public index (req: Request, res: Response, next: NextFunction) {
-    res.status(200).json({ msg: this.snakeService.grow() })
+  @httpGet('/move')
+  public async index (@queryParam('direction') direction: string, req: Request, res: Response, next: NextFunction) {
+    const snakeNewPosition = await this.snakeService.nextPosition({ x: 5, y: 2 })
+    console.log(this.snakeService)
+    console.log(snakeNewPosition)
+    res.status(200).json({ msg: direction })
   }
 }
 

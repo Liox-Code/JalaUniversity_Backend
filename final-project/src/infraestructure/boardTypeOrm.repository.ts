@@ -19,10 +19,9 @@ export class BoardTypeOrmRepository implements IBoardRepository {
     return await this.repository
   }
 
-  async resize (board: BoardEntity): Promise<BoardEntity> {
-    this.repository.boardId = board.boardId
-    this.repository.boardHeight = board.boardHeight
-    this.repository.boardWidth = board.boardWidth
+  async resize (size: number): Promise<BoardEntity> {
+    this.repository.boardHeight = size
+    this.repository.boardWidth = size
     return await this.repository
   }
 }

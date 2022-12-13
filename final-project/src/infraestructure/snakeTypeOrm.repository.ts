@@ -16,8 +16,9 @@ export class SnakeTypeOrmRepository implements ISnakeRepository {
     }
   }
 
-  nextPosition (newPosition: IPosition) {
-    console.log('nextPosition')
+  async nextPosition (newPosition: IPosition) {
+    this.repository.snakeHeadPosition = newPosition
+    return await this.repository
   }
 
   grow () {
