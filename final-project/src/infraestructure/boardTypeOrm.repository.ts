@@ -8,11 +8,14 @@ export class BoardTypeOrmRepository implements IBoardRepository {
   private readonly repository: BoardEntity
 
   constructor () {
-    this.repository = {
-      boardId: 1,
-      boardWidth: 12,
-      boardHeight: 12
-    }
+    this.repository = new BoardEntity(12, 14, 14)
+  }
+
+  async create (board: BoardEntity): Promise<BoardEntity> {
+    this.repository.boardId = board.boardId
+    this.repository.boardHeight = board.boardHeight
+    this.repository.boardWidth = board.boardWidth
+    return await this.repository
   }
 
   async read (): Promise<BoardEntity> {

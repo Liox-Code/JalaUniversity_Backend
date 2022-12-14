@@ -3,12 +3,17 @@ import { IPosition } from '../interfaces/IPosition'
 import { ISnakeRepository } from '../repositories/ISnake.repository'
 import { TYPES } from '../type.core'
 import { EDirection } from '../enums/EDirection'
+import { SnakeEntity } from '../entities/snake.entity'
 
 @injectable()
 export class SnakeService {
-  private snake: ISnakeRepository
+  private readonly snake: ISnakeRepository
   constructor (@inject(TYPES.SnakeTypeOrm) snake: ISnakeRepository) {
     this.snake = snake
+  }
+
+  async createSnake (snake: SnakeEntity) {
+    return await snake
   }
 
   async directionPosition (direction: EDirection, currentPosition: IPosition) {

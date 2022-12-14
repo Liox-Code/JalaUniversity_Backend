@@ -10,11 +10,16 @@ export class SnakeTypeOrmRepository implements ISnakeRepository {
   private readonly repository: SnakeEntity
 
   constructor () {
-    this.repository = {
+    const repoObj = {
       snakeId: 12,
-      snakeHeadPosition: { x: 1, y: 2 },
+      snakeHeadPosition: { x: 2, y: 2 },
       snakeSize: 12
     }
+    this.repository = new SnakeEntity(repoObj.snakeId, repoObj.snakeHeadPosition, repoObj.snakeSize)
+  }
+
+  async createSnake (snake: SnakeEntity) {
+    return snake
   }
 
   async directionPosition (direction: EDirection, currentPosition: IPosition) {

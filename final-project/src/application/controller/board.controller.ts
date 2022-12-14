@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import { controller, httpGet, BaseHttpController, requestParam } from 'inversify-express-utils'
+import { controller, httpGet, BaseHttpController, requestParam, queryParam } from 'inversify-express-utils'
 import { TYPES } from '../../type.core'
 import { BoardService } from '../../services/board.service'
 import { inject } from 'inversify'
@@ -9,6 +9,12 @@ class BoardHandler extends BaseHttpController {
     @inject(TYPES.BoardService) private boardService: BoardService
   ) {
     super()
+  }
+
+  @httpGet('/create')
+  public async create (@queryParam('size') size: number, req: Request, res: Response, next: NextFunction) {
+    const boardCreated = await this.boardService.create({ boardId: 1, boardHeight: size, boardWidth: size })
+    res.status(200).json({ msg: boardCreated })
   }
 
   @httpGet('/read')

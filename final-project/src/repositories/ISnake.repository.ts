@@ -3,6 +3,7 @@ import { EDirection } from '../enums/EDirection'
 import { IPosition } from '../interfaces/IPosition'
 
 export interface ISnakeRepository {
+  createSnake: (snake: SnakeEntity) => Promise<SnakeEntity>
   directionPosition: (direction: EDirection, currentPosition: IPosition) => Promise<IPosition>
   updatePosition: (newPosition: IPosition) => Promise<SnakeEntity>
   grow: () => void
