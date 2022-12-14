@@ -10,15 +10,19 @@ export class BoardService {
     this.board = board
   }
 
-  async create (board: BoardEntity) {
-    return await this.board.create(board)
+  async initialDB () {
+    return await this.board.initialDB()
   }
 
-  async read () {
-    return await this.board.read()
+  async createBoard (board: BoardEntity): Promise<BoardEntity> {
+    return await this.board.createBoard(board)
   }
 
-  async resize (size: number) {
-    return await this.board.resize(size)
+  async readBoard (id: number): Promise<BoardEntity> {
+    return await this.board.readBoard(id)
+  }
+
+  async updateBoard (board: BoardEntity): Promise<BoardEntity> {
+    return await this.board.updateBoard(board)
   }
 }

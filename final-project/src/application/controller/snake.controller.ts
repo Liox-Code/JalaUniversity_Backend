@@ -4,7 +4,6 @@ import { TYPES } from '../../type.core'
 import { SnakeService } from '../../services/snake.service'
 import { inject } from 'inversify'
 import { EDirection } from '../../enums/EDirection'
-import { IPosition } from '../../interfaces/IPosition'
 import { SnakeEntity } from '../../entities/snake.entity'
 @controller('/snake')
 class IndexHandler extends BaseHttpController {
@@ -16,15 +15,16 @@ class IndexHandler extends BaseHttpController {
 
   @httpGet('/create')
   public async create (req: Request, res: Response, next: NextFunction) {
-    const snake: SnakeEntity = new SnakeEntity(12, { x: 2, y: 2 }, 12)
+    await this.snakeService.initilizeDb()
+    const snake: SnakeEntity = await this.snakeService.createSnake(new SnakeEntity(12, { x: 2, y: 2 }, 12))
     res.status(200).json({ msg: snake })
   }
 
   @httpGet('/move')
   public async index (@queryParam('direction') direction: EDirection, req: Request, res: Response, next: NextFunction) {
-    let position: IPosition = { x: 2, y: 2 }
-    position = await this.snakeService.directionPosition(direction, position)
-    const snakeNewPosition = await this.snakeService.updatePosition(position)
+    let snake: SnakeEntity = await this.snakeService.readSnake(12)
+    snake = await this.snakeService.moveSnake(direction, snake)
+    const snakeNewPosition = await this.snakeService.updateSnake(snake)
     res.status(200).json({ msg: snakeNewPosition })
   }
 }

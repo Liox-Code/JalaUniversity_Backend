@@ -1,30 +1,36 @@
 import { injectable } from 'inversify'
+import BoardDataEntity from '../database/boardDataEntity'
 import { BoardEntity } from '../entities/board.entity'
 import { IBoardRepository } from '../repositories/IBoard.repository'
+import { Repository } from 'typeorm'
 import 'reflect-metadata'
+import { AppDataSource } from '../database/dataSource'
+import { BoardMapper } from '../database/boardMapper'
 
 @injectable()
 export class BoardTypeOrmRepository implements IBoardRepository {
-  private readonly repository: BoardEntity
+  private readonly repository: Repository<BoardDataEntity>
 
   constructor () {
-    this.repository = new BoardEntity(12, 14, 14)
+    this.repository = AppDataSource.getRepository(BoardDataEntity)
   }
 
-  async create (board: BoardEntity): Promise<BoardEntity> {
-    this.repository.boardId = board.boardId
-    this.repository.boardHeight = board.boardHeight
-    this.repository.boardWidth = board.boardWidth
-    return await this.repository
+  async initialDB () {
+    await AppDataSource.initialize()
   }
 
-  async read (): Promise<BoardEntity> {
-    return await this.repository
+  async createBoard (board: BoardEntity): Promise<BoardEntity> {
+    const data = await this.repository.save(BoardMapper.toDataEntity(board))
+    return BoardMapper.toEntity(data)
   }
 
-  async resize (size: number): Promise<BoardEntity> {
-    this.repository.boardHeight = size
-    this.repository.boardWidth = size
-    return await this.repository
+  async readBoard (id: number): Promise<BoardEntity> {
+    const data = await this.repository.findOneBy({ boardId: id })
+    return BoardMapper.toEntity(data)
+  }
+
+  async updateBoard (board: BoardEntity): Promise<BoardEntity> {
+    const data = await this.repository.save(BoardMapper.toDataEntity(board))
+    return BoardMapper.toEntity(data)
   }
 }

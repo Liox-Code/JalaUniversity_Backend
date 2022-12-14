@@ -1,5 +1,4 @@
 import { inject, injectable } from 'inversify'
-import { IPosition } from '../interfaces/IPosition'
 import { ISnakeRepository } from '../repositories/ISnake.repository'
 import { TYPES } from '../type.core'
 import { EDirection } from '../enums/EDirection'
@@ -12,16 +11,24 @@ export class SnakeService {
     this.snake = snake
   }
 
+  async initilizeDb (): Promise<void> {
+    await this.snake.initialDB()
+  }
+
   async createSnake (snake: SnakeEntity) {
-    return await snake
+    return await this.snake.createSnake(snake)
   }
 
-  async directionPosition (direction: EDirection, currentPosition: IPosition) {
-    return await this.snake.directionPosition(direction, currentPosition)
+  async readSnake (id: number) {
+    return await this.snake.readSnake(id)
   }
 
-  async updatePosition (newPosition: IPosition) {
-    return await this.snake.updatePosition(newPosition)
+  async moveSnake (direction: EDirection, snake: SnakeEntity) {
+    return await this.snake.moveSnake(direction, snake)
+  }
+
+  async updateSnake (snake: SnakeEntity) {
+    return await this.snake.updateSnake(snake)
   }
 
   grow () {

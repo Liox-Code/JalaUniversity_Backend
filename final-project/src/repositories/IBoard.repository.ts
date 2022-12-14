@@ -1,7 +1,8 @@
 import { BoardEntity } from '../entities/board.entity'
 
 export interface IBoardRepository {
-  create(board:BoardEntity): Promise<BoardEntity>
-  read(): Promise<BoardEntity>
-  resize(size: number): Promise<BoardEntity>
+  initialDB:() => void
+  createBoard(board: BoardEntity): Promise<BoardEntity>
+  readBoard(id: number): Promise<BoardEntity>
+  updateBoard(board: BoardEntity): Promise<BoardEntity>
 }
