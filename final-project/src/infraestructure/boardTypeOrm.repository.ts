@@ -35,17 +35,19 @@ export class BoardTypeOrmRepository implements IBoardRepository {
     return BoardMapper.toEntity(data)
   }
 
-  async randomPosition (limits: number): Promise<IPosition> {
-    const random = (limits: number) => {
-      let seed = Date.now()
-      const A = 11
-      const C = 12
+  randomPosition (limits: number): IPosition {
+    const random = (seed:number, multiplier:number, incrementer:number, limits: number) => {
+      const A = multiplier
+      const C = incrementer
       const M = limits
 
       seed = (seed * A + C) % M
       return seed
     }
 
-    return { x: await random(limits), y: await random(limits) }
+    const posX = random(Date.now(), 8, 7, limits)
+    const posY = random(Date.now(), 11, 12, limits)
+
+    return { x: posX, y: posY }
   }
 }

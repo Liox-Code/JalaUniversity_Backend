@@ -3,6 +3,7 @@ import { controller, httpGet, BaseHttpController, queryParam } from 'inversify-e
 import { TYPES } from '../../type.core'
 import { BoardService } from '../../services/board.service'
 import { inject } from 'inversify'
+import { AppDataSource } from '../../database/dataSource'
 @controller('/board')
 class BoardHandler extends BaseHttpController {
   constructor (
@@ -13,23 +14,27 @@ class BoardHandler extends BaseHttpController {
 
   @httpGet('/create')
   public async create (@queryParam('size') size: number, req: Request, res: Response, next: NextFunction) {
-    await this.boardService.initialDB()
-    const boardCreated = await this.boardService.createBoard({ boardId: 1, boardHeight: size, boardWidth: size })
+    await AppDataSource.initialize()
+    const boardCreated = await this.boardService.createBoard({ boardId: 1, boardSize: size })
+    await AppDataSource.destroy()
     res.status(200).json({ msg: boardCreated })
   }
 
   @httpGet('/read')
   public async read (req: Request, res: Response, next: NextFunction) {
+    await AppDataSource.initialize()
     const boardData = await this.boardService.readBoard(1)
+    await AppDataSource.destroy()
     res.status(200).json({ msg: boardData })
   }
 
   @httpGet('/update')
   public async resize (@queryParam('size') size: number, req: Request, res: Response, next: NextFunction) {
+    await AppDataSource.initialize()
     const boardLoaded = await this.boardService.readBoard(1)
-    boardLoaded.boardHeight = size
-    boardLoaded.boardWidth = size
+    boardLoaded.boardSize = size
     const boardUpdated = await this.boardService.updateBoard(boardLoaded)
+    await AppDataSource.destroy()
     res.status(200).json({ msg: boardUpdated })
   }
 }

@@ -5,8 +5,7 @@ export class BoardMapper {
   static toEntity (board: BoardEntity): BoardDataEntity {
     const boardDataEntity: BoardDataEntity = {
       boardId: board.boardId,
-      boardHeight: board.boardHeight,
-      boardWidth: board.boardWidth
+      boardSize: board.boardSize
     }
 
     return boardDataEntity
@@ -15,8 +14,7 @@ export class BoardMapper {
   static toDataEntity (board: BoardDataEntity): BoardEntity {
     const boardDataEntity: BoardDataEntity = {
       boardId: board.boardId,
-      boardHeight: board.boardHeight,
-      boardWidth: board.boardWidth
+      boardSize: board.boardSize
     }
 
     return boardDataEntity

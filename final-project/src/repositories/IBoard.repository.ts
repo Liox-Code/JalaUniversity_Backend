@@ -6,5 +6,5 @@ export interface IBoardRepository {
   createBoard(board: BoardEntity): Promise<BoardEntity>
   readBoard(id: number): Promise<BoardEntity>
   updateBoard(board: BoardEntity): Promise<BoardEntity>
-  randomPosition (limits: number): Promise<IPosition>
+  randomPosition (limits: number): IPosition
 }

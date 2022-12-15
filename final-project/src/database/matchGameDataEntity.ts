@@ -1,10 +1,13 @@
 import { Column, PrimaryColumn, Entity } from 'typeorm'
 
 @Entity()
-export default class BoardDataEntity {
+export default class MatchGameDataEntity {
   @PrimaryColumn()
+    matchGameId!: number
+
+  @Column()
     boardId!: number
 
   @Column()
-    boardSize!: number
+    snakeId: number
 }

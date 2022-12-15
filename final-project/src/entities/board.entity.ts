@@ -1,11 +1,9 @@
 export class BoardEntity {
   boardId: number
-  boardWidth: number
-  boardHeight: number
+  boardSize: number
 
-  constructor (boardId: number, boardWidth: number, boardHeight: number) {
+  constructor (boardId: number, boardSize: number) {
     this.boardId = boardId
-    this.boardWidth = boardWidth
-    this.boardHeight = boardHeight
+    this.boardSize = boardSize
   }
 }

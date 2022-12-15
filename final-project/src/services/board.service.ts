@@ -27,7 +27,7 @@ export class BoardService {
     return await this.board.updateBoard(board)
   }
 
-  async randomPosition (limits: number): Promise<IPosition> {
-    return await this.board.randomPosition(limits)
+  randomPosition (limits: number): IPosition {
+    return this.board.randomPosition(limits)
   }
 }

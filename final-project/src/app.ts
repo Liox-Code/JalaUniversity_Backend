@@ -5,6 +5,7 @@ import { InversifyExpressServer } from 'inversify-express-utils'
 import { container } from './inversify.config'
 import './application/controller/snake.controller'
 import './application/controller/board.controller'
+import './application/controller/matchGame.controller'
 
 class App {
   public port?: number
