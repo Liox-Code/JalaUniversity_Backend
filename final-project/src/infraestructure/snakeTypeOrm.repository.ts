@@ -30,15 +30,19 @@ export class SnakeTypeOrmRepository implements ISnakeRepository {
     return SnakeMapper.toEntity(data)
   }
 
-  async moveSnake (direction: EDirection, snake: SnakeEntity) {
+  async moveSnake (direction: EDirection, snake: SnakeEntity, limit: number) {
     const directionsList = {
       [EDirection.UP]: { x: 0, y: 1 },
       [EDirection.DOWN]: { x: 0, y: -1 },
       [EDirection.RIGHT]: { x: 1, y: 0 },
       [EDirection.LEFT]: { x: -1, y: 0 }
     }
-    snake.snakeHeadPosition.x = snake.snakeHeadPosition.x + directionsList[direction].x
-    snake.snakeHeadPosition.y = snake.snakeHeadPosition.y + directionsList[direction].y
+    snake.snakeHeadPosition.x += directionsList[direction].x
+    snake.snakeHeadPosition.y += directionsList[direction].y
+    snake.snakeHeadPosition.x = (snake.snakeHeadPosition.x >= limit) ? 0 : snake.snakeHeadPosition.x
+    snake.snakeHeadPosition.y = (snake.snakeHeadPosition.y >= limit) ? 0 : snake.snakeHeadPosition.y
+    snake.snakeHeadPosition.x = (snake.snakeHeadPosition.x < 0) ? (limit - 1) : snake.snakeHeadPosition.x
+    snake.snakeHeadPosition.y = (snake.snakeHeadPosition.y < 0) ? (limit - 1) : snake.snakeHeadPosition.y
     return await snake
   }
 

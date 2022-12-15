@@ -6,6 +6,7 @@ import { container } from './inversify.config'
 import './application/controller/snake.controller'
 import './application/controller/board.controller'
 import './application/controller/matchGame.controller'
+import './application/controller/food.controller'
 
 class App {
   public port?: number

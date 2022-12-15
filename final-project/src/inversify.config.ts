@@ -10,8 +10,12 @@ import { BoardTypeOrmRepository } from './infraestructure/boardTypeOrm.repositor
 import { BoardService } from './services/board.service'
 // MatchGame
 import { IMatchGameRepository } from './repositories/IMatchGame.repository'
-import { MatchGameService } from './services/matchGame.service'
 import { MatchGameTypeOrmRepository } from './infraestructure/matchGameTypeOrm.repository'
+import { MatchGameService } from './services/matchGame.service'
+// Food
+import { IFoodRepository } from './repositories/IFood.repository'
+import { FoodTypeOrmRepository } from './infraestructure/foodTypeOrm.repository'
+import { FoodService } from './services/food.service'
 
 const container = new Container()
 
@@ -26,5 +30,9 @@ container.bind<BoardService>(TYPES.BoardService).to(BoardService)
 // MatchGame
 container.bind<IMatchGameRepository>(TYPES.MatchGameTypeOrm).to(MatchGameTypeOrmRepository)
 container.bind<MatchGameService>(TYPES.MatchGameService).to(MatchGameService)
+
+// Food
+container.bind<IFoodRepository>(TYPES.FoodTypeOrm).to(FoodTypeOrmRepository)
+container.bind<FoodService>(TYPES.FoodService).to(FoodService)
 
 export { container }

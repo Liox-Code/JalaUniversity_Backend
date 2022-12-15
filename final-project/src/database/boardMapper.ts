@@ -2,7 +2,7 @@ import { BoardEntity } from '../entities/board.entity'
 import BoardDataEntity from './boardDataEntity'
 
 export class BoardMapper {
-  static toEntity (board: BoardEntity): BoardDataEntity {
+  static toEntity (board: BoardDataEntity): BoardEntity {
     const boardDataEntity: BoardDataEntity = {
       boardId: board.boardId,
       boardSize: board.boardSize
@@ -11,7 +11,7 @@ export class BoardMapper {
     return boardDataEntity
   }
 
-  static toDataEntity (board: BoardDataEntity): BoardEntity {
+  static toDataEntity (board: BoardEntity): BoardDataEntity {
     const boardDataEntity: BoardDataEntity = {
       boardId: board.boardId,
       boardSize: board.boardSize

@@ -23,8 +23,8 @@ export class SnakeService {
     return await this.snake.readSnake(id)
   }
 
-  async moveSnake (direction: EDirection, snake: SnakeEntity) {
-    return await this.snake.moveSnake(direction, snake)
+  async moveSnake (direction: EDirection, snake: SnakeEntity, limit: number) {
+    return await this.snake.moveSnake(direction, snake, limit)
   }
 
   async updateSnake (snake: SnakeEntity) {

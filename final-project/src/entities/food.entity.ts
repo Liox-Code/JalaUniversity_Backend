@@ -1,11 +1,12 @@
+import { IFood } from '../interfaces/IFood'
 import { IPosition } from '../interfaces/IPosition'
 
-export class foodEntity {
+export class FoodEntity implements IFood {
   foodId: number
-  foodHeadPosition: IPosition
+  foodPosition: IPosition
 
-  constructor (foodId: number, foodHeadPosition: IPosition) {
+  constructor (foodId: number, foodPosition: IPosition) {
     this.foodId = foodId
-    this.foodHeadPosition = foodHeadPosition
+    this.foodPosition = foodPosition
   }
 }
