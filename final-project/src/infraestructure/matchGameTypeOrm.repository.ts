@@ -17,17 +17,17 @@ export class MatchGameTypeOrmRepository implements IMatchGameRepository {
 
   async createMatchGame (matchGame: MatchGameEntity): Promise<MatchGameEntity> {
     const data = await this.repository.save(MatchGameMapper.toDataEntity(matchGame))
-    return MatchGameMapper.toEntity(data)
+    return await MatchGameMapper.toEntity(data)
   }
 
   async readMatchGame (id: number): Promise<MatchGameEntity> {
     const data = await this.repository.findOneBy({ snakeId: id })
-    return MatchGameMapper.toEntity(data)
+    return await MatchGameMapper.toEntity(data)
   }
 
   async updateMatchGame (matchGame: MatchGameEntity): Promise<MatchGameEntity> {
     const data = await this.repository.save(MatchGameMapper.toDataEntity(matchGame))
-    return MatchGameMapper.toEntity(data)
+    return await MatchGameMapper.toEntity(data)
   }
 
   async deleteMatchGame (id: number): Promise<boolean> {
