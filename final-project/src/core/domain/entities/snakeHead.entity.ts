@@ -1,6 +1,6 @@
 import { IPosition } from '../interfaces/IPosition'
 
-export class SnakeEntity {
+export class SnakeHeadEntity {
   snakeId: number
   snakeHeadPosition: IPosition
   snakeSize: number

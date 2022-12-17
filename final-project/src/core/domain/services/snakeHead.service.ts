@@ -1,13 +1,13 @@
 import { inject, injectable } from 'inversify'
-import { ISnakeRepository } from '../repositories/ISnake.repository'
+import { ISnakeRepository } from '../repositories/ISnakeHead.repository'
 import { TYPES } from '../../../type.core'
 import { EDirection } from '../../../enums/EDirection'
-import { SnakeEntity } from '../entities/snake.entity'
+import { SnakeHeadEntity } from '../entities/snakeHead.entity'
 
 @injectable()
 export class SnakeService {
   private readonly snake: ISnakeRepository
-  constructor (@inject(TYPES.SnakeTypeOrm) snake: ISnakeRepository) {
+  constructor (@inject(TYPES.SnakeHeadTypeOrmRepository) snake: ISnakeRepository) {
     this.snake = snake
   }
 
@@ -15,7 +15,7 @@ export class SnakeService {
     await this.snake.initialDB()
   }
 
-  async createSnake (snake: SnakeEntity) {
+  async createSnake (snake: SnakeHeadEntity) {
     return await this.snake.createSnake(snake)
   }
 
@@ -23,11 +23,11 @@ export class SnakeService {
     return await this.snake.readSnake(id)
   }
 
-  async moveSnake (direction: EDirection, snake: SnakeEntity, limit: number) {
+  async moveSnake (direction: EDirection, snake: SnakeHeadEntity, limit: number) {
     return await this.snake.moveSnake(direction, snake, limit)
   }
 
-  async updateSnake (snake: SnakeEntity) {
+  async updateSnake (snake: SnakeHeadEntity) {
     return await this.snake.updateSnake(snake)
   }
 

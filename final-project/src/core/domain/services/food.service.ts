@@ -6,7 +6,7 @@ import { TYPES } from '../../../type.core'
 @injectable()
 export class FoodService {
   private food: IFoodRepository
-  constructor (@inject(TYPES.FoodTypeOrm) food: IFoodRepository) {
+  constructor (@inject(TYPES.FoodTypeOrmRepository) food: IFoodRepository) {
     this.food = food
   }
 

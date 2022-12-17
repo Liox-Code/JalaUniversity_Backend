@@ -7,7 +7,7 @@ import { TYPES } from '../../../type.core'
 @injectable()
 export class BoardService {
   private board: IBoardRepository
-  constructor (@inject(TYPES.BoardTypeOrm) board: IBoardRepository) {
+  constructor (@inject(TYPES.BoardTypeOrmRepository) board: IBoardRepository) {
     this.board = board
   }
 

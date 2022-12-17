@@ -4,14 +4,14 @@ import { TYPES } from '../../type.core'
 import { inject } from 'inversify'
 import { AppDataSource } from '../../database/dataSource'
 import { MatchGameService } from '../../core/domain/services/matchGame.service'
-import { SnakeService } from '../../core/domain/services/snake.service'
+import { SnakeService } from '../../core/domain/services/snakeHead.service'
 import { BoardService } from '../../core/domain/services/board.service'
 
 @controller('/matchGame')
 class MatchGameHandler extends BaseHttpController {
   constructor (
     @inject(TYPES.MatchGameService) private matchGameService: MatchGameService,
-    @inject(TYPES.SnakeService) private snakeService: SnakeService,
+    @inject(TYPES.SnakeHeadService) private snakeService: SnakeService,
     @inject(TYPES.BoardService) private boardService: BoardService
   ) {
     super()

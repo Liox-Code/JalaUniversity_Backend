@@ -6,7 +6,7 @@ import { TYPES } from '../../../type.core'
 @injectable()
 export class MatchGameService {
   private matchGame: IMatchGameRepository
-  constructor (@inject(TYPES.MatchGameTypeOrm) matchGame: IMatchGameRepository) {
+  constructor (@inject(TYPES.MatchGameTypeOrmRepository) matchGame: IMatchGameRepository) {
     this.matchGame = matchGame
   }
 

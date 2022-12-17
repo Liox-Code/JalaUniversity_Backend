@@ -1,13 +1,10 @@
-import { IMatchGame } from '../interfaces/IMatchGame'
+import { inject } from 'inversify'
+import { TYPES } from '../../../type.core'
+import { BoardEntity } from '../entities/board.entity'
 
-export class MatchGameEntity implements IMatchGame {
-  matchGameId: number
-  boardId: number
-  snakeId: number
-
-  constructor (matchId:number, boardId: number, snakeId: number) {
-    this.matchGameId = matchId
-    this.boardId = boardId
-    this.snakeId = snakeId
+export class MatchGameFactory {
+  private boardEntity: BoardEntity
+  constructor (@inject(TYPES.BoardEntity) boardEntity: BoardEntity) {
+    this.boardEntity = boardEntity
   }
 }

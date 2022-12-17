@@ -1,7 +1,7 @@
 import { Column, PrimaryColumn, Entity } from 'typeorm'
 
 @Entity()
-export default class SnakeDataEntity {
+export default class SnakeHeadDataEntity {
   @PrimaryColumn()
     snakeId!: number
 

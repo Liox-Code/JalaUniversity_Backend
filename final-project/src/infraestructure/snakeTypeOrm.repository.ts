@@ -1,26 +1,26 @@
 import { injectable } from 'inversify'
-import { SnakeEntity } from '../core/domain/entities/snake.entity'
-import { ISnakeRepository } from '../core/domain/repositories/ISnake.repository'
+import { SnakeHeadEntity } from '../core/domain/entities/snakeHead.entity'
+import { ISnakeRepository } from '../core/domain/repositories/ISnakeHead.repository'
 import 'reflect-metadata'
 import { EDirection } from '../enums/EDirection'
 import { Repository } from 'typeorm'
 import { AppDataSource } from '../database/dataSource'
-import SnakeDataEntity from '../database/snakeDataEntity'
-import { SnakeMapper } from '../database/snakeMapper'
+import SnakeHeadDataEntity from '../database/snakeHeadDataEntity'
+import { SnakeMapper } from '../database/snakeHeadMapper'
 
 @injectable()
 export class SnakeTypeOrmRepository implements ISnakeRepository {
-  private readonly repository: Repository<SnakeDataEntity>
+  private readonly repository: Repository<SnakeHeadDataEntity>
 
   constructor () {
-    this.repository = AppDataSource.getRepository(SnakeDataEntity)
+    this.repository = AppDataSource.getRepository(SnakeHeadDataEntity)
   }
 
   async initialDB () {
     await AppDataSource.initialize()
   }
 
-  async createSnake (snake: SnakeEntity) {
+  async createSnake (snake: SnakeHeadEntity) {
     const data = await this.repository.save(SnakeMapper.toDataEntity(snake))
     return SnakeMapper.toEntity(data)
   }
@@ -30,7 +30,7 @@ export class SnakeTypeOrmRepository implements ISnakeRepository {
     return SnakeMapper.toEntity(data)
   }
 
-  async moveSnake (direction: EDirection, snake: SnakeEntity, limit: number) {
+  async moveSnake (direction: EDirection, snake: SnakeHeadEntity, limit: number) {
     const directionsList = {
       [EDirection.UP]: { x: 0, y: 1 },
       [EDirection.DOWN]: { x: 0, y: -1 },
@@ -46,7 +46,7 @@ export class SnakeTypeOrmRepository implements ISnakeRepository {
     return await snake
   }
 
-  async updateSnake (snake: SnakeEntity) {
+  async updateSnake (snake: SnakeHeadEntity) {
     const data = await this.repository.save(SnakeMapper.toDataEntity(snake))
     return SnakeMapper.toEntity(data)
   }

@@ -1,11 +1,19 @@
 const TYPES = {
-  SnakeTypeOrm: Symbol.for('SnakeTypeOrm'),
-  SnakeService: Symbol.for('SnakeService'),
-  BoardTypeOrm: Symbol.for('BoardTypeOrm'),
+  // Snake
+  SnakeBodyEntity: Symbol.for('SnakeBodyEntity'),
+  SnakeHeadEntity: Symbol.for('SnakeHeadEntity'),
+  SnakeHeadTypeOrmRepository: Symbol.for('SnakeHeadTypeOrmRepository'),
+  SnakeHeadService: Symbol.for('SnakeHeadService'),
+  // Board
+  BoardEntity: Symbol.for('BoardEntity'),
+  BoardTypeOrmRepository: Symbol.for('BoardTypeOrmRepository'),
   BoardService: Symbol.for('BoardService'),
-  MatchGameTypeOrm: Symbol.for('MatchGameTypeOrm'),
+  // Match Game
+  MatchGameTypeOrmRepository: Symbol.for('MatchGameTypeOrmRepository'),
   MatchGameService: Symbol.for('MatchGameService'),
-  FoodTypeOrm: Symbol.for('FoodTypeOrm'),
+  // Food
+  FoodEntity: Symbol.for('FoodEntity'),
+  FoodTypeOrmRepository: Symbol.for('FoodTypeOrmRepository'),
   FoodService: Symbol.for('FoodService')
 }
 
