@@ -1,4 +1,4 @@
-import { SnakeEntity } from '../entities/snake.entity'
+import { SnakeEntity } from '../core/domain/entities/snake.entity'
 import SnakeDataEntity from './snakeDataEntity'
 
 export class SnakeMapper {

@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify'
 import { MatchGameEntity } from '../entities/matchGame.entity'
 import { IMatchGameRepository } from '../repositories/IMatchGame.repository'
-import { TYPES } from '../type.core'
+import { TYPES } from '../../../type.core'
 
 @injectable()
 export class MatchGameService {

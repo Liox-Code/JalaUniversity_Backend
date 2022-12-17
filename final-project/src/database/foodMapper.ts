@@ -1,4 +1,4 @@
-import { FoodEntity } from '../entities/food.entity'
+import { FoodEntity } from '../core/domain/entities/food.entity'
 import FoodDataEntity from './foodDataEntity'
 
 export class FoodMapper {

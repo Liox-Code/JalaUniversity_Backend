@@ -1,4 +1,4 @@
-import { MatchGameEntity } from '../entities/matchGame.entity'
+import { MatchGameEntity } from '../core/domain/entities/matchGame.entity'
 import MatchGameDataEntity from './matchGameDataEntity'
 
 export class MatchGameMapper {

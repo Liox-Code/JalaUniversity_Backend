@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express'
 import { controller, httpGet, BaseHttpController, queryParam } from 'inversify-express-utils'
 import { TYPES } from '../../type.core'
-import { SnakeService } from '../../services/snake.service'
+import { SnakeService } from '../../core/domain/services/snake.service'
 import { inject } from 'inversify'
 import { EDirection } from '../../enums/EDirection'
-import { SnakeEntity } from '../../entities/snake.entity'
-import { BoardService } from '../../services/board.service'
+import { SnakeEntity } from '../../core/domain/entities/snake.entity'
+import { BoardService } from '../../core/domain/services/board.service'
 import { AppDataSource } from '../../database/dataSource'
 @controller('/snake')
 class IndexHandler extends BaseHttpController {

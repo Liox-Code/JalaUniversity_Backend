@@ -3,9 +3,9 @@ import { controller, httpGet, BaseHttpController, queryParam } from 'inversify-e
 import { TYPES } from '../../type.core'
 import { inject } from 'inversify'
 import { AppDataSource } from '../../database/dataSource'
-import { MatchGameService } from '../../services/matchGame.service'
-import { SnakeService } from '../../services/snake.service'
-import { BoardService } from '../../services/board.service'
+import { MatchGameService } from '../../core/domain/services/matchGame.service'
+import { SnakeService } from '../../core/domain/services/snake.service'
+import { BoardService } from '../../core/domain/services/board.service'
 
 @controller('/matchGame')
 class MatchGameHandler extends BaseHttpController {

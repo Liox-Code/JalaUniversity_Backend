@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { controller, httpGet, BaseHttpController, queryParam } from 'inversify-express-utils'
 import { TYPES } from '../../type.core'
-import { BoardService } from '../../services/board.service'
+import { BoardService } from '../../core/domain/services/board.service'
 import { inject } from 'inversify'
 import { AppDataSource } from '../../database/dataSource'
 @controller('/board')

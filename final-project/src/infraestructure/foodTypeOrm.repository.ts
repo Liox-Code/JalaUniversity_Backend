@@ -1,10 +1,10 @@
 import { injectable } from 'inversify'
 import { Repository } from 'typeorm'
 import { AppDataSource } from '../database/dataSource'
-import { FoodEntity } from '../entities/food.entity'
+import { FoodEntity } from '../core/domain/entities/food.entity'
 import { FoodMapper } from '../database/foodMapper'
 import FoodDataEntity from '../database/foodDataEntity'
-import { IFoodRepository } from '../repositories/IFood.repository'
+import { IFoodRepository } from '../core/domain/repositories/IFood.repository'
 import 'reflect-metadata'
 
 @injectable()

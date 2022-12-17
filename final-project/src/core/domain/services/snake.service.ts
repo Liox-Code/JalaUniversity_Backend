@@ -1,7 +1,7 @@
 import { inject, injectable } from 'inversify'
 import { ISnakeRepository } from '../repositories/ISnake.repository'
-import { TYPES } from '../type.core'
-import { EDirection } from '../enums/EDirection'
+import { TYPES } from '../../../type.core'
+import { EDirection } from '../../../enums/EDirection'
 import { SnakeEntity } from '../entities/snake.entity'
 
 @injectable()
