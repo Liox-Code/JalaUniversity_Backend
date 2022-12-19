@@ -91,9 +91,14 @@ export class MatchGameService {
   }
 
   async eatFood (id: number): Promise<void> {
+    const boardReaded = await this._board.readBoard(id)
     const snakeReaded = await this._snake.readSnake(id)
     snakeReaded.snakeSize = snakeReaded.snakeSize + 1
     await this._snake.updateSnake(snakeReaded)
+
+    const foodReaded = await this._food.readFood(id)
+    foodReaded.foodPosition = await this._board.randomPosition(boardReaded.boardSize)
+    await this._food.updateFood(foodReaded)
   }
 
   async changeStatus (id: number, state: EMatchGameState): Promise<MatchGameEntity> {

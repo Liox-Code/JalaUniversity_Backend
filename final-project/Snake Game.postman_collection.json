@@ -1,0 +1,133 @@
+{
+	"info": {
+		"_postman_id": "6bd46a1b-6bae-4815-b773-2ec79090fc97",
+		"name": "Snake Game",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "SnakeMove",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "MatchGameRead",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8889/matchGame/read?id=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8889",
+					"path": [
+						"matchGame",
+						"read"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MatchGameRestart",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8889/matchGame/restart?matchId=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8889",
+					"path": [
+						"matchGame",
+						"restart"
+					],
+					"query": [
+						{
+							"key": "matchId",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MatchGameCreate",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "FoodCreate",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "FoodRead",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "MatchGameChangeStatus",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8889/matchGame/changeStatus?matchId=1&status=Ready",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8889",
+					"path": [
+						"matchGame",
+						"changeStatus"
+					],
+					"query": [
+						{
+							"key": "matchId",
+							"value": "1"
+						},
+						{
+							"key": "status",
+							"value": "Ready"
+						},
+						{
+							"key": "status",
+							"value": "Playing",
+							"disabled": true
+						},
+						{
+							"key": "status",
+							"value": "Ended",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
