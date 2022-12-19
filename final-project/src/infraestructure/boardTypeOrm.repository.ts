@@ -45,8 +45,8 @@ export class BoardTypeOrmRepository implements IBoardRepository {
       return seed
     }
 
-    const posX = random(Date.now(), 8, 7, limits)
-    const posY = random(Date.now(), 11, 12, limits)
+    const posX = random(new Date().getTime(), 8, 7, limits)
+    const posY = random(new Date().getTime(), 11, 12, limits)
 
     return { x: posX, y: posY }
   }

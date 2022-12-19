@@ -29,9 +29,8 @@ class IndexHandler extends BaseHttpController {
   @httpGet('/move')
   public async move (@queryParam('direction') direction: EDirection, req: Request, res: Response, next: NextFunction) {
     await AppDataSource.initialize()
-    let snake: SnakeEntity = await this.snakeService.readSnake(1)
-    const limit = await (await this.boardService.readBoard(1)).boardSize
-    snake = await this.snakeService.moveSnake(direction, snake, limit)
+    const snake: SnakeEntity = await this.snakeService.readSnake(1)
+    snake.snakeDirection = direction
     const snakeNewPosition = await this.snakeService.updateSnake(snake)
     await AppDataSource.destroy()
     res.status(200).json({ msg: snakeNewPosition })

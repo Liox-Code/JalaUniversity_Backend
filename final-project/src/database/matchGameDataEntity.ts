@@ -13,4 +13,7 @@ export default class MatchGameDataEntity {
 
   @Column()
     foodId: number
+
+  @Column()
+    matchGameState:string
 }

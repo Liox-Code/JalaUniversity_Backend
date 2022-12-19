@@ -6,6 +6,7 @@ import { AppDataSource } from '../../database/dataSource'
 import { MatchGameService } from '../../core/domain/services/matchGame.service'
 import { SnakeService } from '../../core/domain/services/snake.service'
 import { BoardService } from '../../core/domain/services/board.service'
+import { EMatchGameState } from '../../core/domain/entities/matchGame.entity'
 
 @controller('/matchGame')
 class MatchGameHandler extends BaseHttpController {
@@ -31,6 +32,22 @@ class MatchGameHandler extends BaseHttpController {
     const matchGameReaded = await this.matchGameService.readMatchGame(matchId)
     await AppDataSource.destroy()
     res.status(200).json({ matchGameReaded })
+  }
+
+  @httpGet('/restart')
+  public async restart (@queryParam('matchId') matchId: number, req: Request, res: Response, next: NextFunction) {
+    await AppDataSource.initialize()
+    const matchGameRestarted = await this.matchGameService.restart(matchId)
+    await AppDataSource.destroy()
+    res.status(200).json({ matchGameRestarted })
+  }
+
+  @httpGet('/changeStatus')
+  public async changeStatus (@queryParam('matchId') matchId:number, @queryParam('status') status: EMatchGameState, req: Request, res: Response, next: NextFunction) {
+    await AppDataSource.initialize()
+    const matchGameWithNewState = await this.matchGameService.changeStatus(matchId, status)
+    await AppDataSource.destroy()
+    res.status(200).json({ matchGameWithNewState })
   }
 }
 

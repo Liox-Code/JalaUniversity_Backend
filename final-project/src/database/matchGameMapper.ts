@@ -1,4 +1,4 @@
-import { MatchGameEntity } from '../core/domain/entities/matchGame.entity'
+import { EMatchGameState, MatchGameEntity } from '../core/domain/entities/matchGame.entity'
 import MatchGameDataEntity from './matchGameDataEntity'
 
 export class MatchGameMapper {
@@ -7,7 +7,8 @@ export class MatchGameMapper {
       matchGameId: matchGame.matchGameId,
       boardId: matchGame.boardId,
       snakeId: matchGame.snakeId,
-      foodId: matchGame.foodId
+      foodId: matchGame.foodId,
+      matchGameState: EMatchGameState[matchGame.matchGameState as EMatchGameState]
     }
 
     return matchGameDataEntity
@@ -18,7 +19,8 @@ export class MatchGameMapper {
       matchGameId: matchGame.matchGameId,
       boardId: matchGame.boardId,
       snakeId: matchGame.snakeId,
-      foodId: matchGame.foodId
+      foodId: matchGame.foodId,
+      matchGameState: matchGame.matchGameState
     }
 
     return matchGameDataEntity
