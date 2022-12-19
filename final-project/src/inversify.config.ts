@@ -1,10 +1,10 @@
 import { Container } from 'inversify'
 import { TYPES } from './type.core'
 // Snake
-import { SnakeHeadEntity } from './core/domain/entities/snakeHead.entity'
+import { SnakeEntity } from './core/domain/entities/snake.entity'
 import { ISnakeRepository } from './core/domain/repositories/ISnakeHead.repository'
 import { SnakeTypeOrmRepository } from './infraestructure/snakeTypeOrm.repository'
-import { SnakeService } from './core/domain/services/snakeHead.service'
+import { SnakeService } from './core/domain/services/snake.service'
 // Board
 import { IBoardRepository } from './core/domain/repositories/IBoard.repository'
 import { BoardEntity } from './core/domain/entities/board.entity'
@@ -23,7 +23,7 @@ import { FoodEntity } from './core/domain/entities/food.entity'
 const container = new Container()
 
 // Snake
-container.bind<SnakeHeadEntity>(TYPES.SnakeHeadEntity).to(SnakeHeadEntity)
+container.bind<SnakeEntity>(TYPES.SnakeEntity).to(SnakeEntity)
 container.bind<ISnakeRepository>(TYPES.SnakeHeadTypeOrmRepository).to(SnakeTypeOrmRepository)
 container.bind<SnakeService>(TYPES.SnakeHeadService).to(SnakeService)
 

@@ -4,7 +4,7 @@ import { TYPES } from '../../type.core'
 import { inject } from 'inversify'
 import { AppDataSource } from '../../database/dataSource'
 import { MatchGameService } from '../../core/domain/services/matchGame.service'
-import { SnakeService } from '../../core/domain/services/snakeHead.service'
+import { SnakeService } from '../../core/domain/services/snake.service'
 import { BoardService } from '../../core/domain/services/board.service'
 
 @controller('/matchGame')
@@ -20,32 +20,17 @@ class MatchGameHandler extends BaseHttpController {
   @httpGet('/create')
   public async create (@queryParam('size') size: number, req: Request, res: Response, next: NextFunction) {
     await AppDataSource.initialize()
-    const boardCreated = await this.boardService.createBoard({ boardId: 1, boardSize: size })
-    const randonPosition = this.boardService.randomPosition(boardCreated.boardSize)
-    const snakeCreated = await this.snakeService.createSnake({ snakeId: 1, snakeHeadPosition: randonPosition, snakeSize: 1 })
-    const matchGameCreated = await this.matchGameService.createMatchGame({ matchGameId: 1, boardId: boardCreated.boardId, snakeId: snakeCreated.snakeId })
+    const matchGame = await this.matchGameService.createMatchGame(size)
     await AppDataSource.destroy()
-    const matchGame = {
-      matchGame: matchGameCreated,
-      board: boardCreated,
-      snake: snakeCreated
-    }
     res.status(200).json({ msg: matchGame })
   }
 
   @httpGet('/read')
-  public async read (req: Request, res: Response, next: NextFunction) {
+  public async read (@queryParam('matchId') matchId: number, req: Request, res: Response, next: NextFunction) {
     await AppDataSource.initialize()
-    const matchGameReaded = await this.matchGameService.readMatchGame(1)
-    const boardReaded = await this.boardService.readBoard(1)
-    const snakeReaded = await this.snakeService.readSnake(1)
+    const matchGameReaded = await this.matchGameService.readMatchGame(matchId)
     await AppDataSource.destroy()
-    const matchGame = {
-      matchGame: matchGameReaded,
-      board: boardReaded,
-      snake: snakeReaded
-    }
-    res.status(200).json({ matchGame })
+    res.status(200).json({ matchGameReaded })
   }
 }
 

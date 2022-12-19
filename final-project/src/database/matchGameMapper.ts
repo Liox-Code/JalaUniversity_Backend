@@ -6,7 +6,8 @@ export class MatchGameMapper {
     const matchGameDataEntity: MatchGameEntity = {
       matchGameId: matchGame.matchGameId,
       boardId: matchGame.boardId,
-      snakeId: matchGame.snakeId
+      snakeId: matchGame.snakeId,
+      foodId: matchGame.foodId
     }
 
     return matchGameDataEntity
@@ -16,7 +17,8 @@ export class MatchGameMapper {
     const matchGameDataEntity: MatchGameDataEntity = {
       matchGameId: matchGame.matchGameId,
       boardId: matchGame.boardId,
-      snakeId: matchGame.snakeId
+      snakeId: matchGame.snakeId,
+      foodId: matchGame.foodId
     }
 
     return matchGameDataEntity

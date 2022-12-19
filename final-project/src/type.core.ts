@@ -1,7 +1,7 @@
 const TYPES = {
   // Snake
   SnakeBodyEntity: Symbol.for('SnakeBodyEntity'),
-  SnakeHeadEntity: Symbol.for('SnakeHeadEntity'),
+  SnakeEntity: Symbol.for('SnakeEntity'),
   SnakeHeadTypeOrmRepository: Symbol.for('SnakeHeadTypeOrmRepository'),
   SnakeHeadService: Symbol.for('SnakeHeadService'),
   // Board

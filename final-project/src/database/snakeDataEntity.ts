@@ -1,9 +1,12 @@
 import { Column, PrimaryColumn, Entity } from 'typeorm'
 
 @Entity()
-export default class SnakeHeadDataEntity {
+export default class SnakeDataEntity {
   @PrimaryColumn()
     snakeId!: number
+
+  @Column()
+    snakeDirection!: string
 
   @Column()
     snakeHeadXPosition!: number

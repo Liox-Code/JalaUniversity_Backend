@@ -2,7 +2,7 @@ import { inject, injectable } from 'inversify'
 import { ISnakeRepository } from '../repositories/ISnakeHead.repository'
 import { TYPES } from '../../../type.core'
 import { EDirection } from '../../../enums/EDirection'
-import { SnakeHeadEntity } from '../entities/snakeHead.entity'
+import { SnakeEntity } from '../entities/snake.entity'
 
 @injectable()
 export class SnakeService {
@@ -15,7 +15,7 @@ export class SnakeService {
     await this.snake.initialDB()
   }
 
-  async createSnake (snake: SnakeHeadEntity) {
+  async createSnake (snake: SnakeEntity) {
     return await this.snake.createSnake(snake)
   }
 
@@ -23,11 +23,11 @@ export class SnakeService {
     return await this.snake.readSnake(id)
   }
 
-  async moveSnake (direction: EDirection, snake: SnakeHeadEntity, limit: number) {
+  async moveSnake (direction: EDirection, snake: SnakeEntity, limit: number) {
     return await this.snake.moveSnake(direction, snake, limit)
   }
 
-  async updateSnake (snake: SnakeHeadEntity) {
+  async updateSnake (snake: SnakeEntity) {
     return await this.snake.updateSnake(snake)
   }
 

@@ -1,26 +1,26 @@
 import { injectable } from 'inversify'
-import { SnakeHeadEntity } from '../core/domain/entities/snakeHead.entity'
+import { SnakeEntity } from '../core/domain/entities/snake.entity'
 import { ISnakeRepository } from '../core/domain/repositories/ISnakeHead.repository'
 import 'reflect-metadata'
 import { EDirection } from '../enums/EDirection'
 import { Repository } from 'typeorm'
 import { AppDataSource } from '../database/dataSource'
-import SnakeHeadDataEntity from '../database/snakeHeadDataEntity'
-import { SnakeMapper } from '../database/snakeHeadMapper'
+import SnakeDataEntity from '../database/snakeDataEntity'
+import { SnakeMapper } from '../database/SnakeMapper'
 
 @injectable()
 export class SnakeTypeOrmRepository implements ISnakeRepository {
-  private readonly repository: Repository<SnakeHeadDataEntity>
+  private readonly repository: Repository<SnakeDataEntity>
 
   constructor () {
-    this.repository = AppDataSource.getRepository(SnakeHeadDataEntity)
+    this.repository = AppDataSource.getRepository(SnakeDataEntity)
   }
 
   async initialDB () {
     await AppDataSource.initialize()
   }
 
-  async createSnake (snake: SnakeHeadEntity) {
+  async createSnake (snake: SnakeEntity) {
     const data = await this.repository.save(SnakeMapper.toDataEntity(snake))
     return SnakeMapper.toEntity(data)
   }
@@ -30,7 +30,7 @@ export class SnakeTypeOrmRepository implements ISnakeRepository {
     return SnakeMapper.toEntity(data)
   }
 
-  async moveSnake (direction: EDirection, snake: SnakeHeadEntity, limit: number) {
+  async moveSnake (direction: EDirection, snake: SnakeEntity, limit: number) {
     const directionsList = {
       [EDirection.UP]: { x: 0, y: 1 },
       [EDirection.DOWN]: { x: 0, y: -1 },
@@ -46,7 +46,7 @@ export class SnakeTypeOrmRepository implements ISnakeRepository {
     return await snake
   }
 
-  async updateSnake (snake: SnakeHeadEntity) {
+  async updateSnake (snake: SnakeEntity) {
     const data = await this.repository.save(SnakeMapper.toDataEntity(snake))
     return SnakeMapper.toEntity(data)
   }
