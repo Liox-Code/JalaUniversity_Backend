@@ -1,12 +1,12 @@
 import { injectable } from 'inversify'
 import BoardDataEntity from '../database/boardDataEntity'
-import { BoardEntity } from '../entities/board.entity'
-import { IBoardRepository } from '../repositories/IBoard.repository'
+import { BoardEntity } from '../core/domain/entities/board.entity'
+import { IBoardRepository } from '../core/domain/repositories/IBoard.repository'
 import { Repository } from 'typeorm'
 import 'reflect-metadata'
 import { AppDataSource } from '../database/dataSource'
 import { BoardMapper } from '../database/boardMapper'
-import { IPosition } from '../interfaces/IPosition'
+import { IPosition } from '../core/domain/interfaces/IPosition'
 
 @injectable()
 export class BoardTypeOrmRepository implements IBoardRepository {
@@ -45,8 +45,8 @@ export class BoardTypeOrmRepository implements IBoardRepository {
       return seed
     }
 
-    const posX = random(Date.now(), 8, 7, limits)
-    const posY = random(Date.now(), 11, 12, limits)
+    const posX = random(new Date().getTime(), 8, 7, limits)
+    const posY = random(new Date().getTime(), 11, 12, limits)
 
     return { x: posX, y: posY }
   }

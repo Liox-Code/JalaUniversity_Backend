@@ -1,4 +1,4 @@
-import { BoardEntity } from '../entities/board.entity'
+import { BoardEntity } from '../core/domain/entities/board.entity'
 import BoardDataEntity from './boardDataEntity'
 
 export class BoardMapper {

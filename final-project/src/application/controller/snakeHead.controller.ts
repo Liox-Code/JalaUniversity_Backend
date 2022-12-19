@@ -1,16 +1,16 @@
 import { Request, Response, NextFunction } from 'express'
 import { controller, httpGet, BaseHttpController, queryParam } from 'inversify-express-utils'
 import { TYPES } from '../../type.core'
-import { SnakeService } from '../../services/snake.service'
+import { SnakeService } from '../../core/domain/services/snake.service'
 import { inject } from 'inversify'
 import { EDirection } from '../../enums/EDirection'
-import { SnakeEntity } from '../../entities/snake.entity'
-import { BoardService } from '../../services/board.service'
+import { SnakeEntity } from '../../core/domain/entities/snake.entity'
+import { BoardService } from '../../core/domain/services/board.service'
 import { AppDataSource } from '../../database/dataSource'
 @controller('/snake')
 class IndexHandler extends BaseHttpController {
   constructor (
-    @inject(TYPES.SnakeService) private snakeService: SnakeService,
+    @inject(TYPES.SnakeHeadService) private snakeService: SnakeService,
     @inject(TYPES.BoardService) private boardService: BoardService
   ) {
     super()
@@ -29,9 +29,8 @@ class IndexHandler extends BaseHttpController {
   @httpGet('/move')
   public async move (@queryParam('direction') direction: EDirection, req: Request, res: Response, next: NextFunction) {
     await AppDataSource.initialize()
-    let snake: SnakeEntity = await this.snakeService.readSnake(1)
-    const limit = await (await this.boardService.readBoard(1)).boardSize
-    snake = await this.snakeService.moveSnake(direction, snake, limit)
+    const snake: SnakeEntity = await this.snakeService.readSnake(1)
+    snake.snakeDirection = direction
     const snakeNewPosition = await this.snakeService.updateSnake(snake)
     await AppDataSource.destroy()
     res.status(200).json({ msg: snakeNewPosition })

@@ -1,13 +1,13 @@
 import { inject, injectable } from 'inversify'
-import { ISnakeRepository } from '../repositories/ISnake.repository'
-import { TYPES } from '../type.core'
-import { EDirection } from '../enums/EDirection'
+import { ISnakeRepository } from '../repositories/ISnakeHead.repository'
+import { TYPES } from '../../../type.core'
+import { EDirection } from '../../../enums/EDirection'
 import { SnakeEntity } from '../entities/snake.entity'
 
 @injectable()
 export class SnakeService {
   private readonly snake: ISnakeRepository
-  constructor (@inject(TYPES.SnakeTypeOrm) snake: ISnakeRepository) {
+  constructor (@inject(TYPES.SnakeHeadTypeOrmRepository) snake: ISnakeRepository) {
     this.snake = snake
   }
 

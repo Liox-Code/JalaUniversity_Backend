@@ -1,5 +1,5 @@
 import { SnakeEntity } from '../entities/snake.entity'
-import { EDirection } from '../enums/EDirection'
+import { EDirection } from '../../../enums/EDirection'
 
 export interface ISnakeRepository {
   initialDB:() => void

@@ -3,7 +3,7 @@ import { controller, httpGet, BaseHttpController } from 'inversify-express-utils
 import { TYPES } from '../../type.core'
 import { inject } from 'inversify'
 import { AppDataSource } from '../../database/dataSource'
-import { FoodService } from '../../services/food.service'
+import { FoodService } from '../../core/domain/services/food.service'
 
 @controller('/food')
 class FoodHandler extends BaseHttpController {

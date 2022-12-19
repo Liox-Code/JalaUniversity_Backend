@@ -1,4 +1,4 @@
-import { MatchGameEntity } from '../entities/matchGame.entity'
+import { EMatchGameState, MatchGameEntity } from '../core/domain/entities/matchGame.entity'
 import MatchGameDataEntity from './matchGameDataEntity'
 
 export class MatchGameMapper {
@@ -6,7 +6,9 @@ export class MatchGameMapper {
     const matchGameDataEntity: MatchGameEntity = {
       matchGameId: matchGame.matchGameId,
       boardId: matchGame.boardId,
-      snakeId: matchGame.snakeId
+      snakeId: matchGame.snakeId,
+      foodId: matchGame.foodId,
+      matchGameState: EMatchGameState[matchGame.matchGameState as EMatchGameState]
     }
 
     return matchGameDataEntity
@@ -16,7 +18,9 @@ export class MatchGameMapper {
     const matchGameDataEntity: MatchGameDataEntity = {
       matchGameId: matchGame.matchGameId,
       boardId: matchGame.boardId,
-      snakeId: matchGame.snakeId
+      snakeId: matchGame.snakeId,
+      foodId: matchGame.foodId,
+      matchGameState: matchGame.matchGameState
     }
 
     return matchGameDataEntity

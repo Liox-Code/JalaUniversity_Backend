@@ -2,12 +2,12 @@ import { inject, injectable } from 'inversify'
 import { BoardEntity } from '../entities/board.entity'
 import { IPosition } from '../interfaces/IPosition'
 import { IBoardRepository } from '../repositories/IBoard.repository'
-import { TYPES } from '../type.core'
+import { TYPES } from '../../../type.core'
 
 @injectable()
 export class BoardService {
   private board: IBoardRepository
-  constructor (@inject(TYPES.BoardTypeOrm) board: IBoardRepository) {
+  constructor (@inject(TYPES.BoardTypeOrmRepository) board: IBoardRepository) {
     this.board = board
   }
 

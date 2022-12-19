@@ -1,12 +1,12 @@
 import { injectable } from 'inversify'
-import { SnakeEntity } from '../entities/snake.entity'
-import { ISnakeRepository } from '../repositories/ISnake.repository'
+import { SnakeEntity } from '../core/domain/entities/snake.entity'
+import { ISnakeRepository } from '../core/domain/repositories/ISnakeHead.repository'
 import 'reflect-metadata'
 import { EDirection } from '../enums/EDirection'
 import { Repository } from 'typeorm'
 import { AppDataSource } from '../database/dataSource'
 import SnakeDataEntity from '../database/snakeDataEntity'
-import { SnakeMapper } from '../database/snakeMapper'
+import { SnakeMapper } from '../database/SnakeMapper'
 
 @injectable()
 export class SnakeTypeOrmRepository implements ISnakeRepository {

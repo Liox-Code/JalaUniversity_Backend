@@ -6,6 +6,9 @@ export default class SnakeDataEntity {
     snakeId!: number
 
   @Column()
+    snakeDirection!: string
+
+  @Column()
     snakeHeadXPosition!: number
 
   @Column()

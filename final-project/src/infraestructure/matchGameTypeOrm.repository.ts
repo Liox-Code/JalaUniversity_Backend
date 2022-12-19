@@ -1,6 +1,6 @@
 import { injectable } from 'inversify'
-import { MatchGameEntity } from '../entities/matchGame.entity'
-import { IMatchGameRepository } from '../repositories/IMatchGame.repository'
+import { MatchGameEntity } from '../core/domain/entities/matchGame.entity'
+import { IMatchGameRepository } from '../core/domain/repositories/IMatchGame.repository'
 import 'reflect-metadata'
 import { Repository } from 'typeorm'
 import { AppDataSource } from '../database/dataSource'
