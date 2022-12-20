@@ -23,6 +23,10 @@ export class SnakeAggregate {
     return this._snakeId
   }
 
+  get snakeHead (): SnakeEntity {
+    return this._snakeHead
+  }
+
   get snakeBody (): SnakeBodyEntity[] {
     return this._snakeBody
   }

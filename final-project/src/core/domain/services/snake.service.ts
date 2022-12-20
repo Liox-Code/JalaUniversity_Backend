@@ -28,6 +28,21 @@ export class SnakeService {
   }
 
   async moveSnake (direction: EDirection, snake: SnakeEntity, limit: number) {
+    let currentSnake = await this.readSnake(snake.snakeId)
+    currentSnake = await this.moveHeadSnake(direction, currentSnake, limit)
+
+    let snakeAggregate = new SnakeAggregate(snake.snakeId, currentSnake)
+    snakeAggregate = new SnakeAggregate(snake.snakeId, currentSnake)
+    const snakeReaded = await this.snakeHead.readSnakeBody(snake.snakeId)
+    for (const snakeBodyItem of snakeReaded) {
+      snakeAggregate.addSnakeBody(snakeBodyItem)
+    }
+
+    const snakeBodyArray = await this.moveBodySnake(snakeAggregate)
+    return await snakeAggregate
+  }
+
+  async moveHeadSnake (direction: EDirection, snake: SnakeEntity, limit: number) {
     const directionsList = {
       [EDirection.UP]: { x: 0, y: 1 },
       [EDirection.DOWN]: { x: 0, y: -1 },
@@ -41,6 +56,18 @@ export class SnakeService {
     snake.snakeHeadPosition.x = (snake.snakeHeadPosition.x < 0) ? (limit - 1) : snake.snakeHeadPosition.x
     snake.snakeHeadPosition.y = (snake.snakeHeadPosition.y < 0) ? (limit - 1) : snake.snakeHeadPosition.y
     return await snake
+  }
+
+  async moveBodySnake (snake: SnakeAggregate) {
+    return await snake.snakeBody.map(async (snakeBodyItem, index) => {
+      if (index === 1) {
+        const newPosition = new SnakeBodyEntity(snake.snakeId, snake.snakeHead.snakeHeadPosition)
+        return await this.snakeHead.updateSnakeBody(snake.snakeId, newPosition)
+      } else {
+        const newPosition = snake.snakeBody[index - 1]
+        return await this.snakeHead.updateSnakeBody(snake.snakeId, newPosition)
+      }
+    })
   }
 
   async growSnake (snakeHeadId:number) {

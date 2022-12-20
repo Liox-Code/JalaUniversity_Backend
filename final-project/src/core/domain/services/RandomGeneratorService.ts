@@ -16,7 +16,6 @@ export class RandomGeneratorService {
     const seedXDate = Date.now() * seed
     const posX = this.generateRandomNumber(seedXDate, 8, 7, limits)
     const posY = this.generateRandomNumber(seedXDate, 11, 12, limits)
-
     return { x: posX, y: posY }
   }
 }
