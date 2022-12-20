@@ -6,7 +6,7 @@ import { EDirection } from '../enums/EDirection'
 import { Repository } from 'typeorm'
 import { AppDataSource } from '../database/dataSource'
 import SnakeDataEntity from '../database/snakeDataEntity'
-import { SnakeMapper } from '../database/SnakeMapper'
+import { SnakeMapper } from '../database/snakeMapper'
 
 @injectable()
 export class SnakeTypeOrmRepository implements ISnakeRepository {

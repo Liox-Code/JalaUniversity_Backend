@@ -1,4 +1,5 @@
 import { injectable } from 'inversify'
+import { EDirection } from '../../../enums/EDirection'
 import { SnakeEntity } from '../entities/snake.entity'
 import { SnakeBodyEntity } from '../entities/snakeBody.entity'
 
@@ -6,12 +7,14 @@ import { SnakeBodyEntity } from '../entities/snakeBody.entity'
 export class SnakeAggregate {
   private _snakeId: number
   private _snakeSize: number
+  private _snakeDirection: EDirection
   private _snakeHead: SnakeEntity
   private _snakeBody: SnakeBodyEntity[]
 
   constructor (snakeId:number, snakeHead: SnakeEntity) {
     this._snakeId = snakeId
     this._snakeSize = 1
+    this._snakeDirection = EDirection.UP
     this._snakeHead = snakeHead
     this._snakeBody = []
   }
