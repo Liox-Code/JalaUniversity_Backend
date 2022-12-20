@@ -8,10 +8,12 @@ import { SnakeEntity } from '../../core/domain/entities/snake.entity'
 import { BoardService } from '../../core/domain/services/board.service'
 import { AppDataSource } from '../../database/dataSource'
 import { RandomGeneratorService } from '../../core/domain/services/RandomGeneratorService'
+import { SnakeBodyEntity } from '../../core/domain/entities/snakeBody.entity'
+import { SnakeAggregate } from '../../core/domain/aggregates/snake.aggregate'
 @controller('/snake')
 class IndexHandler extends BaseHttpController {
   constructor (
-    @inject(TYPES.SnakeHeadService) private snakeService: SnakeService,
+    @inject(TYPES.SnakeService) private snakeService: SnakeService,
     @inject(TYPES.BoardService) private boardService: BoardService,
     @inject(TYPES.RandomGeneratorService) private randomGeneratorService: RandomGeneratorService
   ) {
@@ -38,6 +40,14 @@ class IndexHandler extends BaseHttpController {
     const snakeNewPosition = await this.snakeService.updateSnake(snake)
     await AppDataSource.destroy()
     res.status(200).json({ msg: snakeNewPosition })
+  }
+
+  @httpGet('/grow')
+  public async grow (@queryParam('snakeId') snakeId: number, req: Request, res: Response, next: NextFunction) {
+    await AppDataSource.initialize()
+    const snake = await this.snakeService.growSnake(snakeId)
+    await AppDataSource.destroy()
+    res.status(200).json({ msg: snake })
   }
 }
 

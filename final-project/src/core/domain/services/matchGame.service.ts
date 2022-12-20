@@ -8,6 +8,7 @@ import { IFoodRepository } from '../repositories/IFood.repository'
 import { SnakeEntity } from '../entities/snake.entity'
 import { FoodEntity } from '../entities/food.entity'
 import { RandomGeneratorService } from './RandomGeneratorService'
+import { SnakeService } from './snake.service'
 
 @injectable()
 export class MatchGameService {
@@ -15,19 +16,22 @@ export class MatchGameService {
   private _snake: ISnakeRepository
   private _board: IBoardRepository
   private _food: IFoodRepository
+  private _snakeService: SnakeService
   private _randomGenerator: RandomGeneratorService
   constructor (
     @inject(TYPES.MatchGameTypeOrmRepository) matchGame: IMatchGameRepository,
     @inject(TYPES.SnakeHeadTypeOrmRepository) snake: ISnakeRepository,
     @inject(TYPES.BoardTypeOrmRepository) board: IBoardRepository,
     @inject(TYPES.FoodTypeOrmRepository) food: IFoodRepository,
-    @inject(TYPES.RandomGeneratorService) randomGenerator: RandomGeneratorService
+    @inject(TYPES.RandomGeneratorService) randomGenerator: RandomGeneratorService,
+    @inject(TYPES.SnakeService) snakeService: SnakeService
   ) {
     this._matchGame = matchGame
     this._snake = snake
     this._board = board
     this._food = food
     this._randomGenerator = randomGenerator
+    this._snakeService = snakeService
   }
 
   async createMatchGame (size: number): Promise<MatchGameEntity> {
@@ -47,7 +51,7 @@ export class MatchGameService {
     let snakeReaded = await this._snake.readSnake(matchGameReaded.snakeId)
     const boardReaded = await this._board.readBoard(matchGameReaded.boardId)
 
-    snakeReaded = await this._snake.moveSnake(snakeReaded.snakeDirection, snakeReaded, boardReaded.boardSize)
+    snakeReaded = await this._snakeService.moveSnake(snakeReaded.snakeDirection, snakeReaded, boardReaded.boardSize)
     await this._snake.updateSnake(snakeReaded)
     snakeReaded = await this._snake.readSnake(matchGameReaded.snakeId)
 
@@ -114,8 +118,4 @@ export class MatchGameService {
     matchGameReaded.matchGameState = state
     return await this._matchGame.updateMatchGame(matchGameReaded)
   }
-
-  // async growSnake (id: number): Promise<MatchGameEntity> {
-  //   // TO DO
-  // }
 }

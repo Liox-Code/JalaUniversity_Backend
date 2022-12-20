@@ -1,6 +1,7 @@
 import { DataSource } from 'typeorm'
 import BoardDataEntity from './boardDataEntity'
 import SnakeDataEntity from './snakeDataEntity'
+import SnakeBodyDataEntity from './snakeBodyDataEntity'
 import MatchGameDataEntity from './matchGameDataEntity'
 import FoodDataEntity from './foodDataEntity'
 
@@ -9,7 +10,7 @@ export const AppDataSource = new DataSource({
   database: 'database.sqlite',
   synchronize: true,
   logging: false,
-  entities: [SnakeDataEntity, BoardDataEntity, MatchGameDataEntity, FoodDataEntity],
+  entities: [SnakeDataEntity, SnakeBodyDataEntity, BoardDataEntity, MatchGameDataEntity, FoodDataEntity],
   migrations: [],
   subscribers: []
 })

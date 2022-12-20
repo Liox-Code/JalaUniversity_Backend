@@ -1,11 +1,12 @@
 import { SnakeEntity } from '../entities/snake.entity'
-import { EDirection } from '../../../enums/EDirection'
+import { SnakeBodyEntity } from '../entities/snakeBody.entity'
 
 export interface ISnakeRepository {
   createSnake: (snake: SnakeEntity) => Promise<SnakeEntity>
   readSnake: (id: number) => Promise<SnakeEntity>
-  moveSnake: (direction: EDirection, snake: SnakeEntity, limit: number) => Promise<SnakeEntity>
   updateSnake: (snake: SnakeEntity) => Promise<SnakeEntity>
-  grow: () => void
-  die: () => void
+  growSnake: (snakeId: number, snakeBody: SnakeBodyEntity) => Promise<SnakeBodyEntity>
+  readSnakeBody: (id: number) => Promise<SnakeBodyEntity[]>
+  updateSnakeBody: (snakeId: number, snakeBody: SnakeBodyEntity) => Promise<SnakeBodyEntity>
+  dieSnake: () => void
 }

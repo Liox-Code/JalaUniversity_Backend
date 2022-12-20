@@ -12,7 +12,7 @@ import { EMatchGameState } from '../../core/domain/entities/matchGame.entity'
 class MatchGameHandler extends BaseHttpController {
   constructor (
     @inject(TYPES.MatchGameService) private matchGameService: MatchGameService,
-    @inject(TYPES.SnakeHeadService) private snakeService: SnakeService,
+    @inject(TYPES.SnakeService) private snakeService: SnakeService,
     @inject(TYPES.BoardService) private boardService: BoardService
   ) {
     super()
