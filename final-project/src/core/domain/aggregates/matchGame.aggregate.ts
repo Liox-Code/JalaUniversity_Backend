@@ -1,13 +1,13 @@
 import { injectable } from 'inversify'
 import { BoardEntity } from '../entities/board.entity'
 import { FoodEntity } from '../entities/food.entity'
-import { Snake } from './snake.aggregate'
+import { SnakeAggregate } from './snake.aggregate'
 
 @injectable()
-export class MatchGame {
+export class MatchGameAggregate {
   private _matchGameId: number
   private _gameState: string
-  private _snake: Snake
+  private _snake: SnakeAggregate
   private _board: BoardEntity
   private _food: FoodEntity
 

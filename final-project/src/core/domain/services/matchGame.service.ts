@@ -7,6 +7,7 @@ import { IBoardRepository } from '../repositories/IBoard.repository'
 import { IFoodRepository } from '../repositories/IFood.repository'
 import { SnakeEntity } from '../entities/snake.entity'
 import { FoodEntity } from '../entities/food.entity'
+import { RandomGeneratorService } from './RandomGeneratorService'
 
 @injectable()
 export class MatchGameService {
@@ -14,21 +15,25 @@ export class MatchGameService {
   private _snake: ISnakeRepository
   private _board: IBoardRepository
   private _food: IFoodRepository
+  private _randomGenerator: RandomGeneratorService
   constructor (
     @inject(TYPES.MatchGameTypeOrmRepository) matchGame: IMatchGameRepository,
     @inject(TYPES.SnakeHeadTypeOrmRepository) snake: ISnakeRepository,
     @inject(TYPES.BoardTypeOrmRepository) board: IBoardRepository,
-    @inject(TYPES.FoodTypeOrmRepository) food: IFoodRepository
+    @inject(TYPES.FoodTypeOrmRepository) food: IFoodRepository,
+    @inject(TYPES.RandomGeneratorService) randomGenerator: RandomGeneratorService
   ) {
     this._matchGame = matchGame
     this._snake = snake
     this._board = board
     this._food = food
+    this._randomGenerator = randomGenerator
   }
 
   async createMatchGame (size: number): Promise<MatchGameEntity> {
+    const seed = 1
     const board = await this._board.createBoard({ boardId: 1, boardSize: size })
-    const randonPosition = this._board.randomPosition(board.boardSize)
+    const randonPosition = this._randomGenerator.generateRandomPosition(seed, board.boardSize)
     const snake = await this._snake.createSnake(new SnakeEntity(1, randonPosition, 1))
     const food = await this._food.createFood(new FoodEntity(1, randonPosition))
     const matchGameCreated = await this._matchGame.createMatchGame(new MatchGameEntity(1, board.boardId, snake.snakeId, food.foodId))
@@ -58,13 +63,15 @@ export class MatchGameService {
   }
 
   async restart (id: number): Promise<any> {
+    const firstSeed = 1
+    const secondSeed = 2
     const matchGameReaded = await this._matchGame.readMatchGame(id)
     const foodReaded = await this._food.readFood(matchGameReaded.foodId)
     const snakeReaded = await this._snake.readSnake(matchGameReaded.snakeId)
     const boardReaded = await this._board.readBoard(matchGameReaded.boardId)
 
-    const snakeRandonPosition = await this._board.randomPosition(boardReaded.boardSize)
-    const foodRandonPosition = await this._board.randomPosition(boardReaded.boardSize)
+    const snakeRandonPosition = this._randomGenerator.generateRandomPosition(firstSeed, boardReaded.boardSize)
+    const foodRandonPosition = this._randomGenerator.generateRandomPosition(secondSeed, boardReaded.boardSize)
 
     snakeReaded.snakeHeadPosition = snakeRandonPosition
     snakeReaded.snakeSize = 1
@@ -91,13 +98,14 @@ export class MatchGameService {
   }
 
   async eatFood (id: number): Promise<void> {
+    const seed = 1
     const boardReaded = await this._board.readBoard(id)
     const snakeReaded = await this._snake.readSnake(id)
     snakeReaded.snakeSize = snakeReaded.snakeSize + 1
     await this._snake.updateSnake(snakeReaded)
 
     const foodReaded = await this._food.readFood(id)
-    foodReaded.foodPosition = await this._board.randomPosition(boardReaded.boardSize)
+    foodReaded.foodPosition = await this._randomGenerator.generateRandomPosition(seed, boardReaded.boardSize)
     await this._food.updateFood(foodReaded)
   }
 
@@ -106,4 +114,8 @@ export class MatchGameService {
     matchGameReaded.matchGameState = state
     return await this._matchGame.updateMatchGame(matchGameReaded)
   }
+
+  // async growSnake (id: number): Promise<MatchGameEntity> {
+  //   // TO DO
+  // }
 }

@@ -14,7 +14,9 @@ const TYPES = {
   // Food
   FoodEntity: Symbol.for('FoodEntity'),
   FoodTypeOrmRepository: Symbol.for('FoodTypeOrmRepository'),
-  FoodService: Symbol.for('FoodService')
+  FoodService: Symbol.for('FoodService'),
+  // Random Generator
+  RandomGeneratorService: Symbol.for('RandomGeneratorService')
 }
 
 export { TYPES }

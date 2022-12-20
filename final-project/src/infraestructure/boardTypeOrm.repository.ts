@@ -6,7 +6,6 @@ import { Repository } from 'typeorm'
 import 'reflect-metadata'
 import { AppDataSource } from '../database/dataSource'
 import { BoardMapper } from '../database/boardMapper'
-import { IPosition } from '../core/domain/interfaces/IPosition'
 
 @injectable()
 export class BoardTypeOrmRepository implements IBoardRepository {
@@ -14,10 +13,6 @@ export class BoardTypeOrmRepository implements IBoardRepository {
 
   constructor () {
     this.repository = AppDataSource.getRepository(BoardDataEntity)
-  }
-
-  async initialDB () {
-    await AppDataSource.initialize()
   }
 
   async createBoard (board: BoardEntity): Promise<BoardEntity> {
@@ -33,21 +28,5 @@ export class BoardTypeOrmRepository implements IBoardRepository {
   async updateBoard (board: BoardEntity): Promise<BoardEntity> {
     const data = await this.repository.save(BoardMapper.toDataEntity(board))
     return BoardMapper.toEntity(data)
-  }
-
-  randomPosition (limits: number): IPosition {
-    const random = (seed:number, multiplier:number, incrementer:number, limits: number) => {
-      const A = multiplier
-      const C = incrementer
-      const M = limits
-
-      seed = (seed * A + C) % M
-      return seed
-    }
-
-    const posX = random(new Date().getTime(), 8, 7, limits)
-    const posY = random(new Date().getTime(), 11, 12, limits)
-
-    return { x: posX, y: posY }
   }
 }

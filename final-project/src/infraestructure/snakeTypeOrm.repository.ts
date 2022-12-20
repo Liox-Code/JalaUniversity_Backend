@@ -16,10 +16,6 @@ export class SnakeTypeOrmRepository implements ISnakeRepository {
     this.repository = AppDataSource.getRepository(SnakeDataEntity)
   }
 
-  async initialDB () {
-    await AppDataSource.initialize()
-  }
-
   async createSnake (snake: SnakeEntity) {
     const data = await this.repository.save(SnakeMapper.toDataEntity(snake))
     return SnakeMapper.toEntity(data)

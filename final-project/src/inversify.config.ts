@@ -19,6 +19,8 @@ import { IFoodRepository } from './core/domain/repositories/IFood.repository'
 import { FoodTypeOrmRepository } from './infraestructure/foodTypeOrm.repository'
 import { FoodService } from './core/domain/services/food.service'
 import { FoodEntity } from './core/domain/entities/food.entity'
+// Random Generator
+import { RandomGeneratorService } from './core/domain/services/RandomGeneratorService'
 
 const container = new Container()
 
@@ -40,5 +42,8 @@ container.bind<MatchGameService>(TYPES.MatchGameService).to(MatchGameService)
 container.bind<FoodEntity>(TYPES.FoodEntity).to(FoodEntity)
 container.bind<IFoodRepository>(TYPES.FoodTypeOrmRepository).to(FoodTypeOrmRepository)
 container.bind<FoodService>(TYPES.FoodService).to(FoodService)
+
+// Random Generator
+container.bind<RandomGeneratorService>(TYPES.RandomGeneratorService).to(RandomGeneratorService)
 
 export { container }

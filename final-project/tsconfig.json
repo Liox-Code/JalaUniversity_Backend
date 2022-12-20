@@ -12,10 +12,10 @@
     "removeComments": true,
     "incremental": true,
     "noImplicitAny": true,
-    "types": ["reflect-metadata"],
+    "types": ["reflect-metadata","jest", "@types/jest", "ts-jest"],
     "lib": ["es2020", "DOM"],
     "resolveJsonModule": true
   },
-  "include": ["src"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }

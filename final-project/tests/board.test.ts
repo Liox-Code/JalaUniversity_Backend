@@ -1,30 +1,59 @@
-import { BoardService } from '../src/services/board.service'
-import { BoardTypeOrmRepositoryMock } from './__mocks__/boardRepositoryMock'
+import { Container } from 'inversify'
+import { TYPES } from '../src/type.core'
 import 'reflect-metadata'
+// Random Generator
+import { RandomGeneratorService } from '../src/core/domain/services/RandomGeneratorService'
+// Board
+import { BoardService } from '../src/core/domain/services/board.service'
+import { BoardTypeOrmRepositoryMock } from './__mocks__/boardRepositoryMock'
+import { BoardEntity } from '../src/core/domain/entities/board.entity'
 
-let boardService: BoardService
-let boardRepo: BoardTypeOrmRepositoryMock
-
+let component:BoardService
+let randomService:RandomGeneratorService
 beforeEach(async () => {
-  boardRepo = await new BoardTypeOrmRepositoryMock()
-  boardService = await new BoardService(boardRepo)
+  const container = new Container()
+  // Board
+  container.bind<RandomGeneratorService>(TYPES.RandomGeneratorService).to(RandomGeneratorService)
+  container.bind<BoardTypeOrmRepositoryMock>(TYPES.BoardTypeOrmRepository).to(BoardTypeOrmRepositoryMock)
+  container.bind<BoardService>(TYPES.BoardService).to(BoardService)
+  randomService = container.get<RandomGeneratorService>(TYPES.RandomGeneratorService)
+  component = container.get<BoardService>(TYPES.BoardService)
 })
 
-it('', async () => {
-  // const boardCreated = await boardService.readBoard(1)
-  // expect(boardCreated).toBe({
-  //   boardId: 1,
-  //   boardSize: 12
-  // })
+test('Create a board', async () => {
+  const board = await component.createBoard(new BoardEntity(1, 12))
+  expect(board).toEqual({
+    boardId: 1,
+    boardSize: 12
+  })
 })
 
-// beforeEach(() => { bishop = new Bishop('WHITE', 'C', 1) })
+test('Read a board', async () => {
+  const board = await component.readBoard(1)
+  expect(board).toEqual({
+    boardId: 1,
+    boardSize: 12
+  })
+})
 
-// it('Should not move to the same place', () => {
-//   const position = new Position('C', 1)
-//   expect(bishop.canMoveTo(position)).toBe(false)
-// })
-// it('Should not move vertically', () => {
-//   const position = new Position('C', 8)
-//   expect(bishop.canMoveTo(position)).toBe(false)
-// })
+test('Update a board', async () => {
+  const board = await component.updateBoard(new BoardEntity(1, 12))
+  expect(board).toEqual({
+    boardId: 1,
+    boardSize: 12
+  })
+})
+
+test('RandomNumber returns a random position between 0 and 10', () => {
+  const randomNumber = randomService.generateRandomPosition(1, 10)
+  expect(randomNumber.x).toBeGreaterThanOrEqual(0)
+  expect(randomNumber.x).toBeLessThanOrEqual(10)
+  expect(randomNumber.y).toBeGreaterThanOrEqual(0)
+  expect(randomNumber.y).toBeLessThanOrEqual(10)
+})
+
+test('randomNumber returns a different value each time it is called', () => {
+  const firstRandomNumber = randomService.generateRandomPosition(2, 10)
+  const secondRandomNumber = randomService.generateRandomPosition(3, 10)
+  expect(firstRandomNumber).not.toEqual(secondRandomNumber)
+})

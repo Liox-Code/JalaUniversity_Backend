@@ -1,4 +1,4 @@
-import { Snake } from '../aggregates/snake.aggregate'
+import { SnakeAggregate } from '../aggregates/snake.aggregate'
 import { BoardEntity } from '../entities/board.entity'
 import { MatchGameEntity } from '../entities/matchGame.entity'
 import { SnakeEntity } from '../entities/snake.entity'
@@ -8,8 +8,8 @@ export class EntityFactory {
     return new BoardEntity(boardId, boardSize)
   }
 
-  public createSnake (boardId: number, snakeHead:SnakeEntity): Snake {
-    return new Snake(boardId, snakeHead)
+  public createSnake (boardId: number, snakeHead:SnakeEntity): SnakeAggregate {
+    return new SnakeAggregate(boardId, snakeHead)
   }
 
   public createMatchGame (matchGameId: number, boardId: number, snakeId: number, foodId: number): MatchGameEntity {

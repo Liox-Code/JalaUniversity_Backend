@@ -7,11 +7,13 @@ import { EDirection } from '../../enums/EDirection'
 import { SnakeEntity } from '../../core/domain/entities/snake.entity'
 import { BoardService } from '../../core/domain/services/board.service'
 import { AppDataSource } from '../../database/dataSource'
+import { RandomGeneratorService } from '../../core/domain/services/RandomGeneratorService'
 @controller('/snake')
 class IndexHandler extends BaseHttpController {
   constructor (
     @inject(TYPES.SnakeHeadService) private snakeService: SnakeService,
-    @inject(TYPES.BoardService) private boardService: BoardService
+    @inject(TYPES.BoardService) private boardService: BoardService,
+    @inject(TYPES.RandomGeneratorService) private randomGeneratorService: RandomGeneratorService
   ) {
     super()
   }
@@ -19,8 +21,10 @@ class IndexHandler extends BaseHttpController {
   @httpGet('/create')
   public async create (req: Request, res: Response, next: NextFunction) {
     await AppDataSource.initialize()
+    const seed = 1
     const limit = await (await this.boardService.readBoard(1)).boardSize
-    const randonPosition = this.boardService.randomPosition(limit)
+    const randonPosition = this.randomGeneratorService.generateRandomPosition(seed, limit)
+
     const snake: SnakeEntity = await this.snakeService.createSnake(new SnakeEntity(1, randonPosition, 1))
     await AppDataSource.destroy()
     res.status(200).json({ msg: snake })

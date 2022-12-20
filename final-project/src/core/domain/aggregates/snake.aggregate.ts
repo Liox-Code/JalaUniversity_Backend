@@ -3,15 +3,11 @@ import { SnakeEntity } from '../entities/snake.entity'
 import { SnakeBodyEntity } from '../entities/snakeBody.entity'
 
 @injectable()
-export class Snake {
+export class SnakeAggregate {
   private _snakeId: number
   private _snakeSize: number
   private _snakeHead: SnakeEntity
   private _snakeBody: SnakeBodyEntity[]
-
-  get snakeId (): number {
-    return this._snakeId
-  }
 
   constructor (snakeId:number, snakeHead: SnakeEntity) {
     this._snakeId = snakeId
@@ -20,12 +16,16 @@ export class Snake {
     this._snakeBody = []
   }
 
-  public addSnakeBody (snakeBody: SnakeBodyEntity): void {
-    this._snakeBody.push(snakeBody)
+  get snakeId (): number {
+    return this._snakeId
   }
 
-  public get snakeBody (): SnakeBodyEntity[] {
+  get snakeBody (): SnakeBodyEntity[] {
     return this._snakeBody
+  }
+
+  addSnakeBody (snakeBody: SnakeBodyEntity): void {
+    this._snakeBody.push(snakeBody)
   }
 
   async checkLenght (): Promise<void> {

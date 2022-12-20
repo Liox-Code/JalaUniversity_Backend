@@ -11,10 +11,6 @@ export class SnakeService {
     this.snake = snake
   }
 
-  async initilizeDb (): Promise<void> {
-    await this.snake.initialDB()
-  }
-
   async createSnake (snake: SnakeEntity) {
     return await this.snake.createSnake(snake)
   }
