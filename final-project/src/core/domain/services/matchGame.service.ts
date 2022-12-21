@@ -2,10 +2,10 @@ import { inject, injectable } from 'inversify'
 import { EMatchGameState, MatchGameEntity } from '../entities/matchGame.entity'
 import { IMatchGameRepository } from '../repositories/IMatchGame.repository'
 import { TYPES } from '../../../type.core'
-import { ISnakeRepository } from '../repositories/ISnakeHead.repository'
+import { ISnakeRepository } from '../repositories/ISnake.repository'
 import { IBoardRepository } from '../repositories/IBoard.repository'
 import { IFoodRepository } from '../repositories/IFood.repository'
-import { SnakeEntity } from '../entities/snake.entity'
+import { SnakeHeadEntity } from '../entities/snakeHead.valueObject'
 import { FoodEntity } from '../entities/food.entity'
 import { RandomGeneratorService } from './RandomGeneratorService'
 import { SnakeService } from './snake.service'
@@ -38,7 +38,7 @@ export class MatchGameService {
     const seed = 1
     const board = await this._board.createBoard({ boardId: 1, boardSize: size })
     const randonPosition = this._randomGenerator.generateRandomPosition(seed, board.boardSize)
-    const snake = await this._snake.createSnake(new SnakeEntity(1, randonPosition, 1))
+    const snake = await this._snake.createSnake(new SnakeHeadEntity(1, randonPosition, 1))
     const food = await this._food.createFood(new FoodEntity(1, randonPosition))
     const matchGameCreated = await this._matchGame.createMatchGame(new MatchGameEntity(1, board.boardId, snake.snakeId, food.foodId))
 

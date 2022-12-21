@@ -1,16 +1,11 @@
-import { EDirection } from '../../../enums/EDirection'
 import { IPosition } from '../interfaces/IPosition'
 
-export class SnakeEntity {
-  snakeId: number
-  snakeDirection: EDirection
-  snakeHeadPosition: IPosition
-  snakeSize: number
+export class SnakeBodyEntity {
+  snakeBodyIndex: number
+  snakeBodyPosition: IPosition
 
-  constructor (snakeId: number, snakeHeadPosition: IPosition, snakeSize: number) {
-    this.snakeId = snakeId
-    this.snakeDirection = EDirection.UP
-    this.snakeHeadPosition = snakeHeadPosition
-    this.snakeSize = snakeSize
+  constructor (snakeBodyIndex:number, snakeBodyPosition: IPosition) {
+    this.snakeBodyIndex = snakeBodyIndex
+    this.snakeBodyPosition = snakeBodyPosition
   }
 }

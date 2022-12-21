@@ -1,4 +1,4 @@
-import { SnakeBodyEntity } from '../core/domain/entities/snakeBody.entity'
+import { SnakeBodyEntity } from '../core/domain/entities/snakeBody.valueObject'
 import SnakeBodyDataEntity from './snakeBodyDataEntity'
 
 export class SnakeBodyMapper {

@@ -1,14 +1,13 @@
 import { injectable } from 'inversify'
-import { SnakeEntity } from '../core/domain/entities/snake.entity'
-import { ISnakeRepository } from '../core/domain/repositories/ISnakeHead.repository'
+import { ISnakeRepository } from '../core/domain/repositories/ISnake.repository'
 import 'reflect-metadata'
-import { FindManyOptions, Repository } from 'typeorm'
 import { AppDataSource } from '../database/dataSource'
 import SnakeDataEntity from '../database/snakeDataEntity'
 import { SnakeMapper } from '../database/snakeMapper'
 import SnakeBodyDataEntity from '../database/snakeBodyDataEntity'
 import { SnakeBodyMapper } from '../database/snakeBodyMapper'
-import { SnakeBodyEntity } from '../core/domain/entities/snakeBody.entity'
+import { SnakeAggregate } from '../core/domain/aggregates/snake.aggregate'
+import { Repository } from 'typeorm'
 
 @injectable()
 export class SnakeTypeOrmRepository implements ISnakeRepository {
@@ -20,41 +19,18 @@ export class SnakeTypeOrmRepository implements ISnakeRepository {
     this.snakeBodyRepository = AppDataSource.getRepository(SnakeBodyDataEntity)
   }
 
-  async createSnake (snake: SnakeEntity) {
-    const data = await this.snakeRepository.save(SnakeMapper.toDataEntity(snake))
-    return SnakeMapper.toEntity(data)
+  async createSnake (snake: SnakeAggregate) {
+    await this.snakeRepository.save(SnakeMapper.toDataEntity(snake))
   }
 
   async readSnake (id: number) {
-    const data = await this.snakeRepository.findOneBy({ snakeId: id })
-    return SnakeMapper.toEntity(data)
+    const snakeDBEntity = await this.snakeRepository.findOneBy({ snakeId: id })
+    const snakeId = snakeDBEntity.snakeId
+    const snake = SnakeMapper.toEntity(snakeDBEntity)
+    return { snakeId, snake }
   }
 
-  async updateSnake (snake: SnakeEntity) {
-    const data = await this.snakeRepository.save(SnakeMapper.toDataEntity(snake))
-    return SnakeMapper.toEntity(data)
-  }
-
-  async growSnake (snakeId: number, snakeBody: SnakeBodyEntity) {
-    const data = await this.snakeBodyRepository.save(SnakeBodyMapper.toDataEntity(snakeId, snakeBody))
-    return SnakeBodyMapper.toEntity(data)
-  }
-
-  async readSnakeBody (id: number) {
-    const options: FindManyOptions<SnakeBodyDataEntity> = {
-      where: { snakeId: id }
-    }
-    const snakeDataBodyArray = await this.snakeBodyRepository.find(options)
-    const snakeBodyArray = snakeDataBodyArray.map((snakeDataBody) => { return SnakeBodyMapper.toEntity(snakeDataBody) })
-    return snakeBodyArray
-  }
-
-  async updateSnakeBody (snakeId: number, snakeBody: SnakeBodyEntity) {
-    const data = await this.snakeBodyRepository.save(SnakeBodyMapper.toDataEntity(snakeId, snakeBody))
-    return SnakeBodyMapper.toEntity(data)
-  }
-
-  dieSnake () {
-    console.log('die')
+  async updateSnake (snake: SnakeAggregate) {
+    await this.snakeRepository.save(SnakeMapper.toDataEntity(snake))
   }
 }

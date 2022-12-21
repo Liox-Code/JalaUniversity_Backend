@@ -1,7 +1,7 @@
 import { Container } from 'inversify'
 import { TYPES } from './type.core'
 // Snake
-import { ISnakeRepository } from './core/domain/repositories/ISnakeHead.repository'
+import { ISnakeRepository } from './core/domain/repositories/ISnake.repository'
 import { SnakeTypeOrmRepository } from './infraestructure/snakeTypeOrm.repository'
 import { SnakeService } from './core/domain/services/snake.service'
 // Board
