@@ -56,17 +56,17 @@ export class MatchGameService {
     const snakeBodyReaded = await this._snakeBodyRepo.readSnakeBody(matchGameReaded.snakeId)
     const boardReaded = await this._board.readBoard(matchGameReaded.boardId)
 
-    // await this._snake.updateSnake(snakeAggregateReaded.snakeHead)
-    const lol = await this._snakeService.moveAllSnake(snakeHeadReaded.snakeId)
+    const isColliding = await this._snakeService.isCollidingSnake(snakeHeadReaded.snakeId)
     await this.isSnakeInFood(snakeHeadReaded.snakeId)
+    await this._snakeService.moveAllSnake(snakeHeadReaded.snakeId)
 
     const matchGame = {
-      matchGameReaded,
+      isColliding,
       foodReaded,
-      boardReaded,
       snakeHeadReaded,
       snakeBodyReaded,
-      lol
+      boardReaded,
+      matchGameReaded
     }
     return await matchGame
   }
