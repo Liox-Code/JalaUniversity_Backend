@@ -9,7 +9,7 @@ export default class SnakeBodyDataEntity {
     snakeId!: number
 
   @Column()
-    snakeBodyNumber!: number
+    snakeIndex!: number
 
   @Column()
     snakeBodyXAxis!: number

@@ -7,11 +7,10 @@ import { EDirection } from '../../enums/EDirection'
 import { SnakeEntity } from '../../core/domain/entities/snake.entity'
 import { BoardService } from '../../core/domain/services/board.service'
 import { AppDataSource } from '../../database/dataSource'
-import { RandomGeneratorService } from '../../core/domain/services/RandomGeneratorService'
-import { SnakeBodyEntity } from '../../core/domain/entities/snakeBody.entity'
-import { SnakeAggregate } from '../../core/domain/aggregates/snake.aggregate'
+import { RandomGeneratorService } from '../../core/domain/services/randomGeneratorService'
+
 @controller('/snake')
-class IndexHandler extends BaseHttpController {
+class SnakeController extends BaseHttpController {
   constructor (
     @inject(TYPES.SnakeService) private snakeService: SnakeService,
     @inject(TYPES.BoardService) private boardService: BoardService,
@@ -21,23 +20,15 @@ class IndexHandler extends BaseHttpController {
   }
 
   @httpGet('/create')
-  public async create (req: Request, res: Response, next: NextFunction) {
-    await AppDataSource.initialize()
-    const seed = 1
-    const limit = await (await this.boardService.readBoard(1)).boardSize
-    const randonPosition = this.randomGeneratorService.generateRandomPosition(seed, limit)
-
-    const snake: SnakeEntity = await this.snakeService.createSnake(new SnakeEntity(1, randonPosition, 1))
-    await AppDataSource.destroy()
+  public async create (@queryParam('snakeId') snakeId: number, req: Request, res: Response, next: NextFunction) {
+    const snake: SnakeEntity = await this.snakeService.createSnakeHead(snakeId)
     res.status(200).json({ msg: snake })
   }
 
   @httpGet('/move')
-  public async move (@queryParam('direction') direction: EDirection, req: Request, res: Response, next: NextFunction) {
+  public async move (@queryParam('snakeId') snakeId: number, @queryParam('direction') direction: EDirection, req: Request, res: Response, next: NextFunction) {
     await AppDataSource.initialize()
-    const snake: SnakeEntity = await this.snakeService.readSnake(1)
-    snake.snakeDirection = direction
-    const snakeNewPosition = await this.snakeService.updateSnake(snake)
+    const snakeNewPosition = await this.snakeService.changeDirectionSnakeHead(snakeId, direction)
     await AppDataSource.destroy()
     res.status(200).json({ msg: snakeNewPosition })
   }
@@ -45,10 +36,18 @@ class IndexHandler extends BaseHttpController {
   @httpGet('/grow')
   public async grow (@queryParam('snakeId') snakeId: number, req: Request, res: Response, next: NextFunction) {
     await AppDataSource.initialize()
-    const snake = await this.snakeService.growSnake(snakeId)
+    const snake = await this.snakeService.createNodeSnake(snakeId)
+    await AppDataSource.destroy()
+    res.status(200).json({ msg: snake })
+  }
+
+  @httpGet('/test')
+  public async test (@queryParam('snakeId') snakeId: number, req: Request, res: Response, next: NextFunction) {
+    await AppDataSource.initialize()
+    const snake = await this.snakeService.readNodeSnake(snakeId)
     await AppDataSource.destroy()
     res.status(200).json({ msg: snake })
   }
 }
 
-export default IndexHandler
+export default SnakeController

@@ -6,7 +6,7 @@ import { AppDataSource } from '../../database/dataSource'
 import { FoodService } from '../../core/domain/services/food.service'
 
 @controller('/food')
-class FoodHandler extends BaseHttpController {
+class FoodController extends BaseHttpController {
   constructor (
     @inject(TYPES.FoodService) private foodService: FoodService
   ) {
@@ -30,4 +30,4 @@ class FoodHandler extends BaseHttpController {
   }
 }
 
-export default FoodHandler
+export default FoodController

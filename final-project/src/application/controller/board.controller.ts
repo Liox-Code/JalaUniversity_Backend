@@ -5,7 +5,7 @@ import { BoardService } from '../../core/domain/services/board.service'
 import { inject } from 'inversify'
 import { AppDataSource } from '../../database/dataSource'
 @controller('/board')
-class BoardHandler extends BaseHttpController {
+class BoardController extends BaseHttpController {
   constructor (
     @inject(TYPES.BoardService) private boardService: BoardService
   ) {
@@ -39,4 +39,4 @@ class BoardHandler extends BaseHttpController {
   }
 }
 
-export default BoardHandler
+export default BoardController

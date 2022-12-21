@@ -1,8 +1,10 @@
 import { Container } from 'inversify'
 import { TYPES } from './type.core'
 // Snake
-import { ISnakeRepository } from './core/domain/repositories/ISnakeHead.repository'
-import { SnakeTypeOrmRepository } from './infraestructure/snakeTypeOrm.repository'
+import { ISnakeHeadRepository } from './core/domain/repositories/ISnakeHead.repository'
+import { SnakeBodyTypeOrmRepository } from './infraestructure/snakeBodyTypeOrm.repository'
+import { ISnakeBodyRepository } from './core/domain/repositories/ISnakeBody.repository'
+import { SnakeHeadTypeOrmRepository } from './infraestructure/snakeHeadTypeOrm.repository'
 import { SnakeService } from './core/domain/services/snake.service'
 // Board
 import { IBoardRepository } from './core/domain/repositories/IBoard.repository'
@@ -17,12 +19,13 @@ import { IFoodRepository } from './core/domain/repositories/IFood.repository'
 import { FoodTypeOrmRepository } from './infraestructure/foodTypeOrm.repository'
 import { FoodService } from './core/domain/services/food.service'
 // Random Generator
-import { RandomGeneratorService } from './core/domain/services/RandomGeneratorService'
+import { RandomGeneratorService } from './core/domain/services/randomGeneratorService'
 
 const container = new Container()
 
 // Snake
-container.bind<ISnakeRepository>(TYPES.SnakeHeadTypeOrmRepository).to(SnakeTypeOrmRepository)
+container.bind<ISnakeHeadRepository>(TYPES.SnakeHeadTypeOrmRepository).to(SnakeHeadTypeOrmRepository)
+container.bind<ISnakeBodyRepository>(TYPES.SnakeBodyTypeOrmRepository).to(SnakeBodyTypeOrmRepository)
 container.bind<SnakeService>(TYPES.SnakeService).to(SnakeService)
 
 // Board

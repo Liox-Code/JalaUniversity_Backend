@@ -1,86 +1,111 @@
 import { inject, injectable } from 'inversify'
-import { ISnakeRepository } from '../repositories/ISnakeHead.repository'
+import { ISnakeHeadRepository } from '../repositories/ISnakeHead.repository'
 import { TYPES } from '../../../type.core'
 import { EDirection } from '../../../enums/EDirection'
+import { ISnakeBodyRepository } from '../repositories/ISnakeBody.repository'
+import { IBoardRepository } from '../repositories/IBoard.repository'
+import { RandomGeneratorService } from './randomGeneratorService'
 import { SnakeEntity } from '../entities/snake.entity'
-import { SnakeAggregate } from '../aggregates/snake.aggregate'
 import { SnakeBodyEntity } from '../entities/snakeBody.entity'
 
 @injectable()
 export class SnakeService {
-  private readonly snakeHead: ISnakeRepository
+  private readonly _snakeHeadRepo: ISnakeHeadRepository
+  private readonly _snakeBodyRepo: ISnakeBodyRepository
+  private readonly _boardRepo: IBoardRepository
+  private readonly _randomGenerator: RandomGeneratorService
   constructor (
-    @inject(TYPES.SnakeHeadTypeOrmRepository) snakeHead: ISnakeRepository
+    @inject(TYPES.SnakeHeadTypeOrmRepository) snakeHeadRepo: ISnakeHeadRepository,
+    @inject(TYPES.SnakeBodyTypeOrmRepository) snakeBodyRepo: ISnakeBodyRepository,
+    @inject(TYPES.BoardTypeOrmRepository) boardRepo: IBoardRepository,
+    @inject(TYPES.RandomGeneratorService) randomGenerator: RandomGeneratorService
   ) {
-    this.snakeHead = snakeHead
+    this._snakeHeadRepo = snakeHeadRepo
+    this._snakeBodyRepo = snakeBodyRepo
+    this._boardRepo = boardRepo
+    this._randomGenerator = randomGenerator
   }
 
-  async createSnake (snake: SnakeEntity) {
-    return await this.snakeHead.createSnake(snake)
+  async createSnakeHead (snakeId: number) {
+    const seed = snakeId
+    const limit = await (await this._boardRepo.readBoard(snakeId)).boardSize
+    const randonPosition = this._randomGenerator.generateRandomPosition(seed, limit)
+
+    const snake: SnakeEntity = new SnakeEntity(snakeId, randonPosition, 1)
+
+    return await this._snakeHeadRepo.createSnake(snake)
   }
 
-  async readSnake (id: number) {
-    return await this.snakeHead.readSnake(id)
+  async readSnakeHead (snakeId: number) {
+    return await this._snakeHeadRepo.readSnake(snakeId)
   }
 
-  async updateSnake (snake: SnakeEntity) {
-    return await this.snakeHead.updateSnake(snake)
+  async updateSnakeHead (snake: SnakeEntity) {
+    return await this._snakeHeadRepo.updateSnake(snake)
   }
 
-  async moveSnake (direction: EDirection, snake: SnakeEntity, limit: number) {
-    let currentSnake = await this.readSnake(snake.snakeId)
-    currentSnake = await this.moveHeadSnake(direction, currentSnake, limit)
+  async changeDirectionSnakeHead (snakeId: number, direction: EDirection) {
+    const snake: SnakeEntity = await this.readSnakeHead(snakeId)
+    snake.snakeDirection = direction
+    const snakeNewPosition = await this.updateSnakeHead(snake)
 
-    let snakeAggregate = new SnakeAggregate(snake.snakeId, currentSnake)
-    snakeAggregate = new SnakeAggregate(snake.snakeId, currentSnake)
-    const snakeReaded = await this.snakeHead.readSnakeBody(snake.snakeId)
-    for (const snakeBodyItem of snakeReaded) {
-      snakeAggregate.addSnakeBody(snakeBodyItem)
-    }
-
-    const snakeBodyArray = await this.moveBodySnake(snakeAggregate)
-    return await snakeAggregate
+    await this._snakeHeadRepo.updateSnake(snakeNewPosition)
   }
 
-  async moveHeadSnake (direction: EDirection, snake: SnakeEntity, limit: number) {
+  async moveAllSnake (snakeId: number) {
+    await this.moveBodySnake(snakeId)
+    await this.moveSnakeHead(snakeId)
+  }
+
+  async moveSnakeHead (snakeId: number) {
+    const currentSnake = await this.readSnakeHead(snakeId)
+    const limit = await (await this._boardRepo.readBoard(snakeId)).boardSize
+    const nextPosition = await this.getNextPosition(currentSnake, limit)
+    currentSnake.snakeHeadPosition = nextPosition
+
+    await this._snakeHeadRepo.updateSnake(currentSnake)
+  }
+
+  async getNextPosition (snake: SnakeEntity, limit: number) {
     const directionsList = {
       [EDirection.UP]: { x: 0, y: 1 },
       [EDirection.DOWN]: { x: 0, y: -1 },
       [EDirection.RIGHT]: { x: 1, y: 0 },
       [EDirection.LEFT]: { x: -1, y: 0 }
     }
-    snake.snakeHeadPosition.x += directionsList[direction].x
-    snake.snakeHeadPosition.y += directionsList[direction].y
+    snake.snakeHeadPosition.x += directionsList[snake.snakeDirection].x
+    snake.snakeHeadPosition.y += directionsList[snake.snakeDirection].y
     snake.snakeHeadPosition.x = (snake.snakeHeadPosition.x >= limit) ? 0 : snake.snakeHeadPosition.x
     snake.snakeHeadPosition.y = (snake.snakeHeadPosition.y >= limit) ? 0 : snake.snakeHeadPosition.y
     snake.snakeHeadPosition.x = (snake.snakeHeadPosition.x < 0) ? (limit - 1) : snake.snakeHeadPosition.x
     snake.snakeHeadPosition.y = (snake.snakeHeadPosition.y < 0) ? (limit - 1) : snake.snakeHeadPosition.y
-    return await snake
+    return await snake.snakeHeadPosition
   }
 
-  async moveBodySnake (snake: SnakeAggregate) {
-    return await snake.snakeBody.map(async (snakeBodyItem, index) => {
-      if (index === 1) {
-        const newPosition = new SnakeBodyEntity(snake.snakeId, snake.snakeHead.snakeHeadPosition)
-        return await this.snakeHead.updateSnakeBody(snake.snakeId, newPosition)
+  async createNodeSnake (snakeId: number) {
+    const currentSnake = await this.readSnakeHead(snakeId)
+    const snakeNodesList = await this._snakeBodyRepo.readSnakeBody(snakeId)
+    const snakeBody = new SnakeBodyEntity(snakeNodesList.length, currentSnake.snakeHeadPosition)
+    return await this._snakeBodyRepo.createSnake(snakeId, snakeBody)
+  }
+
+  async readNodeSnake (snakeId: number) {
+    const snakeNodesList = await this._snakeBodyRepo.readSnakeBody(snakeId)
+    return await snakeNodesList
+  }
+
+  async moveBodySnake (snakeId: number) {
+    const currentSnake = await this.readSnakeHead(snakeId)
+    const snakeBodyList = await this._snakeBodyRepo.readSnakeBody(snakeId)
+    const promises = snakeBodyList.reverse().map(async (snakeBodyItem, index) => {
+      if (index === snakeBodyList.length - 1) {
+        snakeBodyItem.snakeBodyPosition = currentSnake.snakeHeadPosition
+        return this._snakeBodyRepo.updateSnakeBody(currentSnake.snakeId, snakeBodyItem)
       } else {
-        const newPosition = snake.snakeBody[index - 1]
-        return await this.snakeHead.updateSnakeBody(snake.snakeId, newPosition)
+        snakeBodyItem.snakeBodyPosition = snakeBodyList[index + 1].snakeBodyPosition
+        return this._snakeBodyRepo.updateSnakeBody(currentSnake.snakeId, snakeBodyItem)
       }
     })
-  }
-
-  async growSnake (snakeHeadId:number) {
-    const currentSnake = await this.readSnake(snakeHeadId)
-    const snake = new SnakeAggregate(snakeHeadId, currentSnake)
-    const snakeBodyArray = await this.snakeHead.readSnakeBody(snakeHeadId)
-    for (const snakeBodyItem of snakeBodyArray) {
-      snake.addSnakeBody(snakeBodyItem)
-    }
-    const snakeBody = new SnakeBodyEntity(snake.snakeBody.length, currentSnake.snakeHeadPosition)
-    await this.snakeHead.growSnake(snake.snakeId, snakeBody)
-    snake.addSnakeBody(snakeBody)
-
-    return snake
+    await Promise.all(promises)
   }
 }

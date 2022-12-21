@@ -9,7 +9,7 @@ import { BoardService } from '../../core/domain/services/board.service'
 import { EMatchGameState } from '../../core/domain/entities/matchGame.entity'
 
 @controller('/matchGame')
-class MatchGameHandler extends BaseHttpController {
+class MatchGameController extends BaseHttpController {
   constructor (
     @inject(TYPES.MatchGameService) private matchGameService: MatchGameService,
     @inject(TYPES.SnakeService) private snakeService: SnakeService,
@@ -51,4 +51,4 @@ class MatchGameHandler extends BaseHttpController {
   }
 }
 
-export default MatchGameHandler
+export default MatchGameController
