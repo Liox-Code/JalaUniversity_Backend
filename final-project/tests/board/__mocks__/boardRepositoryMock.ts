@@ -1,7 +1,7 @@
 import { injectable } from 'inversify'
 import 'reflect-metadata'
-import { BoardEntity } from '../../src/core/domain/entities/board.entity'
-import { IBoardRepository } from '../../src/core/domain/repositories/IBoard.repository'
+import { BoardEntity } from '../../../src/core/domain/entities/board.entity'
+import { IBoardRepository } from '../../../src/core/domain/repositories/IBoard.repository'
 import { boardPropsMock } from './boardPropsMock'
 
 @injectable()

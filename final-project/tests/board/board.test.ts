@@ -1,12 +1,12 @@
 import { Container } from 'inversify'
-import { TYPES } from '../src/type.core'
+import { TYPES } from '../../src/type.core'
 import 'reflect-metadata'
 // Random Generator
-import { RandomGeneratorService } from '../src/core/domain/services/RandomGeneratorService'
+import { RandomGeneratorService } from '../../src/core/domain/services/randomGeneratorService'
 // Board
-import { BoardService } from '../src/core/domain/services/board.service'
+import { BoardService } from '../../src/core/domain/services/board.service'
 import { BoardTypeOrmRepositoryMock } from './__mocks__/boardRepositoryMock'
-import { BoardEntity } from '../src/core/domain/entities/board.entity'
+import { BoardEntity } from '../../src/core/domain/entities/board.entity'
 
 let component:BoardService
 let randomService:RandomGeneratorService

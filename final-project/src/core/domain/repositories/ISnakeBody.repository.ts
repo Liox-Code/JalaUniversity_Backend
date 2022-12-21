@@ -4,5 +4,5 @@ export interface ISnakeBodyRepository {
   createSnake: (snakeId: number, snakeBody: SnakeBodyEntity) => Promise<SnakeBodyEntity>
   readSnakeBody: (id: number) => Promise<SnakeBodyEntity[]>
   updateSnakeBody: (snakeId: number, snakeBody: SnakeBodyEntity) => Promise<SnakeBodyEntity>
-  dieSnake: () => void
+  dieSnake: (id: number) => Promise<void>
 }

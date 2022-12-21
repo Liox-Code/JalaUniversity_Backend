@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1671566955963" clover="3.2.0">
-  <project timestamp="1671566955963" name="All files">
+<coverage generated="1671634760716" clover="3.2.0">
+  <project timestamp="1671634760716" name="All files">
     <metrics statements="23" coveredstatements="23" conditionals="0" coveredconditionals="0" methods="7" coveredmethods="7" elements="30" coveredelements="30" complexity="0" loc="23" ncloc="23" packages="3" files="4" classes="4"/>
     <package name="src">
       <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="type.core.ts" path="/home/liox/jalasoft/jalasoft-bootcamp/JalaUniversity_Backend/final-project/src/type.core.ts">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="1" type="stmt"/>
-        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
       </file>
     </package>
     <package name="src.core.domain.entities">
@@ -21,7 +21,17 @@
     </package>
     <package name="src.core.domain.services">
       <metrics statements="18" coveredstatements="18" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="6"/>
-      <file name="RandomGeneratorService.ts" path="/home/liox/jalasoft/jalasoft-bootcamp/JalaUniversity_Backend/final-project/src/core/domain/services/RandomGeneratorService.ts">
+      <file name="board.service.ts" path="/home/liox/jalasoft/jalasoft-bootcamp/JalaUniversity_Backend/final-project/src/core/domain/services/board.service.ts">
+        <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="4"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="10" count="5" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+      </file>
+      <file name="randomGeneratorService.ts" path="/home/liox/jalasoft/jalasoft-bootcamp/JalaUniversity_Backend/final-project/src/core/domain/services/randomGeneratorService.ts">
         <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="1" type="stmt"/>
         <line num="5" count="1" type="stmt"/>
@@ -34,16 +44,6 @@
         <line num="17" count="3" type="stmt"/>
         <line num="18" count="3" type="stmt"/>
         <line num="19" count="3" type="stmt"/>
-      </file>
-      <file name="board.service.ts" path="/home/liox/jalasoft/jalasoft-bootcamp/JalaUniversity_Backend/final-project/src/core/domain/services/board.service.ts">
-        <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="4"/>
-        <line num="1" count="1" type="stmt"/>
-        <line num="4" count="1" type="stmt"/>
-        <line num="7" count="1" type="stmt"/>
-        <line num="10" count="5" type="stmt"/>
-        <line num="14" count="1" type="stmt"/>
-        <line num="18" count="1" type="stmt"/>
-        <line num="22" count="1" type="stmt"/>
       </file>
     </package>
   </project>

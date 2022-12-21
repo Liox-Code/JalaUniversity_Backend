@@ -29,7 +29,7 @@ class MatchGameController extends BaseHttpController {
   @httpGet('/read')
   public async read (@queryParam('matchId') matchId: number, req: Request, res: Response, next: NextFunction) {
     await AppDataSource.initialize()
-    const matchGameReaded = await this.matchGameService.readMatchGame(matchId)
+    const matchGameReaded = await this.matchGameService.refreshMatchGame(matchId)
     await AppDataSource.destroy()
     res.status(200).json({ matchGameReaded })
   }

@@ -49,19 +49,34 @@ export class MatchGameService {
     return await matchGameCreated
   }
 
-  async readMatchGame (id: number): Promise<any> {
+  async refreshMatchGame (id: number): Promise<any> {
+    const matchGameReaded = await this._matchGame.readMatchGame(id)
+    const snakeHeadReaded = await this._snakeHeadRepo.readSnake(matchGameReaded.snakeId)
+
+    await this._snakeService.moveAllSnake(snakeHeadReaded.snakeId)
+    const isColliding = await this._snakeService.isCollidingSnake(snakeHeadReaded.snakeId)
+    if (isColliding) {
+      await this.restart(snakeHeadReaded.snakeId)
+    }
+    await this.isSnakeInFood(snakeHeadReaded.snakeId)
+
+    const refreshData = await this.readSnake(id)
+
+    const matchGame = {
+      isColliding,
+      refreshData
+    }
+    return await matchGame
+  }
+
+  async readSnake (id: number): Promise<any> {
     const matchGameReaded = await this._matchGame.readMatchGame(id)
     const foodReaded = await this._food.readFood(matchGameReaded.foodId)
     const snakeHeadReaded = await this._snakeHeadRepo.readSnake(matchGameReaded.snakeId)
     const snakeBodyReaded = await this._snakeBodyRepo.readSnakeBody(matchGameReaded.snakeId)
     const boardReaded = await this._board.readBoard(matchGameReaded.boardId)
 
-    const isColliding = await this._snakeService.isCollidingSnake(snakeHeadReaded.snakeId)
-    await this.isSnakeInFood(snakeHeadReaded.snakeId)
-    await this._snakeService.moveAllSnake(snakeHeadReaded.snakeId)
-
     const matchGame = {
-      isColliding,
       foodReaded,
       snakeHeadReaded,
       snakeBodyReaded,
@@ -77,6 +92,7 @@ export class MatchGameService {
     const matchGameReaded = await this._matchGame.readMatchGame(id)
     const foodReaded = await this._food.readFood(matchGameReaded.foodId)
     const snakeReaded = await this._snakeHeadRepo.readSnake(matchGameReaded.snakeId)
+    const snakeNodesReaded = await this._snakeBodyRepo.readSnakeBody(matchGameReaded.snakeId)
     const boardReaded = await this._board.readBoard(matchGameReaded.boardId)
 
     const snakeRandonPosition = this._randomGenerator.generateRandomPosition(firstSeed, boardReaded.boardSize)
@@ -85,15 +101,19 @@ export class MatchGameService {
     snakeReaded.snakeHeadPosition = snakeRandonPosition
     snakeReaded.snakeSize = 1
     foodReaded.foodPosition = foodRandonPosition
+    matchGameReaded.matchGameState = EMatchGameState.Ready
 
+    await this._matchGame.updateMatchGame(matchGameReaded)
+    await this._food.updateFood(foodReaded)
     await this._snakeHeadRepo.updateSnake(snakeReaded)
-    await this._food.createFood(foodReaded)
+    await this._snakeBodyRepo.dieSnake(snakeReaded.snakeId)
 
     const matchGame = {
-      matchGameReaded,
       foodReaded,
+      snakeReaded,
+      snakeNodesReaded,
       boardReaded,
-      snakeReaded
+      matchGameReaded
     }
     return await matchGame
   }
@@ -102,17 +122,14 @@ export class MatchGameService {
     const foodReaded = await this._food.readFood(id)
     const snakeReaded = await this._snakeHeadRepo.readSnake(id)
     if ((snakeReaded.snakeHeadPosition.x === foodReaded.foodPosition.x) && (snakeReaded.snakeHeadPosition.y === foodReaded.foodPosition.y)) {
-      await this.eatFood(id)
+      await this.moveFood(id)
+      await this._snakeService.growSnake(id)
     }
   }
 
-  async eatFood (id: number): Promise<void> {
+  async moveFood (id: number): Promise<void> {
     const seed = 1
     const boardReaded = await this._board.readBoard(id)
-    const snakeReaded = await this._snakeHeadRepo.readSnake(id)
-    snakeReaded.snakeSize = snakeReaded.snakeSize + 1
-    await this._snakeHeadRepo.updateSnake(snakeReaded)
-
     const foodReaded = await this._food.readFood(id)
     foodReaded.foodPosition = await this._randomGenerator.generateRandomPosition(seed, boardReaded.boardSize)
     await this._food.updateFood(foodReaded)

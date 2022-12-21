@@ -47,9 +47,7 @@ export class SnakeService {
   async changeDirectionSnakeHead (snakeId: number, direction: EDirection) {
     const snake: SnakeEntity = await this.readSnakeHead(snakeId)
     snake.snakeDirection = direction
-    const snakeNewPosition = await this.updateSnakeHead(snake)
-
-    await this._snakeHeadRepo.updateSnake(snakeNewPosition)
+    await this._snakeHeadRepo.updateSnake(snake)
   }
 
   async moveAllSnake (snakeId: number) {
@@ -80,6 +78,22 @@ export class SnakeService {
     snake.snakeHeadPosition.x = (snake.snakeHeadPosition.x < 0) ? (limit - 1) : snake.snakeHeadPosition.x
     snake.snakeHeadPosition.y = (snake.snakeHeadPosition.y < 0) ? (limit - 1) : snake.snakeHeadPosition.y
     return await snake.snakeHeadPosition
+  }
+
+  async growSnake (snakeId: number) {
+    const newSize = await this.growSizeSnake(snakeId)
+    const newNode = await this.createNodeSnake(snakeId)
+    const growSnake = {
+      newSize,
+      newNode
+    }
+    return growSnake
+  }
+
+  async growSizeSnake (snakeId: number) {
+    const currentSnake = await this.readSnakeHead(snakeId)
+    currentSnake.snakeSize = currentSnake.snakeSize + 1
+    return await this._snakeHeadRepo.updateSnake(currentSnake)
   }
 
   async createNodeSnake (snakeId: number) {

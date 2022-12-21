@@ -34,7 +34,11 @@ export class SnakeBodyTypeOrmRepository implements ISnakeBodyRepository {
     return SnakeBodyMapper.toEntity(data)
   }
 
-  dieSnake () {
-    console.log('die')
+  async dieSnake (snakeId: number) {
+    const options: FindManyOptions<SnakeBodyDataEntity> = {
+      where: { snakeId }
+    }
+    const snakeDataBodyArray = await this.snakeBodyRepository.find(options)
+    await this.snakeBodyRepository.remove(snakeDataBodyArray)
   }
 }
