@@ -6,7 +6,6 @@ import { inject } from 'inversify'
 import { EDirection } from '../../enums/EDirection'
 import { SnakeEntity } from '../../core/domain/entities/snake.entity'
 import { BoardService } from '../../core/domain/services/board.service'
-import { AppDataSource } from '../../database/dataSource'
 import { RandomGeneratorService } from '../../core/domain/services/randomGeneratorService'
 
 @controller('/snake')
@@ -27,25 +26,19 @@ class SnakeController extends BaseHttpController {
 
   @httpGet('/move')
   public async move (@queryParam('snakeId') snakeId: number, @queryParam('direction') direction: EDirection, req: Request, res: Response, next: NextFunction) {
-    await AppDataSource.initialize()
     const snakeNewPosition = await this.snakeService.changeDirectionSnakeHead(snakeId, direction)
-    await AppDataSource.destroy()
     res.status(200).json({ msg: snakeNewPosition })
   }
 
   @httpGet('/grow')
   public async grow (@queryParam('snakeId') snakeId: number, req: Request, res: Response, next: NextFunction) {
-    await AppDataSource.initialize()
     const snake = await this.snakeService.createNodeSnake(snakeId)
-    await AppDataSource.destroy()
     res.status(200).json({ msg: snake })
   }
 
   @httpGet('/test')
   public async test (@queryParam('snakeId') snakeId: number, req: Request, res: Response, next: NextFunction) {
-    await AppDataSource.initialize()
     const snake = await this.snakeService.readNodeSnake(snakeId)
-    await AppDataSource.destroy()
     res.status(200).json({ msg: snake })
   }
 }

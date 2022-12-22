@@ -9,6 +9,7 @@ const TYPES = {
   // Match Game
   MatchGameTypeOrmRepository: Symbol.for('MatchGameTypeOrmRepository'),
   MatchGameService: Symbol.for('MatchGameService'),
+  MatchGameController: Symbol.for('MatchGameController'),
   // Food
   FoodTypeOrmRepository: Symbol.for('FoodTypeOrmRepository'),
   FoodService: Symbol.for('FoodService'),

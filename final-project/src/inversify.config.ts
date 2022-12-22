@@ -20,6 +20,7 @@ import { FoodTypeOrmRepository } from './infraestructure/foodTypeOrm.repository'
 import { FoodService } from './core/domain/services/food.service'
 // Random Generator
 import { RandomGeneratorService } from './core/domain/services/randomGeneratorService'
+import MatchGameController from './application/controller/matchGame.controller'
 
 const container = new Container()
 
@@ -34,7 +35,8 @@ container.bind<BoardService>(TYPES.BoardService).to(BoardService)
 
 // MatchGame
 container.bind<IMatchGameRepository>(TYPES.MatchGameTypeOrmRepository).to(MatchGameTypeOrmRepository)
-container.bind<MatchGameService>(TYPES.MatchGameService).to(MatchGameService)
+container.bind<MatchGameService>(TYPES.MatchGameService).to(MatchGameService).inSingletonScope()
+container.bind<MatchGameController>(TYPES.MatchGameController).to(MatchGameController)
 
 // Food
 container.bind<IFoodRepository>(TYPES.FoodTypeOrmRepository).to(FoodTypeOrmRepository)

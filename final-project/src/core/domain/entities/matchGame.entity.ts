@@ -11,7 +11,7 @@ export class MatchGameEntity implements IMatchGame {
   boardId: number
   snakeId: number
   foodId: number
-  matchGameState: EMatchGameState
+  matchGameState?: EMatchGameState
 
   constructor (matchId:number, boardId: number, snakeId: number, foodId: number) {
     this.matchGameId = matchId
