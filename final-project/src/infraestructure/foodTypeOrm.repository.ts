@@ -21,8 +21,11 @@ export class FoodTypeOrmRepository implements IFoodRepository {
   }
 
   async readFood (id: number): Promise<FoodEntity> {
-    const data = await this.repository.findOneBy({ foodId: id })
-    return await FoodMapper.toEntity(data)
+    const foundFood = await this.repository.findOneBy({ foodId: id })
+    if (!foundFood) {
+      throw new Error(`Food with id ${id} not found`)
+    }
+    return await FoodMapper.toEntity(foundFood)
   }
 
   async updateFood (food: FoodEntity): Promise<FoodEntity> {

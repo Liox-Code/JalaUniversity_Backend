@@ -21,8 +21,11 @@ export class BoardTypeOrmRepository implements IBoardRepository {
   }
 
   async readBoard (id: number): Promise<BoardEntity> {
-    const data = await this.repository.findOneBy({ boardId: id })
-    return BoardMapper.toEntity(data)
+    const foundBoard = await this.repository.findOneBy({ boardId: id })
+    if (!foundBoard) {
+      throw new Error(`Board with id ${id} not found`)
+    }
+    return BoardMapper.toEntity(foundBoard)
   }
 
   async updateBoard (board: BoardEntity): Promise<BoardEntity> {

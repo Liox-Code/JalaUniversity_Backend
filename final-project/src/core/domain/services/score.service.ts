@@ -28,7 +28,7 @@ export class ScoreService {
   }
 
   async updateScore (criteria: TScoreCriteria): Promise<ScoreEntity> {
-    const user = await this._scoreRepo.updateScore(criteria)
-    return user
+    const score = await this._scoreRepo.updateScore(criteria)
+    return score
   }
 }

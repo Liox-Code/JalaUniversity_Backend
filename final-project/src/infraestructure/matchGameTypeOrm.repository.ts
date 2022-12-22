@@ -21,8 +21,11 @@ export class MatchGameTypeOrmRepository implements IMatchGameRepository {
   }
 
   async readMatchGame (id: number): Promise<MatchGameEntity> {
-    const data = await this.repository.findOneBy({ snakeId: id })
-    return await MatchGameMapper.toEntity(data)
+    const foundMatchGame = await this.repository.findOneBy({ snakeId: id })
+    if (!foundMatchGame) {
+      throw new Error(`Match Game with id ${id} not found`)
+    }
+    return await MatchGameMapper.toEntity(foundMatchGame)
   }
 
   async updateMatchGame (matchGame: MatchGameEntity): Promise<MatchGameEntity> {

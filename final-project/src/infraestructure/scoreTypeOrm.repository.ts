@@ -33,7 +33,7 @@ export class ScoreTypeOrmRepository implements IScoreRepository {
   }
 
   async updateScore (score: TScoreProps): Promise<ScoreEntity> {
-    const updatedUser = await this.repository.save(score)
-    return ScoreMapper.toEntity(updatedUser)
+    const updatedScore = await this.repository.save(score)
+    return ScoreMapper.toEntity(updatedScore)
   }
 }

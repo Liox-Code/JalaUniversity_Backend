@@ -21,8 +21,11 @@ export class SnakeHeadTypeOrmRepository implements ISnakeHeadRepository {
   }
 
   async readSnake (id: number) {
-    const data = await this.snakeRepository.findOneBy({ snakeId: id })
-    return SnakeMapper.toEntity(data)
+    const foundSnake = await this.snakeRepository.findOneBy({ snakeId: id })
+    if (!foundSnake) {
+      throw new Error(`Snake with id ${id} not found`)
+    }
+    return SnakeMapper.toEntity(foundSnake)
   }
 
   async updateSnake (snake: SnakeEntity) {

@@ -23,6 +23,7 @@ beforeEach(async () => {
 
 test('Create a snake', async () => {
   const snake = await component.createSnakeHead(1)
+  console.log(snake)
 })
 
 // test('Create a snake', async () => {

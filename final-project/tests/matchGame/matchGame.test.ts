@@ -31,6 +31,7 @@ beforeEach(async () => {
 
 test('Create a matchGame', async () => {
   const matchGame = await component.createMatchGame(10)
+  console.log(matchGame)
 })
 
 // test('Create a matchGame', async () => {

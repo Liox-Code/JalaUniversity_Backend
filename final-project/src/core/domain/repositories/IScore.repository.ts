@@ -4,6 +4,7 @@ export type TScoreProps = {
   scoreId?: number
   matchId?: number
   userId?: number
+  snakeId?: number
   score?: number
 }
 

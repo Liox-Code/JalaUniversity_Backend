@@ -6,7 +6,9 @@
   "scripts": {
     "debug": "node -r ts-node/register --inspect src/index.ts",
     "dev": "nodemon --inspect src/index.ts",
-    "lint-check": "eslint . --ext .ts",
+    "lint-check:source": "eslint ./src --ext .ts",
+    "lint-check:tests": "eslint ./tests --ext .ts",
+    "lint-check:all": "eslint ./tests --ext .ts",
     "lint-fix": "eslint . --ext .ts --fix",
     "test": "jest --coverage"
   },

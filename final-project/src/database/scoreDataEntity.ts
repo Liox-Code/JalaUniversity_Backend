@@ -12,5 +12,8 @@ export default class ScoreDataEntity {
     userId!: number
 
   @Column()
+    snakeId!: number
+
+  @Column()
     score!: number
 }

@@ -7,6 +7,7 @@ export class ScoreMapper {
       scoreId: score.scoreId,
       userId: score.userId,
       matchId: score.matchId,
+      snakeId: score.snakeId,
       score: score.score
     }
 
@@ -18,6 +19,7 @@ export class ScoreMapper {
       scoreId: score.scoreId,
       userId: score.userId,
       matchId: score.matchId,
+      snakeId: score.snakeId,
       score: score.score
     }
 

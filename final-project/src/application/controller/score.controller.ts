@@ -15,7 +15,14 @@ class ScoreController extends BaseHttpController {
 
   @httpGet('/test')
   public async test (req: Request, res: Response) {
-    const score: ScoreEntity = await this.scoreService.createScore(1, 1, 1, 100)
+    const scoreEntity: ScoreEntity = {
+      scoreId: 1,
+      matchId: 1,
+      userId: 1,
+      snakeId: 1,
+      score: 100
+    }
+    const score: ScoreEntity = await this.scoreService.createScore(scoreEntity)
     res.status(200).json({ msg: score })
   }
 }

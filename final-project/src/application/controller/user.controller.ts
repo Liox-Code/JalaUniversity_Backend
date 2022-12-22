@@ -15,7 +15,11 @@ class UserController extends BaseHttpController {
 
   @httpGet('/test')
   public async test (req: Request, res: Response) {
-    const user: UserEntity = await this.userService.createUser(1, 'Liox')
+    const scoreEntity: UserEntity = {
+      userId: 1,
+      name: 'Liox'
+    }
+    const user: UserEntity = await this.userService.createUser(scoreEntity)
     res.status(200).json({ msg: user })
   }
 }
