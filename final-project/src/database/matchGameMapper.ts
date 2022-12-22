@@ -3,7 +3,7 @@ import MatchGameDataEntity from './matchGameDataEntity'
 
 export class MatchGameMapper {
   static toEntity (matchGame: MatchGameDataEntity): MatchGameEntity {
-    const matchGameDataEntity: MatchGameEntity = {
+    const matchGameEntity: MatchGameEntity = {
       matchGameId: matchGame.matchGameId,
       boardId: matchGame.boardId,
       snakeId: matchGame.snakeId,
@@ -11,7 +11,7 @@ export class MatchGameMapper {
       matchGameState: EMatchGameState[matchGame.matchGameState as EMatchGameState]
     }
 
-    return matchGameDataEntity
+    return matchGameEntity
   }
 
   static toDataEntity (matchGame: MatchGameEntity): MatchGameDataEntity {

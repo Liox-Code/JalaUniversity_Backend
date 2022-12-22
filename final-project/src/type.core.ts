@@ -13,6 +13,12 @@ const TYPES = {
   // Food
   FoodTypeOrmRepository: Symbol.for('FoodTypeOrmRepository'),
   FoodService: Symbol.for('FoodService'),
+  // User
+  ScoreTypeOrmRepository: Symbol.for('ScoreTypeOrmRepository'),
+  ScoreService: Symbol.for('ScoreService'),
+  // Score
+  UserTypeOrmRepository: Symbol.for('UserTypeOrmRepository'),
+  UserService: Symbol.for('UserService'),
   // Random Generator
   RandomGeneratorService: Symbol.for('RandomGeneratorService')
 }

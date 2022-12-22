@@ -116,7 +116,8 @@ export class MatchGameService {
       matchGameId: matchId,
       boardId: boardProps.boardId,
       snakeId: snakeProps.snakeId,
-      foodId: foodProps.foodId
+      foodId: foodProps.foodId,
+      matchGameState: EMatchGameState.Ready
     }
 
     const MatchData = {

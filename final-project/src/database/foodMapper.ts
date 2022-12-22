@@ -3,12 +3,12 @@ import FoodDataEntity from './foodDataEntity'
 
 export class FoodMapper {
   static toEntity (food: FoodDataEntity): FoodEntity {
-    const foodDataEntity: FoodEntity = {
+    const foodEntity: FoodEntity = {
       foodId: food.foodId,
       foodPosition: { x: food.foodXPosition, y: food.foodYPosition }
     }
 
-    return foodDataEntity
+    return foodEntity
   }
 
   static toDataEntity (food: FoodEntity): FoodDataEntity {

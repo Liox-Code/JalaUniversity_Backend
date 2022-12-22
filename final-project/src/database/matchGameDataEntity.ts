@@ -9,11 +9,11 @@ export default class MatchGameDataEntity {
     boardId!: number
 
   @Column()
-    snakeId: number
+    snakeId!: number
 
   @Column()
-    foodId: number
+    foodId!: number
 
   @Column()
-    matchGameState:string
+    matchGameState!:string
 }

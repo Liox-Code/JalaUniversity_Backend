@@ -15,7 +15,7 @@ export class SnakeMapper {
   }
 
   static toDataEntity (snake: SnakeEntity): SnakeDataEntity {
-    const snakeEntity: SnakeDataEntity = {
+    const snakeDataEntity: SnakeDataEntity = {
       snakeId: snake.snakeId,
       snakeDirection: snake.snakeDirection,
       snakeHeadXPosition: snake.snakeHeadPosition.x,
@@ -23,6 +23,6 @@ export class SnakeMapper {
       snakeSize: snake.snakeSize
     }
 
-    return snakeEntity
+    return snakeDataEntity
   }
 }

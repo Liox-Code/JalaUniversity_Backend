@@ -3,12 +3,12 @@ import BoardDataEntity from './boardDataEntity'
 
 export class BoardMapper {
   static toEntity (board: BoardDataEntity): BoardEntity {
-    const boardDataEntity: BoardDataEntity = {
+    const boardEntity: BoardEntity = {
       boardId: board.boardId,
       boardSize: board.boardSize
     }
 
-    return boardDataEntity
+    return boardEntity
   }
 
   static toDataEntity (board: BoardEntity): BoardDataEntity {

@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response } from 'express'
 import { controller, httpGet, BaseHttpController, queryParam } from 'inversify-express-utils'
 import { TYPES } from '../../type.core'
 import { SnakeService } from '../../core/domain/services/snake.service'
@@ -19,25 +19,25 @@ class SnakeController extends BaseHttpController {
   }
 
   @httpGet('/create')
-  public async create (@queryParam('snakeId') snakeId: number, req: Request, res: Response, next: NextFunction) {
+  public async create (@queryParam('snakeId') snakeId: number, req: Request, res: Response) {
     const snake: SnakeEntity = await this.snakeService.createSnakeHead(snakeId)
     res.status(200).json({ msg: snake })
   }
 
   @httpGet('/move')
-  public async move (@queryParam('snakeId') snakeId: number, @queryParam('direction') direction: EDirection, req: Request, res: Response, next: NextFunction) {
+  public async move (@queryParam('snakeId') snakeId: number, @queryParam('direction') direction: EDirection, req: Request, res: Response) {
     const snakeNewPosition = await this.snakeService.changeDirectionSnakeHead(snakeId, direction)
     res.status(200).json({ msg: snakeNewPosition })
   }
 
   @httpGet('/grow')
-  public async grow (@queryParam('snakeId') snakeId: number, req: Request, res: Response, next: NextFunction) {
+  public async grow (@queryParam('snakeId') snakeId: number, req: Request, res: Response) {
     const snake = await this.snakeService.createNodeSnake(snakeId)
     res.status(200).json({ msg: snake })
   }
 
   @httpGet('/test')
-  public async test (@queryParam('snakeId') snakeId: number, req: Request, res: Response, next: NextFunction) {
+  public async test (@queryParam('snakeId') snakeId: number, req: Request, res: Response) {
     const snake = await this.snakeService.readNodeSnake(snakeId)
     res.status(200).json({ msg: snake })
   }

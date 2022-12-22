@@ -21,6 +21,14 @@ import { FoodService } from './core/domain/services/food.service'
 // Random Generator
 import { RandomGeneratorService } from './core/domain/services/randomGeneratorService'
 import MatchGameController from './application/controller/matchGame.controller'
+// User
+import { IUserRepository } from './core/domain/repositories/IUser.repository'
+import { UserTypeOrmRepository } from './infraestructure/userTypeOrm.repository'
+import { UserService } from './core/domain/services/user.service'
+// Score
+import { ScoreTypeOrmRepository } from './infraestructure/scoreTypeOrm.repository'
+import { IScoreRepository } from './core/domain/repositories/IScore.repository'
+import { ScoreService } from './core/domain/services/score.service'
 
 const container = new Container()
 
@@ -41,6 +49,14 @@ container.bind<MatchGameController>(TYPES.MatchGameController).to(MatchGameContr
 // Food
 container.bind<IFoodRepository>(TYPES.FoodTypeOrmRepository).to(FoodTypeOrmRepository)
 container.bind<FoodService>(TYPES.FoodService).to(FoodService)
+
+// User
+container.bind<IUserRepository>(TYPES.UserTypeOrmRepository).to(UserTypeOrmRepository)
+container.bind<UserService>(TYPES.UserService).to(UserService)
+
+// Score
+container.bind<IScoreRepository>(TYPES.ScoreTypeOrmRepository).to(ScoreTypeOrmRepository)
+container.bind<ScoreService>(TYPES.ScoreService).to(ScoreService)
 
 // Random Generator
 container.bind<RandomGeneratorService>(TYPES.RandomGeneratorService).to(RandomGeneratorService)
