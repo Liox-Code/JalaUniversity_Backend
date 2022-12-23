@@ -1,133 +1,461 @@
 {
 	"info": {
-		"_postman_id": "6bd46a1b-6bae-4815-b773-2ec79090fc97",
+		"_postman_id": "edc8316a-eb5d-429f-ba25-d80148e456d7",
 		"name": "Snake Game",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24988181"
 	},
 	"item": [
 		{
-			"name": "SnakeMove",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
-		},
-		{
-			"name": "MatchGameRead",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8889/matchGame/read?id=1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8889",
-					"path": [
-						"matchGame",
-						"read"
-					],
-					"query": [
-						{
-							"key": "id",
-							"value": "1"
+			"name": "Users",
+			"item": [
+				{
+					"name": "Create-User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8889/users/create",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8889",
+							"path": [
+								"users",
+								"create"
+							]
 						}
-					]
+					},
+					"response": []
+				},
+				{
+					"name": "Update-User",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get-One-User",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get-All-User",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "MatchGameRestart",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8889/matchGame/restart?matchId=1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8889",
-					"path": [
-						"matchGame",
-						"restart"
-					],
-					"query": [
-						{
-							"key": "matchId",
-							"value": "1"
+			"name": "Match_Games",
+			"item": [
+				{
+					"name": "MatchGameCreate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8889/matchGame/create?matchGameId=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8889",
+							"path": [
+								"matchGame",
+								"create"
+							],
+							"query": [
+								{
+									"key": "matchGameId",
+									"value": "1"
+								},
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "MatchGameCreate",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
-		},
-		{
-			"name": "FoodCreate",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
-		},
-		{
-			"name": "FoodRead",
-			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
-		},
-		{
-			"name": "MatchGameChangeStatus",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8889/matchGame/changeStatus?matchId=1&status=Ready",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8889",
-					"path": [
-						"matchGame",
-						"changeStatus"
-					],
-					"query": [
+					},
+					"response": []
+				},
+				{
+					"name": "MatchGameRestart",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8889/matchGame/restart?matchGameId=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8889",
+							"path": [
+								"matchGame",
+								"restart"
+							],
+							"query": [
+								{
+									"key": "matchGameId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MatchGameChangeStatus",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8889/matchGame/changeStatus?matchGameId=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8889",
+							"path": [
+								"matchGame",
+								"changeStatus"
+							],
+							"query": [
+								{
+									"key": "matchGameId",
+									"value": "1"
+								},
+								{
+									"key": "status",
+									"value": "Ready",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "Playing",
+									"disabled": true
+								},
+								{
+									"key": "status",
+									"value": "Ended",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MatchGameCurrentFrame",
+					"event": [
 						{
-							"key": "matchId",
-							"value": "1"
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
 						},
 						{
-							"key": "status",
-							"value": "Ready"
-						},
-						{
-							"key": "status",
-							"value": "Playing",
-							"disabled": true
-						},
-						{
-							"key": "status",
-							"value": "Ended",
-							"disabled": true
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Set the interval to 10 seconds\r",
+									"var interval = 10000;\r",
+									"\r",
+									"// Create a function to run the test\r",
+									"function runTest() {\r",
+									"  // Test code goes here\r",
+									"  pm.test(\"Test name\", () => {\r",
+									"    pm.expect(true).to.be.true;\r",
+									"  });\r",
+									"}\r",
+									"\r",
+									"// Run the test every 10 seconds\r",
+									"setInterval(runTest, interval);"
+								],
+								"type": "text/javascript"
+							}
 						}
-					]
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8889/matchGame/matchCurrentFrame?matchGameId=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8889",
+							"path": [
+								"matchGame",
+								"matchCurrentFrame"
+							],
+							"query": [
+								{
+									"key": "matchGameId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MatchGameNextFrame",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Set the interval to 10 seconds\r",
+									"var interval = 10000;\r",
+									"\r",
+									"// Create a function to run the test\r",
+									"function runTest() {\r",
+									"  // Test code goes here\r",
+									"  pm.test(\"Test name\", () => {\r",
+									"    pm.expect(true).to.be.true;\r",
+									"  });\r",
+									"}\r",
+									"\r",
+									"// Run the test every 10 seconds\r",
+									"setInterval(runTest, interval);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8889/matchGame/matchNextFrame?matchGameId=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8889",
+							"path": [
+								"matchGame",
+								"matchNextFrame"
+							],
+							"query": [
+								{
+									"key": "matchGameId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MatchGameStart",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8889/matchGame/start?matchGameId=1&intervalTime=3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8889",
+							"path": [
+								"matchGame",
+								"start"
+							],
+							"query": [
+								{
+									"key": "matchGameId",
+									"value": "1"
+								},
+								{
+									"key": "intervalTime",
+									"value": "3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "MatchGameStop",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8889/matchGame/stop",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8889",
+							"path": [
+								"matchGame",
+								"stop"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ScoreRanking",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8889/matchGame/scoreRanking?matchGameId=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8889",
+							"path": [
+								"matchGame",
+								"scoreRanking"
+							],
+							"query": [
+								{
+									"key": "matchGameId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
+		},
+		{
+			"name": "Food",
+			"item": [
+				{
+					"name": "FoodRead",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "FoodCreate",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Board",
+			"item": []
+		},
+		{
+			"name": "Snake",
+			"item": [
+				{
+					"name": "SnakeGrow",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8889/snake/grow?snakeId=4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8889",
+							"path": [
+								"snake",
+								"grow"
+							],
+							"query": [
+								{
+									"key": "snakeId",
+									"value": "4"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SnakeMove",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8889/snake/move?direction=DOWN&snakeId=1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8889",
+							"path": [
+								"snake",
+								"move"
+							],
+							"query": [
+								{
+									"key": "direction",
+									"value": "UP",
+									"disabled": true
+								},
+								{
+									"key": "direction",
+									"value": "DOWN"
+								},
+								{
+									"key": "direction",
+									"value": "LEFT",
+									"disabled": true
+								},
+								{
+									"key": "direction",
+									"value": "RIGHT",
+									"disabled": true
+								},
+								{
+									"key": "snakeId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
