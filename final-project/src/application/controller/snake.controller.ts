@@ -19,8 +19,8 @@ class SnakeController extends BaseHttpController {
   }
 
   @httpGet('/create')
-  public async create (@queryParam('snakeId') snakeId: number, req: Request, res: Response) {
-    const snake: SnakeEntity = await this.snakeService.createSnakeHead(snakeId)
+  public async create (@queryParam('snakeId') snakeId: number, @queryParam('boardSize') boardSize: number, req: Request, res: Response) {
+    const snake: SnakeEntity = await this.snakeService.createSnakeHead(snakeId, boardSize)
     res.status(200).json({ msg: snake })
   }
 

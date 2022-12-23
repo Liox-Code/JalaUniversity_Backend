@@ -28,7 +28,7 @@ export class MatchGameTypeOrmRepository implements IMatchGameRepository {
 
   async getOneMatchGameByCriteria (matchGameId: number): Promise<MatchGameEntity> {
     if (!matchGameId) {
-      throw new Error(`Match Game getOneMatchGameByCriteria() receives and undefined matchGameId:${matchGameId}`)
+      throw new Error(`Match Game getOneMatchGameByCriteria() with id function receives and undefined matchGameId:${matchGameId}`)
     }
     const foundMatchGame = await this.repository.findOneBy({ matchGameId })
     if (!foundMatchGame) {

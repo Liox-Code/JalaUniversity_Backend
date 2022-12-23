@@ -32,6 +32,16 @@ export class ScoreTypeOrmRepository implements IScoreRepository {
     return await this.repository.findBy(criteria)
   }
 
+  async getScoreRanking (matchGameId: number): Promise<ScoreEntity[]> {
+    const options: FindManyOptions<ScoreDataEntity> = {
+      where: { matchGameId },
+      order: {
+        score: 'DESC'
+      }
+    }
+    return await this.repository.find(options)
+  }
+
   async updateScore (score: TScoreProps): Promise<ScoreEntity> {
     const updatedScore = await this.repository.save(score)
     return ScoreMapper.toEntity(updatedScore)

@@ -54,6 +54,12 @@ class MatchGameController extends BaseHttpController {
     const matchGameWithNewState = await this.matchGameService.stopTimer()
     res.status(200).json({ matchGameWithNewState })
   }
+
+  @httpGet('/scoreRanking')
+  public async scoreRanking (@queryParam('matchGameId') matchGameId:number, req: Request, res: Response) {
+    const matchGameWithNewState = await this.matchGameService.scoreRanking(matchGameId)
+    res.status(200).json({ matchGameWithNewState })
+  }
 }
 
 export default MatchGameController

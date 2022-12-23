@@ -134,14 +134,20 @@ export class SnakeService {
     await Promise.all(promises)
   }
 
-  async isCollidingSnake (snakeId: number) {
-    const currentSnake = await this.readSnakeHead(snakeId)
-    const snakeBodyList = await this._snakeBodyRepo.readSnakeBody(snakeId)
-    const isColliding = snakeBodyList.some((snakeBodyItem) => {
-      const inSameXAxis = snakeBodyItem.snakeBodyPosition.x === currentSnake.snakeHeadPosition.x
-      const inSameYAxis = snakeBodyItem.snakeBodyPosition.y === currentSnake.snakeHeadPosition.y
+  async areTwoSnakesColliding (snakeHeadOne: SnakeEntity, snakeHeadTwo: SnakeEntity) {
+    const inSameXAxis = snakeHeadOne.snakeHeadPosition.x === snakeHeadTwo.snakeHeadPosition.x
+    const inSameYAxis = snakeHeadOne.snakeHeadPosition.y === snakeHeadTwo.snakeHeadPosition.y
+    const isColliding = (inSameXAxis && inSameYAxis)
+    return isColliding
+  }
+
+  async isCollidingSnake (snakeHead: SnakeEntity, snakeBody: SnakeBodyEntity[]) {
+    const isColliding = snakeBody.some((snakeBodyItem) => {
+      const inSameXAxis = snakeBodyItem.snakeBodyPosition.x === snakeHead.snakeHeadPosition.x
+      const inSameYAxis = snakeBodyItem.snakeBodyPosition.y === snakeHead.snakeHeadPosition.y
       return (inSameXAxis && inSameYAxis)
     })
+
     return isColliding
   }
 }

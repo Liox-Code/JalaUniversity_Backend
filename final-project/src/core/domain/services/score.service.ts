@@ -39,7 +39,7 @@ export class ScoreService {
     return userCreated
   }
 
-  async erateScore (scoreId: number) {
+  async eraseScore (scoreId: number) {
     const { snakeId, userId } = await this.getOneScoreFulfillCondition({ scoreId })
     await this._snakeService.eraseSnake(snakeId)
     await this._userService.eraseUser(userId)
@@ -89,8 +89,13 @@ export class ScoreService {
     return snakeReaded
   }
 
-  async updateScore (criteria: TScoreCriteria): Promise<ScoreEntity> {
-    const score = await this._scoreRepo.updateScore(criteria)
-    return score
+  async getScoreRanking (matchGameId: number) {
+    const scoreRanking = await this._scoreRepo.getScoreRanking(matchGameId)
+    return scoreRanking
+  }
+
+  async updateScore (score: ScoreEntity): Promise<ScoreEntity> {
+    const scoreUpdated = await this._scoreRepo.updateScore(score)
+    return scoreUpdated
   }
 }

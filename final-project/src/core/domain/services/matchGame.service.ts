@@ -10,6 +10,7 @@ import { RandomGeneratorService } from './randomGeneratorService'
 import { SnakeService } from './snake.service'
 import { BoardEntity } from '../entities/board.entity'
 import { ScoreService } from './score.service'
+import { ScoreEntity } from '../entities/score.entity'
 
 @injectable()
 export class MatchGameService {
@@ -218,20 +219,22 @@ export class MatchGameService {
     })
     await Promise.all(moveAllSnakePromises)
 
-    const isCollidingPromises = scoresReaded.map(async (scoreReaded) => {
-      const { snake } = scoreReaded
-      const snakeId = snake.snake.snakeHeadReaded.snakeId
-      const isColliding = await this._snakeService.isCollidingSnake(snakeId)
-      if (isColliding) {
-        await this._snakeService.eraseSnake(snakeId)
-      }
-    })
-    await Promise.all(isCollidingPromises)
+    // try {
+    //   const isCollidingPromises = scoresReaded.map(async (scoreReaded) => {
+    //     const { snake } = scoreReaded
+    //     const snakeId = snake.snake.snakeHeadReaded.snakeId
+    //     const isColliding = await this._snakeService.isCollidingSnake(scoreReaded.snake.snake.snakeHeadReaded, scoreReaded.snake.snake.snakeBodyReaded)
+    //     if (isColliding) {
+    //       await this._snakeService.eraseSnake(snakeId)
+    //     }
+    //   })
+    //   await Promise.all(isCollidingPromises)
+    // } catch (error) {
+    //   console.log(error)
+    // }
 
     const isInFoodPromises = scoresReaded.map(async (scoreReaded) => {
-      const { snake } = scoreReaded
-      const snakeId = snake.snake.snakeHeadReaded.snakeId
-      await this.isSnakeInFood(matchGameReaded.foodId, snakeId)
+      await this.isSnakeInFood(scoreReaded.score, matchGameReaded.foodId)
     })
     await Promise.all(isInFoodPromises)
 
@@ -251,12 +254,14 @@ export class MatchGameService {
     return await this.getMatchGameData(matchGameId)
   }
 
-  async isSnakeInFood (foodId: number, snakeId: number): Promise<void> {
+  async isSnakeInFood (scoreEntity: ScoreEntity, foodId: number): Promise<void> {
     const foodReaded = await this._food.readFood(foodId)
-    const snakeReaded = await this._snakeService.readSnakeHead(snakeId)
+    const snakeReaded = await this._snakeService.readSnakeHead(scoreEntity.snakeId)
     if ((snakeReaded.snakeHeadPosition.x === foodReaded.foodPosition.x) && (snakeReaded.snakeHeadPosition.y === foodReaded.foodPosition.y)) {
       await this.moveFood(foodId)
-      await this._snakeService.growSnake(snakeId)
+      await this._snakeService.growSnake(scoreEntity.snakeId)
+      scoreEntity.score = snakeReaded.snakeSize * 100
+      await this._scoreService.updateScore(scoreEntity)
     }
   }
 
@@ -272,5 +277,9 @@ export class MatchGameService {
     const matchGameReaded = await this._matchGame.getOneMatchGameByCriteria(id)
     matchGameReaded.matchGameState = state
     return await this._matchGame.updateMatchGame(matchGameReaded)
+  }
+
+  async scoreRanking (matchGameId: number) {
+    return await this._scoreService.getScoreRanking(matchGameId)
   }
 }

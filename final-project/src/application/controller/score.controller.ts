@@ -22,7 +22,7 @@ class ScoreController extends BaseHttpController {
       snakeId: 1,
       score: 100
     }
-    const score: ScoreEntity = await this.scoreService.createScore(scoreEntity)
+    const score: ScoreEntity = await this.scoreService.createScore({ score: scoreEntity, limit: 10, name: 'Liox' })
     res.status(200).json({ msg: score })
   }
 }
