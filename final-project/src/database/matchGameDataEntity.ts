@@ -9,9 +9,6 @@ export default class MatchGameDataEntity {
     boardId!: number
 
   @Column()
-    snakeId!: number
-
-  @Column()
     foodId!: number
 
   @Column()

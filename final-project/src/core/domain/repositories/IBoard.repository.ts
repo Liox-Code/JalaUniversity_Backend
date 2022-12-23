@@ -4,4 +4,5 @@ export interface IBoardRepository {
   createBoard(board: BoardEntity): Promise<BoardEntity>
   readBoard(id: number): Promise<BoardEntity>
   updateBoard(board: BoardEntity): Promise<BoardEntity>
+  eraseBoard: (boardId: number) => Promise<void>
 }

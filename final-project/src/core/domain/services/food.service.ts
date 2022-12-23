@@ -22,7 +22,7 @@ export class FoodService {
     return await this.food.updateFood(food)
   }
 
-  async deleteFood (id: number): Promise<boolean> {
-    return await this.food.deleteFood(id)
+  async deleteFood (id: number): Promise<void> {
+    await this.food.eraseFood(id)
   }
 }

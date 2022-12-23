@@ -1,19 +1,19 @@
 export class ScoreEntity {
   scoreId: number
-  matchId: number
+  matchGameId: number
   userId: number
   snakeId: number
   score: number
 
   constructor (
     scoreId: number,
-    matchId: number,
+    matchGameId: number,
     userId: number,
     snakeId: number,
     score: number
   ) {
     this.scoreId = scoreId
-    this.matchId = matchId
+    this.matchGameId = matchGameId
     this.userId = userId
     this.snakeId = snakeId
     this.score = score

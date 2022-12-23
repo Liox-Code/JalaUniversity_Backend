@@ -3,33 +3,22 @@ import { setInterval } from 'timers'
 import { EMatchGameState, MatchGameEntity } from '../entities/matchGame.entity'
 import { IMatchGameRepository } from '../repositories/IMatchGame.repository'
 import { TYPES } from '../../../type.core'
-import { ISnakeHeadRepository } from '../repositories/ISnakeHead.repository'
 import { IBoardRepository } from '../repositories/IBoard.repository'
 import { IFoodRepository } from '../repositories/IFood.repository'
-import { SnakeEntity } from '../entities/snake.entity'
 import { FoodEntity } from '../entities/food.entity'
 import { RandomGeneratorService } from './randomGeneratorService'
 import { SnakeService } from './snake.service'
-import { ISnakeBodyRepository } from '../repositories/ISnakeBody.repository'
 import { BoardEntity } from '../entities/board.entity'
-import { EDirection } from '../../../enums/EDirection'
-
-type TMatchGameProps = {
-  boardEntity: BoardEntity
-  snakeEntity: SnakeEntity
-  foodEntity: FoodEntity
-  matchGameEntity: MatchGameEntity
-}
+import { ScoreService } from './score.service'
 
 @injectable()
 export class MatchGameService {
   private _matchGame: IMatchGameRepository
-  private _snakeHeadRepo: ISnakeHeadRepository
-  private _snakeBodyRepo: ISnakeBodyRepository
   private _board: IBoardRepository
   private _food: IFoodRepository
-  private _snakeService: SnakeService
   private _randomGenerator: RandomGeneratorService
+  private _snakeService: SnakeService
+  private _scoreService: ScoreService
   private _timer: ReturnType<typeof setInterval>
 
   get timer () {
@@ -44,67 +33,59 @@ export class MatchGameService {
     this._timer = timer
   }
 
-  startTimer (timeIntervaslSec: number) {
-    return setInterval(async () => {
-      await this.refreshMatchGame(1)
+  startTimer (matchGameId: number, timeIntervaslSec: number) {
+    const timeSec = timeIntervaslSec * 1000
+    this.stopTimer()
+    this._timer = setInterval(async () => {
+      await this.refreshMatchGame(matchGameId)
       console.log('GAME REFRESHED')
-    }, timeIntervaslSec)
+    }, timeSec)
   }
 
-  stopTimer (timer: ReturnType<typeof setInterval>) {
-    clearInterval(timer)
+  stopTimer () {
+    clearInterval(this._timer)
     console.log('GAME STOPS')
   }
 
   constructor (
     @inject(TYPES.MatchGameTypeOrmRepository) matchGame: IMatchGameRepository,
-    @inject(TYPES.SnakeHeadTypeOrmRepository) snakeHeadRepo: ISnakeHeadRepository,
-    @inject(TYPES.SnakeBodyTypeOrmRepository) snakeBodyRepo: ISnakeBodyRepository,
     @inject(TYPES.BoardTypeOrmRepository) board: IBoardRepository,
     @inject(TYPES.FoodTypeOrmRepository) food: IFoodRepository,
     @inject(TYPES.RandomGeneratorService) randomGenerator: RandomGeneratorService,
-    @inject(TYPES.SnakeService) snakeService: SnakeService
+    @inject(TYPES.SnakeService) snakeService: SnakeService,
+    @inject(TYPES.ScoreService) scoreService: ScoreService
   ) {
     this._matchGame = matchGame
-    this._snakeHeadRepo = snakeHeadRepo
-    this._snakeBodyRepo = snakeBodyRepo
     this._board = board
     this._food = food
     this._randomGenerator = randomGenerator
     this._snakeService = snakeService
+    this._scoreService = scoreService
     this._timer = setTimeout(() => {
       console.log('Initialize Timer')
     }, 1)
   }
 
-  async startMatchGame (size: number, refreshTimeRare: number): Promise<any> {
-    const matchData = await this.createMatchGame(size)
-
-    const timeIntervaslSec = refreshTimeRare * 1000
-    this.stopTimer(this.timer)
-    this.timer = this.startTimer(timeIntervaslSec)
+  async startMatchGame (matchGameId: number) {
+    const matchData = await this.createMatchGame(matchGameId)
+    // const matchData = await this._matchGame.getAllMatchGame()
 
     return await matchData
   }
 
-  initProps (size: number): TMatchGameProps {
+  initProps (matchGameId: number) {
     const boardId = 1
-    const snakeId = 1
     const foodId = 1
-    const matchId = 1
+    const scoreId = [1, 2, 3, 4]
+    const snakeId = [1, 2, 3, 4]
+    const userId = [1, 2, 3, 4]
     const seed = 1
+    const size = 10
     const randonPosition = this._randomGenerator.generateRandomPosition(seed, size)
 
     const boardProps: BoardEntity = {
       boardId,
       boardSize: size
-    }
-
-    const snakeProps: SnakeEntity = {
-      snakeId,
-      snakeHeadPosition: randonPosition,
-      snakeDirection: EDirection.UP,
-      snakeSize: 1
     }
 
     const foodProps: FoodEntity = {
@@ -113,125 +94,169 @@ export class MatchGameService {
     }
 
     const matchProps: MatchGameEntity = {
-      matchGameId: matchId,
+      matchGameId,
       boardId: boardProps.boardId,
-      snakeId: snakeProps.snakeId,
       foodId: foodProps.foodId,
       matchGameState: EMatchGameState.Ready
     }
 
+    const scoreProps = {
+      limit: 10,
+      scoreData: [
+        {
+          score: {
+            scoreId: scoreId[0],
+            matchGameId: matchProps.matchGameId,
+            snakeId: snakeId[0],
+            userId: userId[0],
+            score: 0
+          },
+          name: 'User1'
+        },
+        {
+          score: {
+            scoreId: scoreId[1],
+            matchGameId: matchProps.matchGameId,
+            snakeId: snakeId[1],
+            userId: userId[1],
+            score: 0
+          },
+          name: 'User2'
+        },
+        {
+          score: {
+            scoreId: scoreId[2],
+            matchGameId: matchProps.matchGameId,
+            snakeId: snakeId[2],
+            userId: userId[2],
+            score: 0
+          },
+          name: 'User3'
+        },
+        {
+          score: {
+            scoreId: scoreId[3],
+            matchGameId: matchProps.matchGameId,
+            snakeId: snakeId[3],
+            userId: userId[3],
+            score: 0
+          },
+          name: 'User4'
+        }
+      ]
+    }
+
     const MatchData = {
       boardEntity: boardProps,
-      snakeEntity: snakeProps,
       foodEntity: foodProps,
-      matchGameEntity: matchProps
+      matchGameEntity: matchProps,
+      scoreEntity: scoreProps
     }
     return MatchData
   }
 
   async createMatchGame (
-    size: number
-  ): Promise<TMatchGameProps> {
+    matchGameId: number
+  ) {
     const {
       boardEntity,
-      snakeEntity,
       foodEntity,
-      matchGameEntity
-    } = this.initProps(size)
+      matchGameEntity,
+      scoreEntity
+    } = this.initProps(matchGameId)
 
-    const board = await this._board.createBoard({ ...boardEntity })
-    const snake = await this._snakeHeadRepo.createSnake({ ...snakeEntity })
-    const food = await this._food.createFood({ ...foodEntity })
+    const boardCreated = await this._board.createBoard({ ...boardEntity })
+    const scorePromises = scoreEntity.scoreData.map(async (score) => {
+      return await this._scoreService.createScore({ score: score.score, name: score.name, limit: scoreEntity.limit })
+    })
+    const scoreCreated = await Promise.all(scorePromises)
+    const foodCreated = await this._food.createFood({ ...foodEntity })
     const matchGameCreated = await this._matchGame.createMatchGame({ ...matchGameEntity })
 
     const MatchData = {
-      boardEntity: board,
-      snakeEntity: snake,
-      foodEntity: food,
-      matchGameEntity: matchGameCreated
+      boardEntity: boardCreated,
+      foodEntity: foodCreated,
+      matchGameEntity: matchGameCreated,
+      scoreEntity: scoreCreated
     }
 
     return await MatchData
   }
 
-  async getMatchGameData (id: number): Promise<any> {
-    const matchGameReaded = await this._matchGame.readMatchGame(id)
-    const foodReaded = await this._food.readFood(matchGameReaded.foodId)
-    const snakeHeadReaded = await this._snakeHeadRepo.readSnake(matchGameReaded.snakeId)
-    const snakeBodyReaded = await this._snakeBodyRepo.readSnakeBody(matchGameReaded.snakeId)
-    const boardReaded = await this._board.readBoard(matchGameReaded.boardId)
+  async eraseMatchGame (matchGame: MatchGameEntity): Promise<void> {
+    const { matchGameId, boardId, foodId } = matchGame
+    await this._matchGame.eraseMatchGame(matchGameId)
 
-    const matchGame = {
+    await this._board.eraseBoard(boardId)
+    await this._food.eraseFood(foodId)
+    await this._scoreService.erateAllScoresInMatchGame(matchGameId)
+  }
+
+  async getMatchGameData (matchGameId: number): Promise<any> {
+    const matchGameReaded = await this._matchGame.getOneMatchGameByCriteria(matchGameId)
+    const foodReaded = await this._food.readFood(matchGameReaded.foodId)
+    const boardReaded = await this._board.readBoard(matchGameReaded.boardId)
+    const scoresReaded = await this._scoreService.getAllScoresFulfillCondition({ matchGameId: matchGameReaded.matchGameId })
+
+    const data = {
       foodReaded,
-      snakeHeadReaded,
-      snakeBodyReaded,
+      scoresReaded,
       boardReaded,
       matchGameReaded
     }
-    return await matchGame
+    return await data
   }
 
   async refreshMatchGame (id: number): Promise<any> {
-    const matchGameReaded = await this._matchGame.readMatchGame(id)
-    const snakeHeadReaded = await this._snakeHeadRepo.readSnake(matchGameReaded.snakeId)
+    const matchGameReaded = await this._matchGame.getOneMatchGameByCriteria(id)
+    const boardReaded = await this._board.readBoard(matchGameReaded.boardId)
+    const scoresReaded = await this._scoreService.getAllScoresFulfillCondition({ matchGameId: id })
 
-    await this._snakeService.moveAllSnake(snakeHeadReaded.snakeId)
+    const moveAllSnakePromises = scoresReaded.map(async (scoreReaded) => {
+      const { snake } = scoreReaded
+      await this._snakeService.moveAllSnake(snake.snake.snakeHeadReaded.snakeId, boardReaded.boardSize)
+    })
+    await Promise.all(moveAllSnakePromises)
 
-    const isColliding = await this._snakeService.isCollidingSnake(snakeHeadReaded.snakeId)
-    if (isColliding) {
-      await this.restart(snakeHeadReaded.snakeId)
-    }
+    const isCollidingPromises = scoresReaded.map(async (scoreReaded) => {
+      const { snake } = scoreReaded
+      const snakeId = snake.snake.snakeHeadReaded.snakeId
+      const isColliding = await this._snakeService.isCollidingSnake(snakeId)
+      if (isColliding) {
+        await this._snakeService.eraseSnake(snakeId)
+      }
+    })
+    await Promise.all(isCollidingPromises)
 
-    await this.isSnakeInFood(snakeHeadReaded.snakeId)
+    const isInFoodPromises = scoresReaded.map(async (scoreReaded) => {
+      const { snake } = scoreReaded
+      const snakeId = snake.snake.snakeHeadReaded.snakeId
+      await this.isSnakeInFood(matchGameReaded.foodId, snakeId)
+    })
+    await Promise.all(isInFoodPromises)
 
     const refreshData = await this.getMatchGameData(id)
 
     const matchGame = {
-      isColliding,
       refreshData
     }
     return await matchGame
   }
 
-  async restart (id: number): Promise<any> {
-    const firstSeed = 1
-    const secondSeed = 2
-    const matchGameReaded = await this._matchGame.readMatchGame(id)
-    const foodReaded = await this._food.readFood(matchGameReaded.foodId)
-    const snakeReaded = await this._snakeHeadRepo.readSnake(matchGameReaded.snakeId)
-    const snakeNodesReaded = await this._snakeBodyRepo.readSnakeBody(matchGameReaded.snakeId)
-    const boardReaded = await this._board.readBoard(matchGameReaded.boardId)
+  async restart (matchGameId: number): Promise<any> {
+    const matchGame = await this._matchGame.getOneMatchGameByCriteria(matchGameId)
+    await this.eraseMatchGame(matchGame)
+    await this.createMatchGame(matchGameId)
 
-    const snakeRandonPosition = this._randomGenerator.generateRandomPosition(firstSeed, boardReaded.boardSize)
-    const foodRandonPosition = this._randomGenerator.generateRandomPosition(secondSeed, boardReaded.boardSize)
-
-    this.stopTimer(this.timer)
-    snakeReaded.snakeHeadPosition = snakeRandonPosition
-    snakeReaded.snakeSize = 1
-    foodReaded.foodPosition = foodRandonPosition
-    matchGameReaded.matchGameState = EMatchGameState.Ready
-
-    await this._matchGame.updateMatchGame(matchGameReaded)
-    await this._food.updateFood(foodReaded)
-    await this._snakeHeadRepo.updateSnake(snakeReaded)
-    await this._snakeBodyRepo.dieSnake(snakeReaded.snakeId)
-
-    const matchGame = {
-      foodReaded,
-      snakeReaded,
-      snakeNodesReaded,
-      boardReaded,
-      matchGameReaded
-    }
-    return await matchGame
+    return await this.getMatchGameData(matchGameId)
   }
 
-  async isSnakeInFood (id: number): Promise<void> {
-    const foodReaded = await this._food.readFood(id)
-    const snakeReaded = await this._snakeHeadRepo.readSnake(id)
+  async isSnakeInFood (foodId: number, snakeId: number): Promise<void> {
+    const foodReaded = await this._food.readFood(foodId)
+    const snakeReaded = await this._snakeService.readSnakeHead(snakeId)
     if ((snakeReaded.snakeHeadPosition.x === foodReaded.foodPosition.x) && (snakeReaded.snakeHeadPosition.y === foodReaded.foodPosition.y)) {
-      await this.moveFood(id)
-      await this._snakeService.growSnake(id)
+      await this.moveFood(foodId)
+      await this._snakeService.growSnake(snakeId)
     }
   }
 
@@ -244,7 +269,7 @@ export class MatchGameService {
   }
 
   async changeStatus (id: number, state: EMatchGameState): Promise<MatchGameEntity> {
-    const matchGameReaded = await this._matchGame.readMatchGame(id)
+    const matchGameReaded = await this._matchGame.getOneMatchGameByCriteria(id)
     matchGameReaded.matchGameState = state
     return await this._matchGame.updateMatchGame(matchGameReaded)
   }

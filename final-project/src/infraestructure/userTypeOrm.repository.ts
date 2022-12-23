@@ -1,5 +1,5 @@
 import { injectable } from 'inversify'
-import { Repository } from 'typeorm'
+import { FindManyOptions, Repository } from 'typeorm'
 import { AppDataSource } from '../database/dataSource'
 import 'reflect-metadata'
 import UserDataEntity from '../database/userDataEntity'
@@ -35,5 +35,13 @@ export class UserTypeOrmRepository implements IUserRepository {
   async updateUser (user: TUserProps): Promise<UserEntity> {
     const createdUser = await this.repository.save(user)
     return UserMapper.toEntity(createdUser)
+  }
+
+  async eraseUser (userId: number): Promise<void> {
+    const options: FindManyOptions<UserDataEntity> = {
+      where: { userId }
+    }
+    const userDataBodyArray = await this.repository.find(options)
+    await this.repository.remove(userDataBodyArray)
   }
 }

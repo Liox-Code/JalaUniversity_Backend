@@ -22,7 +22,7 @@ export class SnakeBodyTypeOrmRepositoryMock implements ISnakeBodyRepository {
     return await snakeBody
   }
 
-  async dieSnake (id: number) {
+  async eraseSnakeBody (id: number) {
     await id
   }
   // async createSnake (snake: SnakeBodyEntity) {

@@ -6,7 +6,7 @@ export default class ScoreDataEntity {
     scoreId!: number
 
   @Column()
-    matchId!: number
+    matchGameId!: number
 
   @Column()
     userId!: number

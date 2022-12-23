@@ -2,7 +2,7 @@ import { injectable } from 'inversify'
 import BoardDataEntity from '../database/boardDataEntity'
 import { BoardEntity } from '../core/domain/entities/board.entity'
 import { IBoardRepository } from '../core/domain/repositories/IBoard.repository'
-import { Repository } from 'typeorm'
+import { FindManyOptions, Repository } from 'typeorm'
 import 'reflect-metadata'
 import { AppDataSource } from '../database/dataSource'
 import { BoardMapper } from '../database/boardMapper'
@@ -31,5 +31,13 @@ export class BoardTypeOrmRepository implements IBoardRepository {
   async updateBoard (board: BoardEntity): Promise<BoardEntity> {
     const data = await this.repository.save(BoardMapper.toDataEntity(board))
     return BoardMapper.toEntity(data)
+  }
+
+  async eraseBoard (boardId: number): Promise<void> {
+    const options: FindManyOptions<BoardDataEntity> = {
+      where: { boardId }
+    }
+    const boardDataBodyArray = await this.repository.find(options)
+    await this.repository.remove(boardDataBodyArray)
   }
 }

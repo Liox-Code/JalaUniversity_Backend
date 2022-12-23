@@ -14,32 +14,44 @@ class MatchGameController extends BaseHttpController {
   }
 
   @httpGet('/create')
-  public async create (@queryParam('size') size: number, @queryParam('refreshTimeRare') refreshTimeRare: number, req: Request, res: Response) {
-    const matchGame = await this.matchGameService.startMatchGame(size, refreshTimeRare)
+  public async create (@queryParam('matchGameId') matchGameId: number, @queryParam('refreshTimeRare') refreshTimeRare: number, req: Request, res: Response) {
+    const matchGame = await this.matchGameService.startMatchGame(matchGameId)
     res.status(200).json({ MatchGameData: matchGame })
   }
 
-  @httpGet('/read')
-  public async read (@queryParam('matchId') matchId: number, req: Request, res: Response) {
-    const matchGameReaded = await this.matchGameService.refreshMatchGame(matchId)
-    res.status(200).json({ matchGameReaded })
-  }
-
   @httpGet('/restart')
-  public async restart (@queryParam('matchId') matchId: number, req: Request, res: Response) {
-    const matchGameRestarted = await this.matchGameService.restart(matchId)
+  public async restart (@queryParam('matchGameId') matchGameId: number, req: Request, res: Response) {
+    const matchGameRestarted = await this.matchGameService.restart(matchGameId)
     res.status(200).json({ matchGameRestarted })
   }
 
-  @httpGet('/changeStatus')
-  public async changeStatus (@queryParam('matchId') matchId:number, @queryParam('status') status: EMatchGameState, req: Request, res: Response) {
-    const matchGameWithNewState = await this.matchGameService.changeStatus(matchId, status)
+  @httpGet('/matchCurrentFrame')
+  public async matchCurrentFrame (@queryParam('matchGameId') matchGameId: number, @queryParam('status') status: EMatchGameState, req: Request, res: Response) {
+    const matchGameWithNewState = await this.matchGameService.getMatchGameData(matchGameId)
     res.status(200).json({ matchGameWithNewState })
   }
 
-  @httpGet('/matchCurrentFrame')
-  public async matchCurrentFrame (@queryParam('matchId') matchId:number, @queryParam('status') status: EMatchGameState, req: Request, res: Response) {
-    const matchGameWithNewState = await this.matchGameService.getMatchGameData(matchId)
+  @httpGet('/matchNextFrame')
+  public async matchNextFrame (@queryParam('matchGameId') matchGameId: number, req: Request, res: Response) {
+    const matchGameReaded = await this.matchGameService.refreshMatchGame(matchGameId)
+    res.status(200).json({ matchGameReaded })
+  }
+
+  @httpGet('/changeStatus')
+  public async changeStatus (@queryParam('matchGameId') matchGameId:number, @queryParam('status') status: EMatchGameState, req: Request, res: Response) {
+    const matchGameWithNewState = await this.matchGameService.changeStatus(matchGameId, status)
+    res.status(200).json({ matchGameWithNewState })
+  }
+
+  @httpGet('/start')
+  public async start (@queryParam('matchGameId') matchGameId:number, @queryParam('intervalTime') intervalTime: number, req: Request, res: Response) {
+    const matchGameWithNewState = await this.matchGameService.startTimer(matchGameId, intervalTime)
+    res.status(200).json({ matchGameWithNewState })
+  }
+
+  @httpGet('/stop')
+  public async stop (req: Request, res: Response) {
+    const matchGameWithNewState = await this.matchGameService.stopTimer()
     res.status(200).json({ matchGameWithNewState })
   }
 }

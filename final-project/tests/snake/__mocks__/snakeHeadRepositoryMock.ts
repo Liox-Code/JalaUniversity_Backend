@@ -18,4 +18,8 @@ export class SnakeHeadTypeOrmRepositoryMock implements ISnakeHeadRepository {
   async updateSnake (snake: SnakeEntity) {
     return await snake
   }
+
+  async eraseSnake (snakeId: number): Promise<void> {
+    await console.log(snakeId)
+  }
 }

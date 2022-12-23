@@ -17,7 +17,7 @@ class ScoreController extends BaseHttpController {
   public async test (req: Request, res: Response) {
     const scoreEntity: ScoreEntity = {
       scoreId: 1,
-      matchId: 1,
+      matchGameId: 1,
       userId: 1,
       snakeId: 1,
       score: 100

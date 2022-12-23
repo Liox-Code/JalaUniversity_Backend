@@ -6,7 +6,7 @@ export class ScoreMapper {
     const scoreEntity: ScoreEntity = {
       scoreId: score.scoreId,
       userId: score.userId,
-      matchId: score.matchId,
+      matchGameId: score.matchGameId,
       snakeId: score.snakeId,
       score: score.score
     }
@@ -18,7 +18,7 @@ export class ScoreMapper {
     const scoreDataEntity: ScoreDataEntity = {
       scoreId: score.scoreId,
       userId: score.userId,
-      matchId: score.matchId,
+      matchGameId: score.matchGameId,
       snakeId: score.snakeId,
       score: score.score
     }

@@ -33,4 +33,8 @@ export class BoardTypeOrmRepositoryMock implements IBoardRepository {
     boardToUpdate.boardSize = board.boardSize
     return boardToUpdate
   }
+
+  async eraseBoard (boardId: number): Promise<void> {
+    await console.log(boardId)
+  }
 }

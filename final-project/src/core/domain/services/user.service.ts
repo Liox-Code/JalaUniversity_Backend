@@ -32,4 +32,8 @@ export class UserService {
     const user = await this._userRepo.updateUser(criteria)
     return user
   }
+
+  async eraseUser (userId: number) {
+    await this._userRepo.eraseUser(userId)
+  }
 }

@@ -20,7 +20,7 @@ export class FoodTypeOrmRepositoryMock implements IFoodRepository {
     return await food
   }
 
-  async deleteFood (id: number): Promise<boolean> {
+  async eraseFood (id: number): Promise<void> {
     throw new Error('Method not implemented.')
   }
 }

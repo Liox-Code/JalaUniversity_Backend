@@ -1,16 +1,12 @@
 import { injectable } from 'inversify'
 import 'reflect-metadata'
 import { MatchGameEntity } from '../../../src/core/domain/entities/matchGame.entity'
-import { IMatchGameRepository } from '../../../src/core/domain/repositories/IMatchGame.repository'
+import { IMatchGameRepository, TMatchGameCriteria } from '../../../src/core/domain/repositories/IMatchGame.repository'
 import { matchGamePropsMock } from './matchGamePropsMock'
 
 @injectable()
 export class MatchGameTypeOrmRepositoryMock implements IMatchGameRepository {
-  async createMatchGame (matchGame: MatchGameEntity): Promise<MatchGameEntity> {
-    return await matchGame
-  }
-
-  async readMatchGame (id: number): Promise<MatchGameEntity> {
+  async getOneMatchGameByCriteria (id: number): Promise<MatchGameEntity> {
     throw new Error('Method not implemented.')
   }
 
@@ -18,7 +14,19 @@ export class MatchGameTypeOrmRepositoryMock implements IMatchGameRepository {
     return await matchGame
   }
 
-  async deleteMatchGame (id: number): Promise<boolean> {
+  async eraseMatchGame (id: number): Promise<void> {
     throw new Error('Method not implemented.')
+  }
+
+  async getAllMatchGame (): Promise<MatchGameEntity[]> {
+    throw new Error('Method not implemented.')
+  }
+
+  async getAllMatchGameByCriteria (criteria: TMatchGameCriteria): Promise<MatchGameEntity[]> {
+    throw new Error('Method not implemented.')
+  }
+
+  async createMatchGame (matchGame: MatchGameEntity): Promise<MatchGameEntity> {
+    return await matchGame
   }
 }

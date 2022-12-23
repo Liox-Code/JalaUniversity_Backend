@@ -13,8 +13,8 @@ class UserController extends BaseHttpController {
     super()
   }
 
-  @httpGet('/test')
-  public async test (req: Request, res: Response) {
+  @httpGet('/create')
+  public async create (req: Request, res: Response) {
     const scoreEntity: UserEntity = {
       userId: 1,
       name: 'Liox'

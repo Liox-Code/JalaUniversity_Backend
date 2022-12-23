@@ -12,4 +12,5 @@ export interface IUserRepository {
   findOneUserWhere: (userCriteria: TUserCriteria) => Promise<UserEntity >
   findAllUsersWhere: (userCriteria: TUserCriteria) => Promise<UserEntity[]>
   updateUser: (user: TUserProps) => Promise<UserEntity>
+  eraseUser: (userId: number) => Promise<void>
 }

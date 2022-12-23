@@ -1,5 +1,5 @@
 import { injectable } from 'inversify'
-import { Repository } from 'typeorm'
+import { FindManyOptions, Repository } from 'typeorm'
 import { AppDataSource } from '../database/dataSource'
 import { FoodEntity } from '../core/domain/entities/food.entity'
 import { FoodMapper } from '../database/foodMapper'
@@ -33,7 +33,11 @@ export class FoodTypeOrmRepository implements IFoodRepository {
     return await FoodMapper.toEntity(data)
   }
 
-  async deleteFood (id: number): Promise<boolean> {
-    return await false
+  async eraseFood (foodId: number): Promise<void> {
+    const options: FindManyOptions<FoodDataEntity> = {
+      where: { foodId }
+    }
+    const foodDataBodyArray = await this.repository.find(options)
+    await this.repository.remove(foodDataBodyArray)
   }
 }

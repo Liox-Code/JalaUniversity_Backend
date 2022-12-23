@@ -1,5 +1,5 @@
 import { injectable } from 'inversify'
-import { Repository } from 'typeorm'
+import { FindManyOptions, Repository } from 'typeorm'
 import { AppDataSource } from '../database/dataSource'
 import 'reflect-metadata'
 import ScoreDataEntity from '../database/scoreDataEntity'
@@ -35,5 +35,13 @@ export class ScoreTypeOrmRepository implements IScoreRepository {
   async updateScore (score: TScoreProps): Promise<ScoreEntity> {
     const updatedScore = await this.repository.save(score)
     return ScoreMapper.toEntity(updatedScore)
+  }
+
+  async eraseScore (scoreId: number): Promise<void> {
+    const options: FindManyOptions<ScoreDataEntity> = {
+      where: { scoreId }
+    }
+    const scoreDataBodyArray = await this.repository.find(options)
+    await this.repository.remove(scoreDataBodyArray)
   }
 }

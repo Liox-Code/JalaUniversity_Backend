@@ -7,13 +7,14 @@ import { RandomGeneratorService } from '../../src/core/domain/services/randomGen
 import { BoardService } from '../../src/core/domain/services/board.service'
 import { BoardTypeOrmRepositoryMock } from './__mocks__/boardRepositoryMock'
 import { BoardEntity } from '../../src/core/domain/entities/board.entity'
+import { IBoardRepository } from '../../src/core/domain/repositories/IBoard.repository'
 
 let component:BoardService
 beforeEach(async () => {
   const container = new Container()
   // Board
   container.bind<RandomGeneratorService>(TYPES.RandomGeneratorService).to(RandomGeneratorService)
-  container.bind<BoardTypeOrmRepositoryMock>(TYPES.BoardTypeOrmRepository).to(BoardTypeOrmRepositoryMock)
+  container.bind<IBoardRepository>(TYPES.BoardTypeOrmRepository).to(BoardTypeOrmRepositoryMock)
   container.bind<BoardService>(TYPES.BoardService).to(BoardService)
   component = container.get<BoardService>(TYPES.BoardService)
 })
