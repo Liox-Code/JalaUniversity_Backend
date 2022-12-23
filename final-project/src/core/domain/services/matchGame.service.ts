@@ -190,7 +190,7 @@ export class MatchGameService {
 
     await this._board.eraseBoard(boardId)
     await this._food.eraseFood(foodId)
-    await this._scoreService.erateAllScoresInMatchGame(matchGameId)
+    await this._scoreService.eraseAllScoresInMatchGame(matchGameId)
   }
 
   async getMatchGameData (matchGameId: number): Promise<any> {

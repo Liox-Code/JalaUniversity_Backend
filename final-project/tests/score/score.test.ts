@@ -33,6 +33,7 @@ test('Create a Score', async () => {
   const score = await component.createScore({ score: scoreProps, limit, name })
   await component.createSnake(score.snakeId, limit)
   await component.createUser({ userId: score.userId, name })
+
   expect(score).toEqual({
     scoreId: scoreProps.scoreId,
     matchGameId: scoreProps.matchGameId,
@@ -42,8 +43,41 @@ test('Create a Score', async () => {
   })
 })
 
-// createUser
-// getOneUserFulfillCondition
-// getAllUsersFulfillCondition
-// updateUser
-// eraseUser
+test('Get a Score', async () => {
+  const scoreProps = new ScoreEntity(scorePropsMock.scoreId, scorePropsMock.matchGameId, scorePropsMock.snakeId, scorePropsMock.userId, scorePropsMock.score)
+  const score = await component.getOneScoreFulfillCondition({ matchGameId: scoreProps.matchGameId })
+  expect(score).toEqual({
+    scoreId: scoreProps.scoreId,
+    matchGameId: scoreProps.matchGameId,
+    userId: score.userId,
+    snakeId: score.snakeId,
+    score: score.score
+  })
+})
+
+test('Get a Score', async () => {
+  const scoreProps = new ScoreEntity(scorePropsMock.scoreId, scorePropsMock.matchGameId, scorePropsMock.snakeId, scorePropsMock.userId, scorePropsMock.score)
+  const score = await component.updateScore(scoreProps)
+  expect(score).toEqual({
+    scoreId: scoreProps.scoreId,
+    matchGameId: scoreProps.matchGameId,
+    userId: scoreProps.userId,
+    snakeId: scoreProps.snakeId,
+    score: scoreProps.score
+  })
+})
+
+// test('Get all Scoresrase a Score', async () => {
+//   const scoreProps = new ScoreEntity(scorePropsMock.scoreId, scorePropsMock.matchGameId, scorePropsMock.snakeId, scorePropsMock.userId, scorePropsMock.score)
+//   const scoreList = await component.getAllScoresFulfillCondition({ scoreId: scoreProps.scoreId })
+
+//   scoreList.forEach((scoreItem) => {
+//     expect(scoreItem).toEqual({
+//       scoreId: scoreProps.scoreId,
+//       matchGameId: scoreProps.matchGameId,
+//       userId: scoreProps.userId,
+//       snakeId: scoreProps.snakeId,
+//       scoreProps: scoreProps.score
+//     })
+//   })
+// })

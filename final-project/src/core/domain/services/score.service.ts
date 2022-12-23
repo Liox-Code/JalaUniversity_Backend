@@ -46,7 +46,7 @@ export class ScoreService {
     await this._scoreRepo.eraseScore(scoreId)
   }
 
-  async erateAllScoresInMatchGame (matchGameId: number) {
+  async eraseAllScoresInMatchGame (matchGameId: number) {
     const allScoresInMatchGame = await this.getAllScoresFulfillCondition({ matchGameId })
     const allScoresPromises = allScoresInMatchGame.map(async (score) => {
       const userId = score.snake.snake.snakeHeadReaded.snakeId
