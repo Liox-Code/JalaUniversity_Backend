@@ -193,7 +193,7 @@ export class MatchGameService {
     await this._scoreService.eraseAllScoresInMatchGame(matchGameId)
   }
 
-  async getMatchGameData (matchGameId: number): Promise<any> {
+  async getMatchGameData (matchGameId: number) {
     const matchGameReaded = await this._matchGame.getOneMatchGameByCriteria(matchGameId)
     const foodReaded = await this._food.readFood(matchGameReaded.foodId)
     const boardReaded = await this._board.readBoard(matchGameReaded.boardId)
@@ -208,7 +208,7 @@ export class MatchGameService {
     return await data
   }
 
-  async refreshMatchGame (matchGameId: number): Promise<any> {
+  async refreshMatchGame (matchGameId: number) {
     const matchState = await this._matchGame.getOneMatchGameByCriteria(matchGameId)
     await this.snakeDie(matchGameId)
     await this.eatFoodSnakes(matchGameId, matchState)
@@ -238,6 +238,8 @@ export class MatchGameService {
         const isColliding = await this._snakeService.isCollidingSnake(scoreReaded.snake.snake.snakeHeadReaded, scoreReaded.snake.snake.snakeBodyReaded)
         if (isColliding) {
           await this._snakeService.eraseSnake(snakeId)
+          await this._scoreService.eraseScore(scoreReaded.score.scoreId)
+          console.log(`Snake Died ${scoreReaded.score.scoreId}`)
         }
       })
       await Promise.all(isCollidingPromises)
@@ -254,7 +256,7 @@ export class MatchGameService {
     await Promise.all(isInFoodPromises)
   }
 
-  async restart (matchGameId: number): Promise<any> {
+  async restart (matchGameId: number) {
     const matchGame = await this._matchGame.getOneMatchGameByCriteria(matchGameId)
     await this.eraseMatchGame(matchGame)
     await this.createMatchGame(matchGameId)
