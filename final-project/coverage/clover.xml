@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1671801766239" clover="3.2.0">
-  <project timestamp="1671801766240" name="All files">
-    <metrics statements="290" coveredstatements="91" conditionals="23" coveredconditionals="4" methods="80" coveredmethods="18" elements="393" coveredelements="113" complexity="0" loc="290" ncloc="290" packages="4" files="16" classes="16"/>
+<coverage generated="1671803977865" clover="3.2.0">
+  <project timestamp="1671803977866" name="All files">
+    <metrics statements="290" coveredstatements="129" conditionals="23" coveredconditionals="4" methods="80" coveredmethods="26" elements="393" coveredelements="159" complexity="0" loc="290" ncloc="290" packages="4" files="16" classes="16"/>
     <package name="src">
       <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="type.core.ts" path="/home/liox/jalasoft/jalasoft-bootcamp/JalaUniversity_Backend/final-project/src/type.core.ts">
@@ -11,12 +11,12 @@
       </file>
     </package>
     <package name="src.core.domain.entities">
-      <metrics statements="33" coveredstatements="20" conditionals="2" coveredconditionals="2" methods="8" coveredmethods="4"/>
+      <metrics statements="33" coveredstatements="25" conditionals="2" coveredconditionals="2" methods="8" coveredmethods="5"/>
       <file name="board.entity.ts" path="/home/liox/jalasoft/jalasoft-bootcamp/JalaUniversity_Backend/final-project/src/core/domain/entities/board.entity.ts">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="3" type="stmt"/>
-        <line num="6" count="5" type="stmt"/>
-        <line num="7" count="5" type="stmt"/>
+        <line num="6" count="6" type="stmt"/>
+        <line num="7" count="6" type="stmt"/>
       </file>
       <file name="food.entity.ts" path="/home/liox/jalasoft/jalasoft-bootcamp/JalaUniversity_Backend/final-project/src/core/domain/entities/food.entity.ts">
         <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
@@ -37,22 +37,22 @@
         <line num="24" count="0" type="stmt"/>
       </file>
       <file name="score.entity.ts" path="/home/liox/jalasoft/jalasoft-bootcamp/JalaUniversity_Backend/final-project/src/core/domain/entities/score.entity.ts">
-        <metrics statements="6" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="2" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
-        <line num="17" count="0" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="19" count="0" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
       </file>
       <file name="snake.entity.ts" path="/home/liox/jalasoft/jalasoft-bootcamp/JalaUniversity_Backend/final-project/src/core/domain/entities/snake.entity.ts">
         <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="3" type="stmt"/>
         <line num="4" count="3" type="stmt"/>
-        <line num="11" count="1" type="stmt"/>
-        <line num="12" count="1" type="stmt"/>
-        <line num="13" count="1" type="stmt"/>
-        <line num="14" count="1" type="stmt"/>
+        <line num="11" count="7" type="stmt"/>
+        <line num="12" count="7" type="stmt"/>
+        <line num="13" count="7" type="stmt"/>
+        <line num="14" count="7" type="stmt"/>
       </file>
       <file name="snakeBody.entity.ts" path="/home/liox/jalasoft/jalasoft-bootcamp/JalaUniversity_Backend/final-project/src/core/domain/entities/snakeBody.entity.ts">
         <metrics statements="3" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -68,7 +68,7 @@
       </file>
     </package>
     <package name="src.core.domain.services">
-      <metrics statements="250" coveredstatements="64" conditionals="19" coveredconditionals="0" methods="71" coveredmethods="13"/>
+      <metrics statements="250" coveredstatements="97" conditionals="19" coveredconditionals="0" methods="71" coveredmethods="20"/>
       <file name="board.service.ts" path="/home/liox/jalasoft/jalasoft-bootcamp/JalaUniversity_Backend/final-project/src/core/domain/services/board.service.ts">
         <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="4"/>
         <line num="1" count="1" type="stmt"/>
@@ -91,7 +91,7 @@
         <line num="26" count="0" type="stmt"/>
       </file>
       <file name="matchGame.service.ts" path="/home/liox/jalasoft/jalasoft-bootcamp/JalaUniversity_Backend/final-project/src/core/domain/services/matchGame.service.ts">
-        <metrics statements="96" coveredstatements="15" conditionals="5" coveredconditionals="0" methods="21" coveredmethods="1"/>
+        <metrics statements="96" coveredstatements="38" conditionals="5" coveredconditionals="0" methods="21" coveredmethods="4"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
@@ -121,29 +121,29 @@
         <line num="66" count="0" type="stmt"/>
         <line num="71" count="0" type="stmt"/>
         <line num="74" count="0" type="stmt"/>
-        <line num="78" count="0" type="stmt"/>
-        <line num="79" count="0" type="stmt"/>
-        <line num="80" count="0" type="stmt"/>
-        <line num="81" count="0" type="stmt"/>
-        <line num="82" count="0" type="stmt"/>
-        <line num="83" count="0" type="stmt"/>
-        <line num="84" count="0" type="stmt"/>
-        <line num="85" count="0" type="stmt"/>
-        <line num="87" count="0" type="stmt"/>
-        <line num="92" count="0" type="stmt"/>
-        <line num="97" count="0" type="stmt"/>
-        <line num="104" count="0" type="stmt"/>
-        <line num="150" count="0" type="stmt"/>
-        <line num="156" count="0" type="stmt"/>
-        <line num="167" count="0" type="stmt"/>
-        <line num="169" count="0" type="stmt"/>
-        <line num="170" count="0" type="stmt"/>
-        <line num="171" count="0" type="stmt"/>
-        <line num="173" count="0" type="stmt"/>
-        <line num="174" count="0" type="stmt"/>
-        <line num="175" count="0" type="stmt"/>
-        <line num="177" count="0" type="stmt"/>
-        <line num="184" count="0" type="stmt"/>
+        <line num="78" count="1" type="stmt"/>
+        <line num="79" count="1" type="stmt"/>
+        <line num="80" count="1" type="stmt"/>
+        <line num="81" count="1" type="stmt"/>
+        <line num="82" count="1" type="stmt"/>
+        <line num="83" count="1" type="stmt"/>
+        <line num="84" count="1" type="stmt"/>
+        <line num="85" count="1" type="stmt"/>
+        <line num="87" count="1" type="stmt"/>
+        <line num="92" count="1" type="stmt"/>
+        <line num="97" count="1" type="stmt"/>
+        <line num="104" count="1" type="stmt"/>
+        <line num="150" count="1" type="stmt"/>
+        <line num="156" count="1" type="stmt"/>
+        <line num="167" count="1" type="stmt"/>
+        <line num="169" count="1" type="stmt"/>
+        <line num="170" count="1" type="stmt"/>
+        <line num="171" count="4" type="stmt"/>
+        <line num="173" count="1" type="stmt"/>
+        <line num="174" count="1" type="stmt"/>
+        <line num="175" count="1" type="stmt"/>
+        <line num="177" count="1" type="stmt"/>
+        <line num="184" count="1" type="stmt"/>
         <line num="188" count="0" type="stmt"/>
         <line num="189" count="0" type="stmt"/>
         <line num="191" count="0" type="stmt"/>
@@ -193,18 +193,18 @@
         <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="5" type="stmt"/>
         <line num="5" count="5" type="stmt"/>
-        <line num="7" count="8" type="stmt"/>
-        <line num="8" count="8" type="stmt"/>
-        <line num="9" count="8" type="stmt"/>
-        <line num="11" count="8" type="stmt"/>
-        <line num="12" count="8" type="stmt"/>
-        <line num="16" count="4" type="stmt"/>
-        <line num="17" count="4" type="stmt"/>
-        <line num="18" count="4" type="stmt"/>
-        <line num="19" count="4" type="stmt"/>
+        <line num="7" count="22" type="stmt"/>
+        <line num="8" count="22" type="stmt"/>
+        <line num="9" count="22" type="stmt"/>
+        <line num="11" count="22" type="stmt"/>
+        <line num="12" count="22" type="stmt"/>
+        <line num="16" count="11" type="stmt"/>
+        <line num="17" count="11" type="stmt"/>
+        <line num="18" count="11" type="stmt"/>
+        <line num="19" count="11" type="stmt"/>
       </file>
       <file name="score.service.ts" path="/home/liox/jalasoft/jalasoft-bootcamp/JalaUniversity_Backend/final-project/src/core/domain/services/score.service.ts">
-        <metrics statements="46" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="14" coveredmethods="1"/>
+        <metrics statements="46" coveredstatements="16" conditionals="0" coveredconditionals="0" methods="14" coveredmethods="4"/>
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
         <line num="7" count="2" type="stmt"/>
@@ -213,14 +213,14 @@
         <line num="20" count="2" type="stmt"/>
         <line num="21" count="2" type="stmt"/>
         <line num="22" count="2" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="34" count="0" type="stmt"/>
-        <line num="38" count="0" type="stmt"/>
-        <line num="39" count="0" type="stmt"/>
+        <line num="26" count="5" type="stmt"/>
+        <line num="27" count="5" type="stmt"/>
+        <line num="28" count="5" type="stmt"/>
+        <line num="29" count="5" type="stmt"/>
+        <line num="33" count="6" type="stmt"/>
+        <line num="34" count="6" type="stmt"/>
+        <line num="38" count="6" type="stmt"/>
+        <line num="39" count="6" type="stmt"/>
         <line num="43" count="0" type="stmt"/>
         <line num="44" count="0" type="stmt"/>
         <line num="45" count="0" type="stmt"/>
@@ -264,10 +264,10 @@
         <line num="20" count="4" type="stmt"/>
         <line num="21" count="4" type="stmt"/>
         <line num="22" count="4" type="stmt"/>
-        <line num="26" count="1" type="stmt"/>
-        <line num="27" count="1" type="stmt"/>
-        <line num="29" count="1" type="stmt"/>
-        <line num="31" count="1" type="stmt"/>
+        <line num="26" count="7" type="stmt"/>
+        <line num="27" count="7" type="stmt"/>
+        <line num="29" count="7" type="stmt"/>
+        <line num="31" count="7" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
         <line num="39" count="0" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
@@ -325,13 +325,13 @@
         <line num="151" count="0" type="stmt"/>
       </file>
       <file name="user.service.ts" path="/home/liox/jalasoft/jalasoft-bootcamp/JalaUniversity_Backend/final-project/src/core/domain/services/user.service.ts">
-        <metrics statements="13" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="1"/>
+        <metrics statements="13" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="2"/>
         <line num="1" count="3" type="stmt"/>
         <line num="2" count="3" type="stmt"/>
         <line num="7" count="3" type="stmt"/>
         <line num="13" count="3" type="stmt"/>
-        <line num="17" count="0" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
+        <line num="17" count="6" type="stmt"/>
+        <line num="18" count="6" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
         <line num="27" count="0" type="stmt"/>

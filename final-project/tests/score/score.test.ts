@@ -9,6 +9,8 @@ import { SnakeBodyTypeOrmRepositoryMock } from '../snake/__mocks__/snakeBodyRepo
 import { RandomGeneratorService } from '../../src/core/domain/services/randomGeneratorService'
 import { UserService } from '../../src/core/domain/services/user.service'
 import { UserTypeOrmRepositoryMock } from '../user/__mocks__/userRepositoryMock'
+import { scorePropsMock } from './__mocks__/scorePropsMock'
+import { ScoreEntity } from '../../src/core/domain/entities/score.entity'
 
 let component: ScoreService
 beforeEach(async () => {
@@ -24,6 +26,24 @@ beforeEach(async () => {
   component = container.get<ScoreService>(TYPES.ScoreService)
 })
 
-test('Create a user', async () => {
-  console.log()
+test('Create a Score', async () => {
+  const scoreProps = new ScoreEntity(scorePropsMock.scoreId, scorePropsMock.matchGameId, scorePropsMock.snakeId, scorePropsMock.userId, scorePropsMock.score)
+  const limit = 10
+  const name = 'Liox'
+  const score = await component.createScore({ score: scoreProps, limit, name })
+  await component.createSnake(score.snakeId, limit)
+  await component.createUser({ userId: score.userId, name })
+  expect(score).toEqual({
+    scoreId: scoreProps.scoreId,
+    matchGameId: scoreProps.matchGameId,
+    userId: score.userId,
+    snakeId: score.snakeId,
+    score: score.score
+  })
 })
+
+// createUser
+// getOneUserFulfillCondition
+// getAllUsersFulfillCondition
+// updateUser
+// eraseUser

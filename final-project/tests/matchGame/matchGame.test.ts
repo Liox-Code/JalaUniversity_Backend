@@ -20,6 +20,8 @@ import { IUserRepository } from '../../src/core/domain/repositories/IUser.reposi
 import { UserTypeOrmRepositoryMock } from '../user/__mocks__/userRepositoryMock'
 import { ScoreTypeOrmRepositoryMock } from '../score/__mocks__/scoreRepositoryMock'
 import { IScoreRepository } from '../../src/core/domain/repositories/IScore.repository'
+import { EMatchGameState } from '../../src/core/domain/entities/matchGame.entity'
+import { matchGamePropsMock } from './__mocks__/matchGamePropsMock'
 
 let component: MatchGameService
 beforeEach(async () => {
@@ -42,31 +44,35 @@ beforeEach(async () => {
 })
 
 test('Create a matchGame', async () => {
-  console.log()
+  const matchGame = await component.createMatchGame(10)
+  expect(matchGame.boardEntity).toEqual({
+    boardId: 1,
+    boardSize: 12
+  })
+  expect(matchGame.foodEntity.foodId).toEqual(1)
+  expect(matchGame.foodEntity.foodPosition.x).toBeGreaterThanOrEqual(0)
+  expect(matchGame.foodEntity.foodPosition.y).toBeLessThanOrEqual(12)
+  expect(matchGame.scoreEntity).toEqual({
+    matchGameId: matchGamePropsMock.matchGameId,
+    boardId: matchGamePropsMock.boardId,
+    foodId: matchGamePropsMock.foodId,
+    matchGameState: matchGamePropsMock.matchGameState
+  })
 })
 
-// test('Create a matchGame', async () => {
-//   const matchGame = await component.createMatchGame(10)
-//   expect(matchGame).toEqual({
-//     boardEntity: {
-//       boardId: 1,
-//       boardSize: 12
-//     },
-//     snakeEntity: {
-//       snakeId: 1,
-//       snakeHeadPosition: { x: 9, y: 6 },
-//       snakeSize: 1
-//     },
-//     foodEntity: {
-//       foodId: 1,
-//       foodPosition: { x: 9, y: 6 }
-//     },
-//     matchGameEntity: {
-//       matchGameId: 1,
-//       boardId: 1,
-//       foodId: 1,
-//       snakeId: 1,
-//       matchGameState: EMatchGameState.Ready
-//     }
-//   })
-// })
+test('Get Score', async () => {
+  const matchGame = await component.scoreRanking()
+  expect(matchGame.boardEntity).toEqual({
+    boardId: 1,
+    boardSize: 12
+  })
+  expect(matchGame.foodEntity.foodId).toEqual(1)
+  expect(matchGame.foodEntity.foodPosition.x).toBeGreaterThanOrEqual(0)
+  expect(matchGame.foodEntity.foodPosition.y).toBeLessThanOrEqual(12)
+  expect(matchGame.scoreEntity).toEqual({
+    matchGameId: matchGamePropsMock.matchGameId,
+    boardId: matchGamePropsMock.boardId,
+    foodId: matchGamePropsMock.foodId,
+    matchGameState: matchGamePropsMock.matchGameState
+  })
+})
