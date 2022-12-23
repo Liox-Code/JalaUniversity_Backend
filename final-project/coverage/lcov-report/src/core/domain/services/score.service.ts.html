@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">72.91% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>35/48</span>
+                <span class='fraction'>24/48</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">78.57% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>11/14</span>
+                <span class='fraction'>7/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">71.73% </span>
+                <span class="strong">47.82% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>33/46</span>
+                <span class='fraction'>22/46</span>
             </div>
         
             
@@ -183,9 +183,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -232,27 +232,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -332,28 +332,28 @@ export class ScoreService {
     return score
   }
 &nbsp;
-  async getAllScoresFulfillCondition (criteria: TScoreCriteria) {
-    const allScores = await this._scoreRepo.findAllScoresWhere(criteria)
+<span class="fstat-no" title="function not covered" >  async </span>getAllScoresFulfillCondition (criteria: TScoreCriteria) {
+    const allScores = <span class="cstat-no" title="statement not covered" >await this._scoreRepo.findAllScoresWhere(criteria)</span>
 &nbsp;
-    const allScoresPromises = allScores.map(async (score) =&gt; {
-      const snakesReaded = await this.getCompleteSnake(score.snakeId)
-      const usersReaded = await this.getUser({ userId: score.userId })
-      return { score, snake: snakesReaded, user: usersReaded }
+    const allScoresPromises = <span class="cstat-no" title="statement not covered" >allScores.map(<span class="fstat-no" title="function not covered" >async </span>(score) =&gt; {</span>
+      const snakesReaded = <span class="cstat-no" title="statement not covered" >await this.getCompleteSnake(score.snakeId)</span>
+      const usersReaded = <span class="cstat-no" title="statement not covered" >await this.getUser({ userId: score.userId })</span>
+<span class="cstat-no" title="statement not covered" >      return { score, snake: snakesReaded, user: usersReaded }</span>
     })
 &nbsp;
-    const allScoresResultsList = await Promise.all(allScoresPromises)
+    const allScoresResultsList = <span class="cstat-no" title="statement not covered" >await Promise.all(allScoresPromises)</span>
 &nbsp;
-    return allScoresResultsList
+<span class="cstat-no" title="statement not covered" >    return allScoresResultsList</span>
   }
 &nbsp;
-  async getCompleteSnake (snakeId: number) {
-    const snakeReaded = await this._snakeService.getAllSnake(snakeId)
-    return snakeReaded
+<span class="fstat-no" title="function not covered" >  async </span>getCompleteSnake (snakeId: number) {
+    const snakeReaded = <span class="cstat-no" title="statement not covered" >await this._snakeService.getAllSnake(snakeId)</span>
+<span class="cstat-no" title="statement not covered" >    return snakeReaded</span>
   }
 &nbsp;
-  async getUser (criteria: TUserCriteria) {
-    const snakeReaded = await this._userService.getOneUserFulfillCondition(criteria)
-    return snakeReaded
+<span class="fstat-no" title="function not covered" >  async </span>getUser (criteria: TUserCriteria) {
+    const snakeReaded = <span class="cstat-no" title="statement not covered" >await this._userService.getOneUserFulfillCondition(criteria)</span>
+<span class="cstat-no" title="statement not covered" >    return snakeReaded</span>
   }
 &nbsp;
   async getScoreRanking (matchGameId: number) {
@@ -373,7 +373,7 @@ export class ScoreService {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-12-23T19:39:07.734Z
+                at 2022-12-23T19:45:26.333Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

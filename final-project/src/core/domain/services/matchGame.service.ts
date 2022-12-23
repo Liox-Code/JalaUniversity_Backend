@@ -208,42 +208,50 @@ export class MatchGameService {
     return await data
   }
 
-  async refreshMatchGame (id: number): Promise<any> {
-    const matchGameReaded = await this._matchGame.getOneMatchGameByCriteria(id)
-    const boardReaded = await this._board.readBoard(matchGameReaded.boardId)
-    const scoresReaded = await this._scoreService.getAllScoresFulfillCondition({ matchGameId: id })
+  async refreshMatchGame (matchGameId: number): Promise<any> {
+    const matchState = await this._matchGame.getOneMatchGameByCriteria(matchGameId)
+    await this.snakeDie(matchGameId)
+    await this.eatFoodSnakes(matchGameId, matchState)
+    await this.moveAllSnakes(matchGameId, matchState)
+
+    const refreshData = await this.getMatchGameData(matchGameId)
+    return await refreshData
+  }
+
+  async moveAllSnakes (matchGameId: number, matchState: MatchGameEntity) {
+    const boardReaded = await this._board.readBoard(matchState.boardId)
+    const scoresReaded = await this._scoreService.getAllScoresFulfillCondition({ matchGameId })
 
     const moveAllSnakePromises = scoresReaded.map(async (scoreReaded) => {
       const { snake } = scoreReaded
       await this._snakeService.moveAllSnake(snake.snake.snakeHeadReaded.snakeId, boardReaded.boardSize)
     })
     await Promise.all(moveAllSnakePromises)
+  }
 
-    // try {
-    //   const isCollidingPromises = scoresReaded.map(async (scoreReaded) => {
-    //     const { snake } = scoreReaded
-    //     const snakeId = snake.snake.snakeHeadReaded.snakeId
-    //     const isColliding = await this._snakeService.isCollidingSnake(scoreReaded.snake.snake.snakeHeadReaded, scoreReaded.snake.snake.snakeBodyReaded)
-    //     if (isColliding) {
-    //       await this._snakeService.eraseSnake(snakeId)
-    //     }
-    //   })
-    //   await Promise.all(isCollidingPromises)
-    // } catch (error) {
-    //   console.log(error)
-    // }
+  async snakeDie (matchGameId: number) {
+    const scoresReaded = await this._scoreService.getAllScoresFulfillCondition({ matchGameId })
+    try {
+      const isCollidingPromises = scoresReaded.map(async (scoreReaded) => {
+        const { snake } = scoreReaded
+        const snakeId = snake.snake.snakeHeadReaded.snakeId
+        const isColliding = await this._snakeService.isCollidingSnake(scoreReaded.snake.snake.snakeHeadReaded, scoreReaded.snake.snake.snakeBodyReaded)
+        if (isColliding) {
+          await this._snakeService.eraseSnake(snakeId)
+        }
+      })
+      await Promise.all(isCollidingPromises)
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
+  async eatFoodSnakes (matchGameId: number, matchState: MatchGameEntity) {
+    const scoresReaded = await this._scoreService.getAllScoresFulfillCondition({ matchGameId })
     const isInFoodPromises = scoresReaded.map(async (scoreReaded) => {
-      await this.isSnakeInFood(scoreReaded.score, matchGameReaded.foodId)
+      await this.isSnakeInFood(scoreReaded.score, matchState.foodId)
     })
     await Promise.all(isInFoodPromises)
-
-    const refreshData = await this.getMatchGameData(id)
-
-    const matchGame = {
-      refreshData
-    }
-    return await matchGame
   }
 
   async restart (matchGameId: number): Promise<any> {

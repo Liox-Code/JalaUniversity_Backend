@@ -20,8 +20,6 @@ import { IUserRepository } from '../../src/core/domain/repositories/IUser.reposi
 import { UserTypeOrmRepositoryMock } from '../user/__mocks__/userRepositoryMock'
 import { ScoreTypeOrmRepositoryMock } from '../score/__mocks__/scoreRepositoryMock'
 import { IScoreRepository } from '../../src/core/domain/repositories/IScore.repository'
-import { EMatchGameState } from '../../src/core/domain/entities/matchGame.entity'
-import { matchGamePropsMock } from './__mocks__/matchGamePropsMock'
 
 let component: MatchGameService
 beforeEach(async () => {
@@ -52,12 +50,6 @@ test('Create a matchGame', async () => {
   expect(matchGame.foodEntity.foodId).toEqual(1)
   expect(matchGame.foodEntity.foodPosition.x).toBeGreaterThanOrEqual(0)
   expect(matchGame.foodEntity.foodPosition.y).toBeLessThanOrEqual(12)
-  // expect(matchGame.scoreEntity).toEqual({
-  //   matchGameId: matchGamePropsMock.matchGameId,
-  //   boardId: matchGamePropsMock.boardId,
-  //   foodId: matchGamePropsMock.foodId,
-  //   matchGameState: matchGamePropsMock.matchGameState
-  // })
 })
 
 test('Get Score', async () => {
