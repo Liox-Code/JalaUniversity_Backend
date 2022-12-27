@@ -1,3 +1,4 @@
+
 {
   "name": "09-testing",
   "version": "1.0.0",
@@ -25,8 +26,8 @@
     "inversify": "^5.1.1",
     "inversify-express-utils": "^6.3.2",
     "inversify-inject-decorators": "^3.1.0",
+    "pg": "^8.8.0",
     "reflect-metadata": "^0.1.13",
-    "sqlite3": "^5.1.2",
     "typeorm": "^0.3.11"
   },
   "devDependencies": {
@@ -35,7 +36,9 @@
     "@types/inversify-express-utils": "^2.0.0",
     "@types/inversify-inject-decorators": "^2.0.0",
     "@types/jest": "^29.2.4",
-    "@types/node": "^18.11.13",
+    "@types/node": "^18.11.18",
+    "@types/pg": "^8.6.6",
+    "@types/reflect-metadata": "^0.1.0",
     "@typescript-eslint/eslint-plugin": "^5.44.0",
     "@typescript-eslint/parser": "^5.44.0",
     "eslint": "^8.28.0",

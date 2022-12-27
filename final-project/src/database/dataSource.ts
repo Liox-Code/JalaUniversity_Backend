@@ -8,8 +8,12 @@ import ScoreDataEntity from './scoreDataEntity'
 import UserDataEntity from './userDataEntity'
 
 export const AppDataSource = new DataSource({
-  type: 'sqlite',
-  database: 'database.sqlite',
+  type: 'postgres',
+  host: 'localhost',
+  port: 5432,
+  username: 'postgres',
+  password: 'postgres',
+  database: 'snakegame',
   synchronize: true,
   logging: false,
   entities: [
