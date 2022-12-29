@@ -6,13 +6,14 @@ import { FindManyOptions, Repository } from 'typeorm'
 import { AppDataSource } from '../database/dataSource'
 import SnakeDataEntity from '../database/snakeDataEntity'
 import { SnakeMapper } from '../database/snakeMapper'
+import { ObjectId } from 'mongodb'
 
 @injectable()
 export class SnakeHeadTypeOrmRepository implements ISnakeHeadRepository {
   private readonly snakeRepository: Repository<SnakeDataEntity>
 
   constructor () {
-    this.snakeRepository = AppDataSource.getRepository(SnakeDataEntity)
+    this.snakeRepository = AppDataSource.getMongoRepository(SnakeDataEntity)
   }
 
   async createSnake (snake: SnakeEntity) {
@@ -21,7 +22,8 @@ export class SnakeHeadTypeOrmRepository implements ISnakeHeadRepository {
   }
 
   async readSnake (id: number): Promise<SnakeEntity> {
-    const foundSnake = await this.snakeRepository.findOneBy({ snakeId: id })
+    const objectId = new ObjectId(id)
+    const foundSnake = await this.snakeRepository.findOneBy({ _id: objectId })
     if (!foundSnake) {
       throw new Error(`Snake with id ${id} not found`)
     }
@@ -29,13 +31,19 @@ export class SnakeHeadTypeOrmRepository implements ISnakeHeadRepository {
   }
 
   async updateSnake (snake: SnakeEntity) {
-    const data = await this.snakeRepository.save(SnakeMapper.toDataEntity(snake))
-    return SnakeMapper.toEntity(data)
+    const objectId = new ObjectId(snake.snakeId)
+    await this.snakeRepository.update({ _id: objectId }, SnakeMapper.toDataEntity(snake))
+    const foundSnake = await this.snakeRepository.findOneBy({ _id: objectId })
+    if (!foundSnake) {
+      throw new Error(`updateSnake not found after updated ${objectId} not found`)
+    }
+    return SnakeMapper.toEntity(foundSnake)
   }
 
   async eraseSnake (snakeId: number) {
+    const objectId = new ObjectId(snakeId)
     const options: FindManyOptions<SnakeDataEntity> = {
-      where: { snakeId }
+      where: { _id: objectId }
     }
     const snakeDataBodyArray = await this.snakeRepository.find(options)
     await this.snakeRepository.remove(snakeDataBodyArray)

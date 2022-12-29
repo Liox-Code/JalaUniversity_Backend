@@ -5,7 +5,7 @@ import SnakeDataEntity from './snakeDataEntity'
 export class SnakeMapper {
   static toEntity (snake: SnakeDataEntity): SnakeEntity {
     const snakeEntity: SnakeEntity = {
-      snakeId: snake.snakeId,
+      snakeId: snake._id,
       snakeDirection: EDirection[snake.snakeDirection as EDirection],
       snakeHeadPosition: { x: snake.snakeHeadXPosition, y: snake.snakeHeadYPosition },
       snakeSize: snake.snakeSize

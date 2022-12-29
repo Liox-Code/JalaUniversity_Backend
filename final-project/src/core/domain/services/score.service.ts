@@ -23,8 +23,11 @@ export class ScoreService {
   }
 
   async createScore ({ score, limit, name }: {score: ScoreEntity, limit: number, name: string}) {
-    await this.createSnake(score.snakeId, limit)
-    await this.createUser({ userId: score.userId, name })
+    const snakeCreated = await this.createSnake(score.snakeId, limit)
+    const userCreated = await this.createUser({ userId: score.userId, name })
+
+    score.snakeId = snakeCreated.snakeId
+    score.userId = userCreated.userId
     const scoreCreated = await this._scoreRepo.createScore(score)
     return scoreCreated
   }

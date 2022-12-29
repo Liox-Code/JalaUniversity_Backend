@@ -4,7 +4,7 @@ import UserDataEntity from './userDataEntity'
 export class UserMapper {
   static toEntity (user: UserDataEntity): UserEntity {
     const userEntity: UserEntity = {
-      userId: user.userId,
+      userId: user._id,
       name: user.name
     }
 

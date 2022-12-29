@@ -8,11 +8,9 @@ import ScoreDataEntity from './scoreDataEntity'
 import UserDataEntity from './userDataEntity'
 
 export const AppDataSource = new DataSource({
-  type: 'postgres',
+  type: 'mongodb',
   host: 'localhost',
-  port: 5432,
-  username: 'postgres',
-  password: 'postgres',
+  port: 27017,
   database: 'snakegame',
   synchronize: true,
   logging: false,

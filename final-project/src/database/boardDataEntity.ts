@@ -1,7 +1,10 @@
-import { Column, PrimaryColumn, Entity } from 'typeorm'
+import { Column, ObjectIdColumn, Entity, PrimaryColumn } from 'typeorm'
 
 @Entity()
 export default class BoardDataEntity {
+  @ObjectIdColumn()
+    _id!: string
+
   @PrimaryColumn()
     boardId!: number
 

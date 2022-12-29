@@ -6,13 +6,14 @@ import { FindManyOptions, Repository } from 'typeorm'
 import 'reflect-metadata'
 import { AppDataSource } from '../database/dataSource'
 import { BoardMapper } from '../database/boardMapper'
+import { ObjectId } from 'mongodb'
 
 @injectable()
 export class BoardTypeOrmRepository implements IBoardRepository {
   private readonly repository: Repository<BoardDataEntity>
 
   constructor () {
-    this.repository = AppDataSource.getRepository(BoardDataEntity)
+    this.repository = AppDataSource.getMongoRepository(BoardDataEntity)
   }
 
   async createBoard (board: BoardEntity): Promise<BoardEntity> {
@@ -20,10 +21,11 @@ export class BoardTypeOrmRepository implements IBoardRepository {
     return BoardMapper.toEntity(data)
   }
 
-  async readBoard (id: number): Promise<BoardEntity> {
-    const foundBoard = await this.repository.findOneBy({ boardId: id })
+  async readBoard (boardId: number): Promise<BoardEntity> {
+    const objectId = new ObjectId(boardId)
+    const foundBoard = await this.repository.findOneBy({ _id: objectId })
     if (!foundBoard) {
-      throw new Error(`Board with id ${id} not found`)
+      throw new Error(`Board with id ${boardId} not found`)
     }
     return BoardMapper.toEntity(foundBoard)
   }
@@ -34,8 +36,9 @@ export class BoardTypeOrmRepository implements IBoardRepository {
   }
 
   async eraseBoard (boardId: number): Promise<void> {
+    const objectId = new ObjectId(boardId)
     const options: FindManyOptions<BoardDataEntity> = {
-      where: { boardId }
+      where: { _id: objectId }
     }
     const boardDataBodyArray = await this.repository.find(options)
     await this.repository.remove(boardDataBodyArray)

@@ -4,7 +4,7 @@ import SnakeBodyDataEntity from './snakeBodyDataEntity'
 export class SnakeBodyMapper {
   static toEntity (snakeBody: SnakeBodyDataEntity): SnakeBodyEntity {
     const snakeBodyEntity: SnakeBodyEntity = {
-      snakeBodyIndex: snakeBody.snakeIndex,
+      snakeBodyIndex: snakeBody._id,
       snakeBodyPosition: { x: snakeBody.snakeBodyXAxis, y: snakeBody.snakeBodyYAxis }
     }
 

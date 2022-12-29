@@ -4,7 +4,7 @@ import ScoreDataEntity from './scoreDataEntity'
 export class ScoreMapper {
   static toEntity (score: ScoreDataEntity): ScoreEntity {
     const scoreEntity: ScoreEntity = {
-      scoreId: score.scoreId,
+      scoreId: score._id,
       userId: score.userId,
       matchGameId: score.matchGameId,
       snakeId: score.snakeId,

@@ -4,7 +4,7 @@ import FoodDataEntity from './foodDataEntity'
 export class FoodMapper {
   static toEntity (food: FoodDataEntity): FoodEntity {
     const foodEntity: FoodEntity = {
-      foodId: food.foodId,
+      foodId: food._id,
       foodPosition: { x: food.foodXPosition, y: food.foodYPosition }
     }
 

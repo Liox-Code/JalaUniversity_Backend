@@ -6,13 +6,14 @@ import UserDataEntity from '../database/userDataEntity'
 import { UserEntity } from '../core/domain/entities/user.entity'
 import { IUserRepository, TUserCriteria, TUserProps } from '../core/domain/repositories/IUser.repository'
 import { UserMapper } from '../database/userMapper'
+import { ObjectId } from 'mongodb'
 
 @injectable()
 export class UserTypeOrmRepository implements IUserRepository {
   private readonly repository: Repository<UserDataEntity>
 
   constructor () {
-    this.repository = AppDataSource.getRepository(UserDataEntity)
+    this.repository = AppDataSource.getMongoRepository(UserDataEntity)
   }
 
   async createUser (user: UserEntity): Promise<UserEntity> {
@@ -21,7 +22,8 @@ export class UserTypeOrmRepository implements IUserRepository {
   }
 
   async findOneUserWhere (userCriteria: TUserCriteria): Promise<UserEntity> {
-    const foundScore = await this.repository.findOneBy(userCriteria)
+    const objectId = new ObjectId(userCriteria.userId)
+    const foundScore = await this.repository.findOneBy({ _id: objectId })
     if (!foundScore) {
       throw new Error(`User with criteria ${userCriteria} not found`)
     }
@@ -29,7 +31,10 @@ export class UserTypeOrmRepository implements IUserRepository {
   }
 
   async findAllUsersWhere (userCriteria: TUserCriteria): Promise<UserEntity[]> {
-    return await this.repository.findBy(userCriteria)
+    const objectId = new ObjectId(userCriteria.userId)
+    const usersData = await this.repository.findBy({ _id: objectId })
+    const users = usersData.map((user) => UserMapper.toEntity(user))
+    return users
   }
 
   async updateUser (user: TUserProps): Promise<UserEntity> {
@@ -38,8 +43,9 @@ export class UserTypeOrmRepository implements IUserRepository {
   }
 
   async eraseUser (userId: number): Promise<void> {
+    const objectId = new ObjectId(userId)
     const options: FindManyOptions<UserDataEntity> = {
-      where: { userId }
+      where: { _id: objectId }
     }
     const userDataBodyArray = await this.repository.find(options)
     await this.repository.remove(userDataBodyArray)

@@ -68,7 +68,6 @@ export class SnakeService {
 
   async moveSnakeHead (snakeId: number, limit: number) {
     const currentSnake = await this.readSnakeHead(snakeId)
-
     const nextPosition = await this.getNextPosition(currentSnake, limit)
     currentSnake.snakeHeadPosition = nextPosition
 
