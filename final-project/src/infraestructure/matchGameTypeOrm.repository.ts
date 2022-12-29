@@ -19,7 +19,6 @@ export class MatchGameTypeOrmRepository implements IMatchGameRepository {
 
   async createMatchGame (matchGame: MatchGameEntity): Promise<MatchGameEntity> {
     const data = await this.repository.save(MatchGameMapper.toDataEntity(matchGame))
-    // console.log(`data ${JSON.stringify(data, null, 3)}`)
     return await MatchGameMapper.toEntity(data)
   }
 
@@ -33,14 +32,12 @@ export class MatchGameTypeOrmRepository implements IMatchGameRepository {
     if (!matchGameId) {
       throw new Error(`Match Game getOneMatchGameByCriteria() with id function receives and undefined matchGameId:${matchGameId}`)
     }
-    // console.log(matchGameId)
     const objectId = new ObjectId(matchGameId)
     // const options: MongoFindManyOptions<MatchGameEntity> = {
     //   select: ['matchGameId', 'boardId', 'foodId', 'matchGameState'],
     //   where: { _id: objectId }
     // }
     const foundMatchGame = await this.repository.findOneBy({ _id: objectId })
-    // console.log(foundMatchGame)
     if (!foundMatchGame) {
       throw new Error(`Match Game with id ${matchGameId} not found`)
     }

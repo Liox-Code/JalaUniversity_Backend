@@ -33,10 +33,6 @@ export class SnakeBodyTypeOrmRepository implements ISnakeBodyRepository {
   }
 
   async updateSnakeBody (snakeId: number, snakeBody: SnakeBodyEntity) {
-    console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
-    console.log(snakeId)
-    console.log(snakeBody)
-    console.log('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
     const objectId = new ObjectId(snakeBody.snakeBodyIndex)
     const objectHeadId = new ObjectId(snakeId)
     await this.snakeBodyRepository.update({ _id: objectId }, SnakeBodyMapper.toDataEntity(objectHeadId, snakeBody))
@@ -48,8 +44,9 @@ export class SnakeBodyTypeOrmRepository implements ISnakeBodyRepository {
   }
 
   async eraseSnakeBody (snakeId: number) {
+    const objectHeadId = new ObjectId(snakeId)
     const options: FindManyOptions<SnakeBodyDataEntity> = {
-      where: { snakeId }
+      where: { snakeId: objectHeadId }
     }
     const snakeDataBodyArray = await this.snakeBodyRepository.find(options)
     await this.snakeBodyRepository.remove(snakeDataBodyArray)

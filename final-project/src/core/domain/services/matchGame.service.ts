@@ -277,7 +277,8 @@ export class MatchGameService {
 
   async refreshMatchGame (matchGameId: number) {
     const matchState = await this._matchGame.getOneMatchGameByCriteria(matchGameId)
-    // await this.snakeDie(matchGameId)
+
+    await this.snakeDie(matchState.matchGameId)
     await this.eatFoodSnakes(matchState.matchGameId, matchState)
     await this.moveAllSnakes(matchState.matchGameId, matchState)
     const refreshData = await this.getMatchGameData(matchState.matchGameId)
@@ -285,12 +286,8 @@ export class MatchGameService {
   }
 
   async moveAllSnakes (matchGameId: number, matchState: MatchGameEntity) {
-    // console.log(`Move ${matchGameId}, ${JSON.stringify(matchState)}`)
     const boardReaded = await this._board.readBoard(matchState.boardId)
-    // console.log(`BoardReaded ${JSON.stringify(boardReaded, null, 3)}}`)
-    console.log(matchGameId)
     const scoresReaded = await this._scoreService.getAllScoresFulfillCondition({ matchGameId })
-    // console.log(`scoresReaded ${JSON.stringify(scoresReaded, null, 3)}}`)
 
     const moveAllSnakePromises = scoresReaded.map(async (scoreReaded) => {
       const { snake } = scoreReaded
@@ -320,7 +317,6 @@ export class MatchGameService {
 
   async eatFoodSnakes (matchGameId: number, matchState: MatchGameEntity) {
     const scoresReaded = await this._scoreService.getAllScoresFulfillCondition({ matchGameId })
-    console.log('EAT')
     const isInFoodPromises = scoresReaded.map(async (scoreReaded) => {
       await this.isSnakeInFood(scoreReaded.score, matchState)
     })
@@ -330,16 +326,15 @@ export class MatchGameService {
   async restart (matchGameId: number) {
     const matchGame = await this._matchGame.getOneMatchGameByCriteria(matchGameId)
     await this.eraseMatchGame(matchGame)
-    await this.createMatchGame(matchGameId)
+    const createdMatch = await this.createMatchGame(matchGameId)
 
-    return await this.getMatchGameData(matchGameId)
+    return await this.getMatchGameData(createdMatch.matchGameEntity.matchGameId)
   }
 
   async isSnakeInFood (scoreEntity: ScoreEntity, matchState: MatchGameEntity): Promise<void> {
     const foodReaded = await this._food.readFood(matchState.foodId)
     const snakeReaded = await this._snakeService.readSnakeHead(scoreEntity.snakeId)
     if ((snakeReaded.snakeHeadPosition.x === foodReaded.foodPosition.x) && (snakeReaded.snakeHeadPosition.y === foodReaded.foodPosition.y)) {
-      console.log('EAT')
       await this.moveFood(matchState)
       await this._snakeService.growSnake(scoreEntity.snakeId)
       scoreEntity.score = snakeReaded.snakeSize * 100

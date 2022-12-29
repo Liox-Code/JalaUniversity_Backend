@@ -18,15 +18,12 @@ export class FoodTypeOrmRepository implements IFoodRepository {
 
   async createFood (food: FoodEntity): Promise<FoodEntity> {
     const data = await this.repository.save(FoodMapper.toDataEntity(food))
-    // console.log(data)
     return await FoodMapper.toEntity(data)
   }
 
   async readFood (foodId: number): Promise<FoodEntity> {
-    // console.log(`foodId ${foodId}`)
     const objectId = new ObjectId(foodId)
     const foundFood = await this.repository.findOneBy({ _id: objectId })
-    // console.log(`foodId ${JSON.stringify(foundFood, null, 3)}`)
     if (!foundFood) {
       throw new Error(`Food with id ${foodId} not found`)
     }
@@ -37,11 +34,7 @@ export class FoodTypeOrmRepository implements IFoodRepository {
     const objectId = new ObjectId(food.foodId)
     await this.repository.update({ _id: objectId }, FoodMapper.toDataEntity(food))
 
-    console.log(food)
-
     const foundFood = await this.repository.findOneBy({ _id: objectId })
-
-    console.log(foundFood)
 
     if (!foundFood) {
       throw new Error(`updateFood not found after updated ${objectId} not found`)
