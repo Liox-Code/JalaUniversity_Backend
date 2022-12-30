@@ -22,7 +22,8 @@ export class ScoreTypeOrmRepository implements IScoreRepository {
   }
 
   async findOneScoreWhere (criteria: TScoreCriteria): Promise<ScoreEntity> {
-    const foundScore = await this.repository.findOneBy(criteria)
+    const objectId = new ObjectId(criteria.scoreId)
+    const foundScore = await this.repository.findOneBy({_id: objectId})
     if (!foundScore) {
       throw new Error(`Score with criteria ${criteria} not found`)
     }

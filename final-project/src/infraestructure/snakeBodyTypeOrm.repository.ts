@@ -49,6 +49,10 @@ export class SnakeBodyTypeOrmRepository implements ISnakeBodyRepository {
       where: { snakeId: objectHeadId }
     }
     const snakeDataBodyArray = await this.snakeBodyRepository.find(options)
+    if(snakeDataBodyArray.length === 0){
+      console.log('snakeDataBodyArray EMPTY [] in eraseSnakeBody')
+      return
+    }
     await this.snakeBodyRepository.remove(snakeDataBodyArray)
   }
 }
