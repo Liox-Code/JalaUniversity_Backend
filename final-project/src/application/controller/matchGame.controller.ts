@@ -14,14 +14,14 @@ class MatchGameController extends BaseHttpController {
   }
 
   @httpGet('/create')
-  public async create (@queryParam('matchGameId') matchGameId: number, @queryParam('refreshTimeRare') refreshTimeRare: number, req: Request, res: Response) {
-    const matchGame = await this.matchGameService.startMatchGame(matchGameId)
+  public async create (@queryParam('matchGameId') matchGameId: number, @queryParam('size') size: number, req: Request, res: Response) {
+    const matchGame = await this.matchGameService.startMatchGame(matchGameId,size)
     res.status(200).json({ MatchGameData: matchGame })
   }
 
   @httpGet('/restart')
-  public async restart (@queryParam('matchGameId') matchGameId: number, req: Request, res: Response) {
-    const matchGameRestarted = await this.matchGameService.restart(matchGameId)
+  public async restart (@queryParam('matchGameId') matchGameId: number, @queryParam('size') size: number, req: Request, res: Response) {
+    const matchGameRestarted = await this.matchGameService.restart(matchGameId, size)
     res.status(200).json({ matchGameRestarted })
   }
 

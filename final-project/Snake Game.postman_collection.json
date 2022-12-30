@@ -64,7 +64,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8889/matchGame/create?matchGameId=1",
+							"raw": "http://localhost:8889/matchGame/create?matchGameId=1&size=6",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -80,9 +80,8 @@
 									"value": "1"
 								},
 								{
-									"key": "",
-									"value": "",
-									"disabled": true
+									"key": "size",
+									"value": "6"
 								}
 							]
 						}
@@ -95,7 +94,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8889/matchGame/restart?matchGameId=1",
+							"raw": "http://localhost:8889/matchGame/restart?matchGameId=63ae4c30ae2b68ecded8b045&size=4",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -108,7 +107,11 @@
 							"query": [
 								{
 									"key": "matchGameId",
-									"value": "1"
+									"value": "63ae4c30ae2b68ecded8b045"
+								},
+								{
+									"key": "size",
+									"value": "4"
 								}
 							]
 						}
@@ -121,7 +124,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8889/matchGame/changeStatus?matchGameId=1",
+							"raw": "http://localhost:8889/matchGame/changeStatus?matchGameId=63ae4abb8c1cc3b3abb0272d&status=Playing",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -134,17 +137,16 @@
 							"query": [
 								{
 									"key": "matchGameId",
-									"value": "1"
+									"value": "63ae4abb8c1cc3b3abb0272d"
 								},
 								{
 									"key": "status",
-									"value": "Ready",
+									"value": "",
 									"disabled": true
 								},
 								{
 									"key": "status",
-									"value": "Playing",
-									"disabled": true
+									"value": "Playing"
 								},
 								{
 									"key": "status",
@@ -194,7 +196,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8889/matchGame/matchCurrentFrame?matchGameId=1",
+							"raw": "http://localhost:8889/matchGame/matchCurrentFrame?matchGameId=63ae4abb8c1cc3b3abb0272d",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -207,7 +209,7 @@
 							"query": [
 								{
 									"key": "matchGameId",
-									"value": "1"
+									"value": "63ae4abb8c1cc3b3abb0272d"
 								}
 							]
 						}
@@ -252,7 +254,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8889/matchGame/matchNextFrame?matchGameId=1",
+							"raw": "http://localhost:8889/matchGame/matchNextFrame?matchGameId=63ae4abb8c1cc3b3abb0272d",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -265,7 +267,7 @@
 							"query": [
 								{
 									"key": "matchGameId",
-									"value": "1"
+									"value": "63ae4abb8c1cc3b3abb0272d"
 								}
 							]
 						}
@@ -278,7 +280,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8889/matchGame/start?matchGameId=1&intervalTime=3",
+							"raw": "http://localhost:8889/matchGame/start?matchGameId=63ae4abb8c1cc3b3abb0272d&intervalTime=2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -291,11 +293,11 @@
 							"query": [
 								{
 									"key": "matchGameId",
-									"value": "1"
+									"value": "63ae4abb8c1cc3b3abb0272d"
 								},
 								{
 									"key": "intervalTime",
-									"value": "3"
+									"value": "2"
 								}
 							]
 						}
@@ -328,7 +330,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8889/matchGame/scoreRanking?matchGameId=1",
+							"raw": "http://localhost:8889/matchGame/scoreRanking?matchGameId=63ae4abb8c1cc3b3abb0272d",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -341,7 +343,7 @@
 							"query": [
 								{
 									"key": "matchGameId",
-									"value": "1"
+									"value": "63ae4abb8c1cc3b3abb0272d"
 								}
 							]
 						}
@@ -390,7 +392,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8889/snake/grow?snakeId=4",
+							"raw": "http://localhost:8889/snake/grow?snakeId=63ae4abb8c1cc3b3abb0272f",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -403,7 +405,7 @@
 							"query": [
 								{
 									"key": "snakeId",
-									"value": "4"
+									"value": "63ae4abb8c1cc3b3abb0272f"
 								}
 							]
 						}
@@ -416,7 +418,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8889/snake/move?direction=DOWN&snakeId=1",
+							"raw": "http://localhost:8889/snake/move?direction=DOWN&snakeId=63ae4abb8c1cc3b3abb02731",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -448,7 +450,7 @@
 								},
 								{
 									"key": "snakeId",
-									"value": "1"
+									"value": "63ae4abb8c1cc3b3abb02731"
 								}
 							]
 						}

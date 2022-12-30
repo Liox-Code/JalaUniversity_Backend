@@ -67,8 +67,8 @@ export class MatchGameService {
     }, 1)
   }
 
-  async startMatchGame (matchGameId: number) {
-    const matchData = await this.createMatchGame(matchGameId)
+  async startMatchGame (matchGameId: number, size: number) {
+    const matchData = await this.createMatchGame(matchGameId, size)
     // const matchData = await this._matchGame.getAllMatchGame()
 
     return await matchData
@@ -157,7 +157,8 @@ export class MatchGameService {
   }
 
   async createMatchGame (
-    matchGameId: number
+    matchGameId: number,
+    size: number
   ) {
     const boardId = 1
     const foodId = 1
@@ -165,7 +166,6 @@ export class MatchGameService {
     const snakeId = [1, 2, 3, 4]
     const userId = [1, 2, 3, 4]
     const seed = 1
-    const size = 10
     const randonPosition = this._randomGenerator.generateRandomPosition(seed, size)
 
     const boardProps: BoardEntity = {
@@ -323,10 +323,10 @@ export class MatchGameService {
     await Promise.all(isInFoodPromises)
   }
 
-  async restart (matchGameId: number) {
+  async restart (matchGameId: number, size: number) {
     const matchGame = await this._matchGame.getOneMatchGameByCriteria(matchGameId)
     await this.eraseMatchGame(matchGame)
-    const createdMatch = await this.createMatchGame(matchGameId)
+    const createdMatch = await this.createMatchGame(matchGameId, size)
 
     return await this.getMatchGameData(createdMatch.matchGameEntity.matchGameId)
   }
