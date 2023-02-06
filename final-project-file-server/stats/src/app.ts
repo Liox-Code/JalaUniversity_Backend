@@ -7,7 +7,7 @@ class App {
   private app: express.Application
 
   constructor () {
-    this.port = 8889
+    this.port = 8890
     this.app = express()
   }
 
