@@ -1,5 +1,6 @@
 import express from 'express'
 import StatController from './application/controller/stat.controller'
+import MessageBrokerController from './application/controller/messageBroker.controller'
 
 class App {
   public port: number
@@ -16,6 +17,7 @@ class App {
 
   public build () {
     this.app.use('/stat', StatController)
+    this.app.use('/messageBroker', MessageBrokerController)
   }
 
   public listen () {

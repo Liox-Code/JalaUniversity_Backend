@@ -1,13 +1,17 @@
 // import { AppDataSource } from './database/dataSource'
+import MessageBroker from './messageBroker/messageBroker'
 import App from './app'
 
 (async () => {
   try {
     // await AppDataSource.initialize()
-    const app = new App()
-    app.initConfig()
-    app.build()
-    app.listen()
+    const messageBroker = await new MessageBroker()
+    await messageBroker.connect()
+    const app = await new App()
+    await app.initConfig()
+    await app.build()
+    await app.listen()
+    console.log('app')
   } catch (err) {
     console.log(err)
   }

@@ -1,5 +1,6 @@
 import express from 'express'
 import UriController from './application/controller/uri.controller'
+import MessageBrokerController from './application/controller/messageBroker.controller'
 
 class App {
   public port: number
@@ -16,6 +17,7 @@ class App {
 
   public build () {
     this.app.use('/uri', UriController)
+    this.app.use('/messageBroker', MessageBrokerController)
   }
 
   public listen () {
