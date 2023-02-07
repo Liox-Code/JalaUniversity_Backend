@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express'
-import { FileService } from '../../core/services/file.service'
-import MessageBroker from '../../messageBroker/messageBroker'
+import { FileService } from '../core/services/file.service'
+import MessageBroker from '../messageBroker/messageBroker'
 
 class MessageBrokerController {
   public router: Router

@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express'
-import { FileService } from '../../core/services/file.service'
+import { FileService } from '../core/services/file.service'
 
 class FileController {
   public router: Router
