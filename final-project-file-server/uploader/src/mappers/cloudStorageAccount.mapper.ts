@@ -2,23 +2,23 @@ import { CloudStorageAccountDTO } from '../dto/cloudStorageAccount.dto'
 import { CloudStorageAccountEntity } from '../database/entities/cloudStorageAccount.entity'
 
 export class CloudStorageAccountMapper {
-  static toEntity (file: CloudStorageAccountDTO): CloudStorageAccountEntity {
-    const fileEntity: CloudStorageAccountEntity = {
-      _id: file.cloudStorageId,
-      email: file.email,
-      key: file.key
+  static toEntity (cloudStorageAccount: CloudStorageAccountDTO): CloudStorageAccountEntity {
+    const cloudStorageAccountEntity: CloudStorageAccountEntity = {
+      _id: cloudStorageAccount.cloudStorageId,
+      email: cloudStorageAccount.email,
+      key: cloudStorageAccount.key
     }
 
-    return fileEntity
+    return cloudStorageAccountEntity
   }
 
-  static toDTO (file: CloudStorageAccountEntity): CloudStorageAccountDTO {
-    const fileDTO: CloudStorageAccountDTO = {
-      cloudStorageId: file._id,
-      email: file.email,
-      key: file.key
+  static toDTO (cloudStorageAccount: CloudStorageAccountEntity): CloudStorageAccountDTO {
+    const cloudStorageAccountDTO: CloudStorageAccountDTO = {
+      cloudStorageId: cloudStorageAccount._id,
+      email: cloudStorageAccount.email,
+      key: cloudStorageAccount.key
     }
 
-    return fileDTO
+    return cloudStorageAccountDTO
   }
 }

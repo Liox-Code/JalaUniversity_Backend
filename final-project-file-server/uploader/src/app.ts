@@ -1,5 +1,6 @@
 import express from 'express'
 import FileController from './controllers/file.controller'
+import CloudStorageAccountController from './controllers/cloudStorageAccount.controller'
 import MessageBrokerController from './controllers/messageBroker.controller'
 
 class App {
@@ -17,6 +18,7 @@ class App {
 
   public build () {
     this.app.use('/file', FileController)
+    this.app.use('/cloud-storage-account', CloudStorageAccountController)
     this.app.use('/messageBroker', MessageBrokerController)
   }
 

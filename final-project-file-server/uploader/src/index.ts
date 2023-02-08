@@ -11,7 +11,6 @@ import MessageBroker from './infrastructure/messageBroker/messageBroker'
     app.initConfig()
     app.build()
     app.listen()
-    console.log('listen')
   } catch (err) {
     console.log(err)
   }
