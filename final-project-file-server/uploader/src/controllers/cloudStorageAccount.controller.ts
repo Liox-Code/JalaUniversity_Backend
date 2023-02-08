@@ -22,40 +22,44 @@ class CloudStorageAccountController {
   private createCloudStorageAccount = async (req: Request, res: Response) => {
     const { cloudStorageAccountId } = req.query
 
-    if (typeof cloudStorageAccountId !== 'string') throw new Error('cloudStorageAccountId not a string type error')
+    if (!cloudStorageAccountId) return res.status(400).json({ error: 'It is needed a query parameter' })
+    if (typeof cloudStorageAccountId !== 'string') return res.status(400).json({ error: 'Invalid query parameter' })
 
     const response = await this.cloudStorageAccountService.createCloudStorageAccount(new CloudStorageAccountDTO(cloudStorageAccountId, 'email', 123))
-    res.send(`CloudStorageAccount Created: ${response}`)
+    res.status(200).json({ message: `CloudStorageAccount Created: ${response}` })
   }
 
   private readCloudStorageAccount = async (req: Request, res: Response) => {
     const { cloudStorageAccountId } = req.query
 
-    if (typeof cloudStorageAccountId !== 'string') throw new Error('cloudStorageAccountId not a string type error')
+    if (!cloudStorageAccountId) return res.status(400).json({ error: 'It is needed a query parameter' })
+    if (typeof cloudStorageAccountId !== 'string') return res.status(400).json({ error: 'Invalid query parameter' })
 
     const response = await this.cloudStorageAccountService.readCloudStorageAccount(cloudStorageAccountId)
-    res.send(response)
+    res.status(200).json({ message: response })
   }
 
   private updateCloudStorageAccount = async (req: Request, res: Response) => {
     const { cloudStorageAccountId } = req.query
 
-    if (typeof cloudStorageAccountId !== 'string') throw new Error('cloudStorageAccountId not a string type error')
+    if (!cloudStorageAccountId) return res.status(400).json({ error: 'It is needed a query parameter' })
+    if (typeof cloudStorageAccountId !== 'string') return res.status(400).json({ error: 'Invalid query parameter' })
 
     const response = await this.cloudStorageAccountService.updateCloudStorageAccount(new CloudStorageAccountDTO(cloudStorageAccountId, 'emailUpdated', 123456))
-    res.send(`CloudStorageAccount Updated: ${response}`)
+    res.status(200).json({ message: `CloudStorageAccount Updated: ${response}` })
   }
 
   private deleteCloudStorageAccount = async (req: Request, res: Response) => {
     const { cloudStorageAccountId } = req.query
 
-    if (typeof cloudStorageAccountId !== 'string') throw new Error('cloudStorageAccountId not a string type error')
+    if (!cloudStorageAccountId) return res.status(400).json({ error: 'It is needed a query parameter' })
+    if (typeof cloudStorageAccountId !== 'string') return res.status(400).json({ error: 'Invalid query parameter' })
 
     const response = await this.cloudStorageAccountService.deleteCloudStorageAccount(cloudStorageAccountId)
 
-    if (!response) res.send('Error Erasing')
+    if (!response) return res.status(409).json({ error: 'Unable to delete the resource' })
 
-    res.send(`Sucesfully deleted: ${cloudStorageAccountId}`)
+    res.status(200).json({ message: `Sucesfully deleted: ${cloudStorageAccountId}` })
   }
 }
 

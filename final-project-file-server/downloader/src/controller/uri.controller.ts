@@ -22,7 +22,8 @@ class UriController {
   private createUri = async (req: Request, res: Response) => {
     const { uriId } = req.query
 
-    if (typeof uriId !== 'string') throw new Error('uriId not a string type error')
+    if (!uriId) return res.status(400).json({ error: 'It is needed a query parameter' })
+    if (typeof uriId !== 'string') return res.status(400).json({ error: 'Invalid query parameter' })
 
     const response = await this.uriService.createUri(new UriDTO(uriId, 'uriDirection'))
     res.send(`Uri Created: ${response}`)
@@ -31,7 +32,8 @@ class UriController {
   private readUri = async (req: Request, res: Response) => {
     const { uriId } = req.query
 
-    if (typeof uriId !== 'string') throw new Error('uriId not a string type error')
+    if (!uriId) return res.status(400).json({ error: 'It is needed a query parameter' })
+    if (typeof uriId !== 'string') return res.status(400).json({ error: 'Invalid query parameter' })
 
     const response = await this.uriService.readUri(uriId)
 
@@ -41,7 +43,8 @@ class UriController {
   private updateUri = async (req: Request, res: Response) => {
     const { uriId } = req.query
 
-    if (typeof uriId !== 'string') throw new Error('uriId not a string type error')
+    if (!uriId) return res.status(400).json({ error: 'It is needed a query parameter' })
+    if (typeof uriId !== 'string') return res.status(400).json({ error: 'Invalid query parameter' })
 
     const response = await this.uriService.updateUri(new UriDTO(uriId, 'uriDirectionUpdated'))
     res.send(`Uri Updated: ${response}`)
@@ -50,7 +53,8 @@ class UriController {
   private deleteUri = async (req: Request, res: Response) => {
     const { uriId } = req.query
 
-    if (typeof uriId !== 'string') throw new Error('uriId not a string type error')
+    if (!uriId) return res.status(400).json({ error: 'It is needed a query parameter' })
+    if (typeof uriId !== 'string') return res.status(400).json({ error: 'Invalid query parameter' })
 
     const response = await this.uriService.deleteUri(uriId)
 

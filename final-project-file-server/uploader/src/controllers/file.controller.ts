@@ -22,40 +22,44 @@ class FileController {
   private createFile = async (req: Request, res: Response) => {
     const { fileId } = req.query
 
-    if (typeof fileId !== 'string') throw new Error('fileId not a string type error')
+    if (!fileId) return res.status(400).json({ error: 'It is needed a query parameter' })
+    if (typeof fileId !== 'string') return res.status(400).json({ error: 'Invalid query parameter' })
 
     const response = await this.fileService.createFile(new FileDTO(fileId, 'fileName', 'size', 'status'))
-    res.send(`File Created: ${response}`)
+    res.status(200).json({ message: `File Created: ${response}` })
   }
 
   private readFile = async (req: Request, res: Response) => {
     const { fileId } = req.query
 
-    if (typeof fileId !== 'string') throw new Error('fileId not a string type error')
+    if (!fileId) return res.status(400).json({ error: 'It is needed a query parameter' })
+    if (typeof fileId !== 'string') return res.status(400).json({ error: 'Invalid query parameter' })
 
     const response = await this.fileService.readFile(fileId)
-    res.send(response)
+    res.status(200).json({ message: response })
   }
 
   private updateFile = async (req: Request, res: Response) => {
     const { fileId } = req.query
 
-    if (typeof fileId !== 'string') throw new Error('fileId not a string type error')
+    if (!fileId) return res.status(400).json({ error: 'It is needed a query parameter' })
+    if (typeof fileId !== 'string') return res.status(400).json({ error: 'Invalid query parameter' })
 
     const response = await this.fileService.updateFile(new FileDTO(fileId, 'fileNameUpdated', 'sizeUpdated', 'statusUpdated'))
-    res.send(`File Updated: ${response}`)
+    res.status(200).json({ message: `File Updated: ${response}` })
   }
 
   private deleteFile = async (req: Request, res: Response) => {
     const { fileId } = req.query
 
-    if (typeof fileId !== 'string') throw new Error('fileId not a string type error')
+    if (!fileId) return res.status(400).json({ error: 'It is needed a query parameter' })
+    if (typeof fileId !== 'string') return res.status(400).json({ error: 'Invalid query parameter' })
 
     const response = await this.fileService.deleteFile(fileId)
 
-    if (!response) res.send('Error Erasing')
+    if (!response) return res.status(409).json({ error: 'Unable to delete the resource' })
 
-    res.send(`Sucesfully deleted: ${fileId}`)
+    res.status(200).json({ message: `Sucesfully deleted: ${fileId}` })
   }
 }
 

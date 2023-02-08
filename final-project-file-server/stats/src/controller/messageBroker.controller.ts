@@ -20,15 +20,16 @@ class MessageBrokerController {
   private publishMessage = async (req: Request, res: Response) => {
     const { message } = req.query
 
-    if (typeof message !== 'string') throw new Error('message not a string type error')
+    if (!message) return res.status(400).json({ error: 'It is needed a query parameter' })
+    if (typeof message !== 'string') return res.status(400).json({ error: 'Invalid query parameter' })
 
     const response = await this.messageBrokerService.publishMessage(message)
-    res.json(response)
+    res.status(200).json({ message: `${response} published` })
   }
 
   private consumeMessage = async (req: Request, res: Response) => {
     const response = await this.messageBrokerService.consumeMessage()
-    res.json(response)
+    res.status(200).json({ message: 'consumer created' })
   }
 }
 
