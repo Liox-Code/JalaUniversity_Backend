@@ -1,5 +1,5 @@
 import App from './app'
-import MessageBroker from './messageBroker/messageBroker'
+import { MessageBroker } from './infrastructure/messageBroker/messageBroker'
 
 (async () => {
   try {

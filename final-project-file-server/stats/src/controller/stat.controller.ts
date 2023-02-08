@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express'
-import { StatService } from '../../core/services/stat.service'
+import { StatService } from '../services/stat.service'
 
 class StatController {
   public router: Router
