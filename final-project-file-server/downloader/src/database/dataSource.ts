@@ -1,13 +1,18 @@
 import { DataSource } from 'typeorm'
+import { UriEntity } from '../database/entities/uri.entity'
 
 export const AppDataSource = new DataSource({
-  type: 'mongodb',
+  type: 'postgres',
   host: 'localhost',
-  port: 27017,
-  database: 'file-server',
+  port: 5432,
+  username: 'postgres',
+  password: 'postgres',
+  database: 'downloader',
   synchronize: true,
   logging: false,
-  entities: [],
+  entities: [
+    UriEntity
+  ],
   migrations: [],
   subscribers: []
 })
