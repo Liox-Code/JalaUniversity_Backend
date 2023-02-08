@@ -1,6 +1,6 @@
 import express from 'express'
-import FileController from './controller/file.controller'
-import MessageBrokerController from './controller/messageBroker.controller'
+import FileController from './controllers/file.controller'
+import MessageBrokerController from './controllers/messageBroker.controller'
 
 class App {
   public port: number
