@@ -1,40 +1,34 @@
 import { Router, Request, Response } from 'express'
-import { FileService } from '../services/file.service'
-import MessageBroker from '../infrastructure/messageBroker/messageBroker'
+import { MessageBrokerService } from '../services/messageBroker.service'
 
 class MessageBrokerController {
   public router: Router
-  uriService: FileService = new FileService()
-  private messageBroker: MessageBroker
+  messageBrokerService: MessageBrokerService
 
   constructor () {
     this.router = Router()
     this.initRoutes()
 
-    this.messageBroker = new MessageBroker()
-    console.log(this.messageBroker)
+    this.messageBrokerService = new MessageBrokerService()
   }
 
   private initRoutes () {
-    this.router.post('/', this.sendData)
+    this.router.post('/', this.publishMessage)
+    this.router.get('/', this.consumeMessage)
   }
 
-  private async sendData (req: Request, res: Response) {
-    console.log('Controller post testing message broker')
-    // try {
-    //   const data = 'await req.body'
+  private publishMessage = async (req: Request, res: Response) => {
+    const { message } = req.query
 
-    //   await this.messageBroker.channel.sendToQueue(
-    //     'calculate',
-    //     Buffer.from(
-    //       data
-    //     )
-    //   )
+    if (typeof message !== 'string') throw new Error('message not a string type error')
 
-    //   res.send('Calculation order submitted')
-    // } catch (error) {
-    //   throw new Error(`Error: ${error}`)
-    // }
+    const response = await this.messageBrokerService.publishMessage(message)
+    res.json(response)
+  }
+
+  private consumeMessage = async (req: Request, res: Response) => {
+    const response = await this.messageBrokerService.consumeMessage()
+    res.json(response)
   }
 }
 

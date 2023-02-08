@@ -1,4 +1,4 @@
-import { IFileRepository } from '../types/IFile.repository'
+import { IFileRepository } from '../types/IFile.type'
 import { FileRepository } from '../database/repositories/file.repository'
 import { FileDTO } from '../dto/file.dto'
 

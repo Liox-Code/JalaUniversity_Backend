@@ -1,6 +1,7 @@
 import amqplib, { Channel, Connection } from 'amqplib'
+import { TFileExchange } from '../../types/infrastructure/exchanges.type'
 
-class MessageBroker {
+export class MessageBroker {
   static instance: MessageBroker | null
   private _channel!: Channel
   private _connection!: Connection
@@ -29,13 +30,33 @@ class MessageBroker {
       }
       this._connection = await amqplib.connect(amqpServer)
       this._channel = await this._connection.createChannel()
-
-      await this._channel.assertQueue('calculate', { durable: false })
-      await this._channel.sendToQueue('calculate', Buffer.from('Hello from Uploader'))
     } catch (error) {
       throw new Error('Error on conection of Message Broker Connection on Uploader')
     }
   }
-}
 
-export default MessageBroker
+  async publishMessage (exchange: TFileExchange, message: string) {
+    try {
+      await this._channel.assertExchange(exchange.name, exchange.type, { durable: false })
+      await this._channel.publish(exchange.name, '', Buffer.from(message))
+      return message
+    } catch (error) {
+      throw new Error('Error on Publish Message of Message Broker on Uploader')
+    }
+  }
+
+  async consumeMessage (exchange: TFileExchange) {
+    try {
+      await this._channel.assertExchange(exchange.name, exchange.type, { durable: false })
+      const assertQueue = await this._channel.assertQueue('', { exclusive: true })
+
+      await this._channel.bindQueue(assertQueue.queue, exchange.name, '')
+
+      await this._channel.consume(assertQueue.queue, (message) => {
+        if (message?.content) console.log(`The message is: ${message.content.toString()}`)
+      }, { noAck: true })
+    } catch (error) {
+      throw new Error('Error on Consume Message of Message Broker on Uploader')
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import { AppDataSource } from '../dataSource'
-import { IFileRepository } from '../../types/IFile.repository'
+import { IFileRepository } from '../../types/IFile.type'
 import { FindManyOptions, Repository } from 'typeorm'
 import { FileMapper } from '../../mappers/file.mapper'
 import { FileDTO } from '../../dto/file.dto'

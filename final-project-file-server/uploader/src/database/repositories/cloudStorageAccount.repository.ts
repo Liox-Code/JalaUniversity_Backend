@@ -1,7 +1,7 @@
 import { AppDataSource } from '../dataSource'
 import { FindManyOptions, Repository } from 'typeorm'
 
-import { ICloudStorageAccountRepository } from '../../types/ICloudStorageAccount.repository'
+import { ICloudStorageAccountRepository } from '../../types/ICloudStorageAccount.type'
 import { CloudStorageAccountMapper } from '../../mappers/cloudStorageAccount.mapper'
 import { CloudStorageAccountDTO } from '../../dto/cloudStorageAccount.dto'
 import { CloudStorageAccountEntity } from '../entities/cloudStorageAccount.entity'

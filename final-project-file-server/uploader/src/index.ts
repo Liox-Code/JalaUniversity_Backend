@@ -1,6 +1,6 @@
 import { AppDataSource } from './database/dataSource'
 import App from './app'
-import MessageBroker from './infrastructure/messageBroker/messageBroker'
+import { MessageBroker } from './infrastructure/messageBroker/messageBroker'
 
 (async () => {
   try {
@@ -12,6 +12,6 @@ import MessageBroker from './infrastructure/messageBroker/messageBroker'
     app.build()
     app.listen()
   } catch (err) {
-    console.log(err)
+    throw new Error(`${err}`)
   }
 })()

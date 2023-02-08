@@ -1,4 +1,4 @@
-import { ICloudStorageAccountRepository } from '../types/ICloudStorageAccount.repository'
+import { ICloudStorageAccountRepository } from '../types/ICloudStorageAccount.type'
 import { CloudStorageAccountRepository } from '../database/repositories/cloudStorageAccount.repository'
 import { CloudStorageAccountDTO } from '../dto/cloudStorageAccount.dto'
 
