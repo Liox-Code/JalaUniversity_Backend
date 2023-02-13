@@ -1,0 +1,27 @@
+Drive Accounts
+  bart.simpson.test.drive
+  homero.simpson.test.drive
+  lisa.simpson.test.drive
+
+  password: simpson.1234
+
+Databases Docker
+  docker run -d -p 27017:27017 --name <container_name> -e MONGO_INITDB_ROOT_USERNAME=<username> -e MONGO_INITDB_ROOT_PASSWORD=<password> mongo:<version>
+  
+  mongo <hostname>:<port>/<database_name>
+  use <database_name>
+  db.getCollectionNames()
+  db.file_entity.distinct("_id")
+  db.fs.files.find().pretty()
+  db.fs.chunks.find({}).pretty()
+  db.fs.file_entity.find({}).pretty()
+
+  db.fs.files.deleteOne({_id: <file_id>})
+  db.fs.files.deleteMany({<query>})
+  db.fs.files.deleteMany({})
+
+  db.fs.chunks.deleteOne({_id: <file_id>})
+  db.fs.chunks.deleteMany({<query>})
+  db.fs.chunks.deleteMany({})
+
+  db.file_entity.drop()

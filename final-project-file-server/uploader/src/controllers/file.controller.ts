@@ -1,13 +1,16 @@
 import { Router, Request, Response } from 'express'
 import { FileDTO } from '../dto/file.dto'
 import { FileService } from '../services/file.service'
+import multer from 'multer'
 
 class FileController {
   public router: Router
   private fileService
+  private upload
 
   constructor () {
     this.fileService = new FileService()
+    this.upload = multer({ storage: multer.memoryStorage() })
     this.router = Router()
     this.initRoutes()
   }
@@ -17,6 +20,34 @@ class FileController {
     this.router.post('/', this.createFile)
     this.router.delete('/', this.deleteFile)
     this.router.put('/', this.updateFile)
+
+    this.router.post('/file', this.upload.single('file'), this.saveFile)
+    this.router.get('/:id', this.getFile)
+  }
+
+  private saveFile = async (req: Request, res: Response) => {
+    const { fileId, status } = req.body as { fileId: string, status: string }
+    const file = req.file as Express.Multer.File
+
+    const response = await this.fileService.saveFile(fileId, status, file)
+
+    res.status(200).json({ message: response })
+  }
+
+  private getFile = async (req: Request, res: Response) => {
+    try {
+      const stream = await this.fileService.getFile(req.params.id)
+      // res.set('Content-Type', stream.file.contentType)
+      // res.set('Content-Length', stream.file.length)
+      // res.set('Content-Disposition', `attachment; filename=${stream.file.filename}`)
+      stream.pipe(res)
+
+      console.log(stream)
+      // res.status(200).json({ message: stream })
+    } catch (error) {
+      console.error(error)
+      // res.status(500).send(error.message)
+    }
   }
 
   private createFile = async (req: Request, res: Response) => {

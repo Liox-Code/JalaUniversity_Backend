@@ -24,4 +24,12 @@ export class FileService {
   deleteFile = async (fileId: string) => {
     return await this.file.deleteFile(fileId)
   }
+
+  saveFile = async (fileId: string, status: string, file: Express.Multer.File) => {
+    return await this.file.saveFile(fileId, status, file)
+  }
+
+  getFile = async (fileId: string) => {
+    return await this.file.getFile(fileId)
+  }
 }
