@@ -1,6 +1,7 @@
 import express from 'express'
 import StoredFileController from './controller/storedFile.controller'
 import MessageBrokerController from './controller/messageBroker.controller'
+import cloudStorageAccountController from './controller/cloudStorageAccount.controller'
 
 class App {
   public port: number
@@ -18,6 +19,7 @@ class App {
   public build () {
     this.app.use('/storedFile', StoredFileController)
     this.app.use('/messageBroker', MessageBrokerController)
+    this.app.use('/cloud-storage-account', cloudStorageAccountController)
   }
 
   public listen () {
