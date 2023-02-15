@@ -4,9 +4,11 @@ import { CloudStorageAccountEntity } from '../database/entities/cloudStorageAcco
 export class CloudStorageAccountMapper {
   static toEntity (cloudStorageAccount: CloudStorageAccountDTO): CloudStorageAccountEntity {
     const cloudStorageAccountEntity: CloudStorageAccountEntity = {
-      _id: cloudStorageAccount.cloudStorageId,
       email: cloudStorageAccount.email,
-      key: cloudStorageAccount.key
+      credentialClientID: cloudStorageAccount.credentialClientID,
+      credentialRedirecrUri: cloudStorageAccount.credentialRedirecrUri,
+      credentialRefreshToken: cloudStorageAccount.credentialRefreshToken,
+      credentialSecret: cloudStorageAccount.credentialSecret
     }
 
     return cloudStorageAccountEntity
@@ -14,9 +16,11 @@ export class CloudStorageAccountMapper {
 
   static toDTO (cloudStorageAccount: CloudStorageAccountEntity): CloudStorageAccountDTO {
     const cloudStorageAccountDTO: CloudStorageAccountDTO = {
-      cloudStorageId: cloudStorageAccount._id,
       email: cloudStorageAccount.email,
-      key: cloudStorageAccount.key
+      credentialClientID: cloudStorageAccount.credentialClientID,
+      credentialRedirecrUri: cloudStorageAccount.credentialRedirecrUri,
+      credentialRefreshToken: cloudStorageAccount.credentialRefreshToken,
+      credentialSecret: cloudStorageAccount.credentialSecret
     }
 
     return cloudStorageAccountDTO

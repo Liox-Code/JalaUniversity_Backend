@@ -20,7 +20,7 @@ export const AppDataSource = new DataSource({
 })
 
 const uri = 'mongodb://127.0.0.1:27017'
-export const client = new MongoClient(uri, { useUnifiedTopology: true })
+export const client = new MongoClient(uri)
 client.connect((error) => {
   if (error) {
     throw new Error(`Datasource ${error}`)

@@ -13,12 +13,16 @@ export class CloudStorageAccountService {
     return this.cloudStorageAccount.createCloudStorageAccount(cloudStorageAccount)
   }
 
+  readCloudStorageAccounts = async () => {
+    return await this.cloudStorageAccount.readCloudStorageAccounts()
+  }
+
   readCloudStorageAccount = async (cloudStorageAccountId: string) => {
     return await this.cloudStorageAccount.readCloudStorageAccount(cloudStorageAccountId)
   }
 
-  updateCloudStorageAccount = async (cloudStorageAccount: CloudStorageAccountDTO) => {
-    return await this.cloudStorageAccount.updateCloudStorageAccount(cloudStorageAccount)
+  updateCloudStorageAccount = async (cloudStorageAccountId: string, cloudStorageAccount: CloudStorageAccountDTO) => {
+    return await this.cloudStorageAccount.updateCloudStorageAccount(cloudStorageAccountId, cloudStorageAccount)
   }
 
   deleteCloudStorageAccount = async (cloudStorageAccountId: string) => {

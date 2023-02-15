@@ -25,3 +25,10 @@ Databases Docker
   db.fs.chunks.deleteMany({})
 
   db.file_entity.drop()
+
+
+bart.simpson.test.drive@gmail.com
+  ID de cliente = "769487861968-si2om2r5fj90m3rvec5grrkqv4iuemoj.apps.googleusercontent.com"
+  Secreto del cliente = "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"
+  Redirect URI = "https://developers.google.com/oauthplayground/"
+  Refresh token = "1//04sYJsgXPidMlCgYIARAAGAQSNwF-L9Irg4TOgP9gilAPvpWZLnsVWrdLRBW8TWh0hwC9KFyJKgNjwSib_nTewgVkX9VKsPRwAS0"

@@ -1,13 +1,23 @@
+import { ObjectId } from 'mongodb'
 import { Column, ObjectIdColumn, Entity } from 'typeorm'
 
 @Entity()
 export class CloudStorageAccountEntity {
   @ObjectIdColumn()
-    _id!: string
+    _id?: ObjectId
 
   @Column()
     email!: string
 
   @Column()
-    key!: number
+    credentialClientID!: string
+
+  @Column()
+    credentialSecret!: string
+
+  @Column()
+    credentialRedirecrUri!: string
+
+  @Column()
+    credentialRefreshToken!: string
 }

@@ -1,15 +1,21 @@
 export class CloudStorageAccountDTO {
-  cloudStorageId: string
   email: string
-  key: number
+  credentialClientID: string
+  credentialSecret: string
+  credentialRedirecrUri: string
+  credentialRefreshToken: string
 
   constructor (
-    cloudStorageId: string,
     email: string,
-    key: number
+    credentialClientID: string,
+    credentialSecret: string,
+    credentialRedirecrUri: string,
+    credentialRefreshToken: string
   ) {
-    this.cloudStorageId = cloudStorageId
     this.email = email
-    this.key = key
+    this.credentialClientID = credentialClientID
+    this.credentialSecret = credentialSecret
+    this.credentialRedirecrUri = credentialRedirecrUri
+    this.credentialRefreshToken = credentialRefreshToken
   }
 }

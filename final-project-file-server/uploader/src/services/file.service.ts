@@ -1,6 +1,5 @@
 import { IFileRepository } from '../types/IFile.type'
 import { FileRepository } from '../database/repositories/file.repository'
-import { FileDTO } from '../dto/file.dto'
 
 export class FileService {
   private file: IFileRepository
@@ -9,27 +8,23 @@ export class FileService {
     this.file = new FileRepository()
   }
 
-  createFile = async (file: FileDTO) => {
-    return this.file.createFile(file)
+  createFile = async (file: Express.Multer.File) => {
+    return await this.file.createFile(file)
   }
 
-  readFile = async (fileId: string) => {
-    return await this.file.readFile(fileId)
+  readFiles = async () => {
+    return await this.file.readFiles()
   }
 
-  updateFile = async (file: FileDTO) => {
-    return await this.file.updateFile(file)
+  readFileById = async (fileId: string) => {
+    return await this.file.readFileById(fileId)
+  }
+
+  updateFile = async (fileId: string, file: Express.Multer.File) => {
+    return await this.file.updateFile(fileId, file)
   }
 
   deleteFile = async (fileId: string) => {
     return await this.file.deleteFile(fileId)
-  }
-
-  saveFile = async (fileId: string, status: string, file: Express.Multer.File) => {
-    return await this.file.saveFile(fileId, status, file)
-  }
-
-  getFile = async (fileId: string) => {
-    return await this.file.getFile(fileId)
   }
 }

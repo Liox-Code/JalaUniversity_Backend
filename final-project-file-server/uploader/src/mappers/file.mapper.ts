@@ -4,8 +4,8 @@ import { FileEntity } from '../database/entities/file.entity'
 export class FileMapper {
   static toEntity (file: FileDTO): FileEntity {
     const fileEntity: FileEntity = {
-      _id: file.fileId,
       fileName: file.fileName,
+      mimeType: file.mimeType,
       size: file.size,
       status: file.status
     }
@@ -13,12 +13,13 @@ export class FileMapper {
     return fileEntity
   }
 
-  static toDTO (file: FileEntity): FileDTO {
+  static toDTO (file: FileEntity, content: Buffer): FileDTO {
     const fileDTO: FileDTO = {
-      fileId: file._id,
       fileName: file.fileName,
+      mimeType: file.mimeType,
       size: file.size,
-      status: file.status
+      status: file.status,
+      content
     }
 
     return fileDTO

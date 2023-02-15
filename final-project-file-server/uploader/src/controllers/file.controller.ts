@@ -1,96 +1,96 @@
 import { Router, Request, Response } from 'express'
-import { FileDTO } from '../dto/file.dto'
 import { FileService } from '../services/file.service'
 import multer from 'multer'
+import { GoogleAPIService } from '../services/drive'
 
 class FileController {
   public router: Router
   private fileService
+  private cloudStorageService
   private upload
 
   constructor () {
     this.fileService = new FileService()
+    this.cloudStorageService = new GoogleAPIService()
     this.upload = multer({ storage: multer.memoryStorage() })
     this.router = Router()
     this.initRoutes()
   }
 
   private initRoutes () {
-    this.router.get('/', this.readFile)
-    this.router.post('/', this.createFile)
-    this.router.delete('/', this.deleteFile)
-    this.router.put('/', this.updateFile)
+    this.router.post('/', this.upload.single('file'), this.createFile)
+    this.router.get('/', this.readFiles)
+    this.router.get('/:id', this.readFile)
+    this.router.put('/:id', this.upload.single('file'), this.updateFile)
+    this.router.delete('/:id', this.deleteFile)
 
-    this.router.post('/file', this.upload.single('file'), this.saveFile)
-    this.router.get('/:id', this.getFile)
-  }
-
-  private saveFile = async (req: Request, res: Response) => {
-    const { fileId, status } = req.body as { fileId: string, status: string }
-    const file = req.file as Express.Multer.File
-
-    const response = await this.fileService.saveFile(fileId, status, file)
-
-    res.status(200).json({ message: response })
-  }
-
-  private getFile = async (req: Request, res: Response) => {
-    try {
-      const stream = await this.fileService.getFile(req.params.id)
-      // res.set('Content-Type', stream.file.contentType)
-      // res.set('Content-Length', stream.file.length)
-      // res.set('Content-Disposition', `attachment; filename=${stream.file.filename}`)
-      stream.pipe(res)
-
-      console.log(stream)
-      // res.status(200).json({ message: stream })
-    } catch (error) {
-      console.error(error)
-      // res.status(500).send(error.message)
-    }
+    this.router.get('/drive', this.readAllFilesCloudStorage)
+    this.router.post('/drive', this.upload.single('file'), this.uploadFileCloudStorage)
+    this.router.get('/drive/:id', this.readFileCloudStorage)
   }
 
   private createFile = async (req: Request, res: Response) => {
-    const { fileId } = req.query
+    const file = req.file as Express.Multer.File
 
-    if (!fileId) return res.status(400).json({ error: 'It is needed a query parameter' })
-    if (typeof fileId !== 'string') return res.status(400).json({ error: 'Invalid query parameter' })
+    const response = await this.fileService.createFile(file)
 
-    const response = await this.fileService.createFile(new FileDTO(fileId, 'fileName', 'size', 'status'))
-    res.status(200).json({ message: `File Created: ${response}` })
-  }
-
-  private readFile = async (req: Request, res: Response) => {
-    const { fileId } = req.query
-
-    if (!fileId) return res.status(400).json({ error: 'It is needed a query parameter' })
-    if (typeof fileId !== 'string') return res.status(400).json({ error: 'Invalid query parameter' })
-
-    const response = await this.fileService.readFile(fileId)
     res.status(200).json({ message: response })
   }
 
+  private readFiles = async (req: Request, res: Response) => {
+    try {
+      const response = await this.fileService.readFiles()
+      res.status(200).json({ message: response })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  private readFile = async (req: Request, res: Response) => {
+    const { id } = req.params as { id: string }
+    try {
+      const response = await this.fileService.readFileById(id)
+      res.status(200).json({ message: response })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   private updateFile = async (req: Request, res: Response) => {
-    const { fileId } = req.query
+    const { id } = req.params as { id: string }
+    const file = req.file as Express.Multer.File
 
-    if (!fileId) return res.status(400).json({ error: 'It is needed a query parameter' })
-    if (typeof fileId !== 'string') return res.status(400).json({ error: 'Invalid query parameter' })
+    const response = await this.fileService.updateFile(id, file)
 
-    const response = await this.fileService.updateFile(new FileDTO(fileId, 'fileNameUpdated', 'sizeUpdated', 'statusUpdated'))
-    res.status(200).json({ message: `File Updated: ${response}` })
+    res.status(200).json({ message: response })
   }
 
   private deleteFile = async (req: Request, res: Response) => {
-    const { fileId } = req.query
+    const { id } = req.params as { id: string }
 
-    if (!fileId) return res.status(400).json({ error: 'It is needed a query parameter' })
-    if (typeof fileId !== 'string') return res.status(400).json({ error: 'Invalid query parameter' })
+    const response = await this.fileService.deleteFile(id)
 
-    const response = await this.fileService.deleteFile(fileId)
+    res.status(200).json({ message: response })
+  }
 
-    if (!response) return res.status(409).json({ error: 'Unable to delete the resource' })
+  private readFileCloudStorage = async (req: Request, res: Response) => {
+    const { id } = req.params as { id: string }
 
-    res.status(200).json({ message: `Sucesfully deleted: ${fileId}` })
+    const response = await this.cloudStorageService.readFile(id)
+    res.json({ message: response })
+  }
+
+  private readAllFilesCloudStorage = async (req: Request, res: Response) => {
+    const { pageSize, pageToken } = req.body as { pageSize: number, pageToken?: string }
+    const response = await this.cloudStorageService.readFiles(pageSize, pageToken)
+    res.json({ message: response })
+  }
+
+  private uploadFileCloudStorage = async (req: Request, res: Response) => {
+    const file = req.file as Express.Multer.File
+
+    const response = await this.cloudStorageService.uploadFile(file)
+    res.json({ message: response })
   }
 }
 
