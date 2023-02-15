@@ -16,7 +16,7 @@ export class CloudStorageAccountRepository implements ICloudStorageAccountReposi
 
   createCloudStorageAccount = async (cloudStorageAccount: CloudStorageAccountDTO) => {
     const createCloudStorageAccount = await this.repository.save(CloudStorageAccountMapper.toEntity(cloudStorageAccount))
-    return createCloudStorageAccount
+    return CloudStorageAccountMapper.toDTO(createCloudStorageAccount)
   }
 
   readCloudStorageAccount = async (cloudStorageAccountId: string) => {
@@ -30,7 +30,7 @@ export class CloudStorageAccountRepository implements ICloudStorageAccountReposi
       throw new Error(`Cloud Storage Account with id ${cloudStorageAccountId} not found`)
     }
 
-    return foundCloudStorageAccount
+    return CloudStorageAccountMapper.toDTO(foundCloudStorageAccount)
   }
 
   readCloudStorageAccounts = async () => {
@@ -40,7 +40,11 @@ export class CloudStorageAccountRepository implements ICloudStorageAccountReposi
       throw new Error('Cloud Storage Accounts not found')
     }
 
-    return foundCloudStorageAccounts
+    const cloudStorageAccountsDTO = foundCloudStorageAccounts.map((account) => {
+      return CloudStorageAccountMapper.toDTO(account)
+    })
+
+    return cloudStorageAccountsDTO
   }
 
   updateCloudStorageAccount = async (cloudStorageAccountId: string, cloudStorageAccount: CloudStorageAccountDTO) => {

@@ -4,7 +4,7 @@ import { Column, ObjectIdColumn, Entity } from 'typeorm'
 @Entity()
 export class CloudStorageAccountEntity {
   @ObjectIdColumn()
-    _id?: ObjectId
+    _id!: ObjectId
 
   @Column()
     email!: string

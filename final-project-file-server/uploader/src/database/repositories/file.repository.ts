@@ -115,12 +115,14 @@ export class FileRepository implements IFileRepository {
 
     const uploadStream = gridFSBucket.openUploadStreamWithId(new ObjectId(fileId), file.originalname)
 
-    await this.manager.update(FileEntity, { where: { _id: new ObjectId(fileId) } }, {
-      fileName: file.originalname,
-      status,
-      mimeType: file.mimetype,
-      size: file.size
-    })
+    const fileEntity = new FileEntity()
+    fileEntity._id = new ObjectId(fileId)
+    fileEntity.fileName = file.originalname
+    fileEntity.mimeType = file.mimetype
+    fileEntity.size = file.size
+    fileEntity.status = status
+
+    await this.manager.save(fileEntity)
 
     const finished = new Promise((resolve, reject) => {
       uploadStream.on('finish', resolve)
@@ -134,12 +136,7 @@ export class FileRepository implements IFileRepository {
     const downloadStream = gridFSBucket.openDownloadStream(new ObjectId(fileId))
     const buffer = await this.streamToBuffer(downloadStream)
 
-    return FileMapper.toDTO({
-      fileName: file.originalname,
-      status,
-      mimeType: file.mimetype,
-      size: file.size
-    }, buffer)
+    return FileMapper.toDTO(fileEntity, buffer)
   }
 
   deleteFile = async (fileId: string) => {

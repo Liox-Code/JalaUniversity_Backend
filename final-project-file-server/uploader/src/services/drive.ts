@@ -1,23 +1,24 @@
 import { drive_v3, google } from 'googleapis'
 import { OAuth2Client } from 'google-auth-library'
 import { Readable } from 'stream'
+import { TAPICredentials } from '../types/IStoredFile.type'
 
 export class GoogleAPIService {
   private oauth2Client: OAuth2Client
   private drive: drive_v3.Drive
 
-  constructor () {
+  constructor (credentials: TAPICredentials) {
     this.oauth2Client = new google.auth.OAuth2(
-      '769487861968-si2om2r5fj90m3rvec5grrkqv4iuemoj.apps.googleusercontent.com',
-      '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',
-      'https://developers.google.com/oauthplayground/'
+      credentials.credentialClientID,
+      credentials.credentialSecret,
+      credentials.credentialRedirecrUri
     )
     this.drive = google.drive({
       version: 'v3',
       auth: this.oauth2Client
     })
     this.oauth2Client.setCredentials({
-      refresh_token: '1//04sYJsgXPidMlCgYIARAAGAQSNwF-L9Irg4TOgP9gilAPvpWZLnsVWrdLRBW8TWh0hwC9KFyJKgNjwSib_nTewgVkX9VKsPRwAS0'
+      refresh_token: credentials.credentialRefreshToken
     })
   }
 

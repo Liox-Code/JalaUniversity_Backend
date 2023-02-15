@@ -2,19 +2,19 @@ import { ObjectId } from 'mongodb'
 import { Column, ObjectIdColumn, Entity } from 'typeorm'
 
 @Entity()
-export class FileEntity {
+export class StoreFileEntity {
   @ObjectIdColumn()
-    _id!: ObjectId
+    _id?: ObjectId
 
   @Column()
-    fileName!: string
+    cloudStorageAccountId!: ObjectId
 
   @Column()
-    mimeType!: string
+    fileId!: ObjectId
 
   @Column()
-    size!: number
+    webViewLink!: string
 
   @Column()
-    status!: string
+    webContentLink!: string
 }
