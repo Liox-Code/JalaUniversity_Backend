@@ -1,4 +1,4 @@
-export type TFileExchange = {
+export type TExchange = {
   name: string;
   type: string;
 }

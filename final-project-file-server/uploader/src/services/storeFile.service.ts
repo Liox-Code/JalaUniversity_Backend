@@ -3,15 +3,18 @@ import { CloudStorageAccountService } from './cloudStorageAccount.service'
 import { StoreFileRepository } from '../database/repositories/storeFile.repository'
 import { StoreFileDTO } from '../dto/storeFile.dto'
 import { GoogleAPIService } from './drive'
+import { MessageBrokerService } from './messageBroker.service'
 
 export class StoreFileService {
   private fileService: FileService
   private cloudStorageAccountService: CloudStorageAccountService
+  private messageBrokerService: MessageBrokerService
   private storeFileRepository: StoreFileRepository
 
   constructor () {
     this.fileService = new FileService()
     this.cloudStorageAccountService = new CloudStorageAccountService()
+    this.messageBrokerService = new MessageBrokerService()
     this.storeFileRepository = new StoreFileRepository()
   }
 
@@ -49,6 +52,13 @@ export class StoreFileService {
       .catch((error) => {
         throw new Error(error)
       })
+
+    const message = {
+      action: 'uploadFile',
+      storedFiles
+    }
+
+    this.messageBrokerService.publishMessage(message)
 
     return storedFiles
   }

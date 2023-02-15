@@ -1,5 +1,5 @@
 import express from 'express'
-import UriController from './controller/uri.controller'
+import StoredFileController from './controller/storedFile.controller'
 import MessageBrokerController from './controller/messageBroker.controller'
 
 class App {
@@ -16,7 +16,7 @@ class App {
   }
 
   public build () {
-    this.app.use('/uri', UriController)
+    this.app.use('/storedFile', StoredFileController)
     this.app.use('/messageBroker', MessageBrokerController)
   }
 

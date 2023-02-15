@@ -1,5 +1,5 @@
 import { DataSource } from 'typeorm'
-import { UriEntity } from '../database/entities/uri.entity'
+import { StoredFileEntity } from './entities/storedFile.entity'
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -11,7 +11,7 @@ export const AppDataSource = new DataSource({
   synchronize: true,
   logging: false,
   entities: [
-    UriEntity
+    StoredFileEntity
   ],
   migrations: [],
   subscribers: []

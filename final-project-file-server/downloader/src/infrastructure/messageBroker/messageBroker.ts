@@ -45,15 +45,20 @@ export class MessageBroker {
     }
   }
 
-  async consumeMessage (exchange: TExchange) {
+  async consumeMessage (exchange: TExchange, action: (message: Record<string, unknown>) => Promise<Record<string, unknown>>) {
     try {
       await this._channel.assertExchange(exchange.name, exchange.type, { durable: false })
       const assertQueue = await this._channel.assertQueue('', { exclusive: true })
 
       await this._channel.bindQueue(assertQueue.queue, exchange.name, '')
 
-      await this._channel.consume(assertQueue.queue, (message) => {
-        if (message?.content) console.log(`The message is: ${message.content.toString()}`)
+      await this._channel.consume(assertQueue.queue, async (message) => {
+        if (message?.content) {
+          const messageContent = message.content.toString()
+          console.log(`The message is: ${message.content}`)
+          const result = await action(JSON.parse(messageContent))
+          console.log(`The result is: ${result.toString()}`)
+        }
       }, { noAck: true })
     } catch (error) {
       throw new Error('Error on Consume Message of Message Broker on Uploader')

@@ -1,6 +1,6 @@
-import { TFileExchange } from '../../types/infrastructure/exchanges.type'
+import { TExchange } from '../../types/infrastructure/exchanges.type'
 
-export const fileExchange: TFileExchange = {
+export const exchange: TExchange = {
   name: 'file',
   type: 'fanout'
 }

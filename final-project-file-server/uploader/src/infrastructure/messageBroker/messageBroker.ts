@@ -1,5 +1,5 @@
 import amqplib, { Channel, Connection } from 'amqplib'
-import { TFileExchange } from '../../types/infrastructure/exchanges.type'
+import { TExchange } from '../../types/infrastructure/exchanges.type'
 
 export class MessageBroker {
   static instance: MessageBroker | null
@@ -35,17 +35,18 @@ export class MessageBroker {
     }
   }
 
-  async publishMessage (exchange: TFileExchange, message: string) {
+  async publishMessage (exchange: TExchange, message: Record<string, unknown>) {
     try {
+      const messageString = JSON.stringify(message)
       await this._channel.assertExchange(exchange.name, exchange.type, { durable: false })
-      await this._channel.publish(exchange.name, '', Buffer.from(message))
+      await this._channel.publish(exchange.name, '', Buffer.from(messageString))
       return message
     } catch (error) {
       throw new Error('Error on Publish Message of Message Broker on Uploader')
     }
   }
 
-  async consumeMessage (exchange: TFileExchange) {
+  async consumeMessage (exchange: TExchange) {
     try {
       await this._channel.assertExchange(exchange.name, exchange.type, { durable: false })
       const assertQueue = await this._channel.assertQueue('', { exclusive: true })

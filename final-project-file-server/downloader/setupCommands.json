@@ -1,0 +1,20 @@
+Drive Accounts
+  bart.simpson.test.drive
+  homero.simpson.test.drive
+  lisa.simpson.test.drive
+
+  password: simpson.1234
+
+Databases Docker
+  docker pull postgres
+  docker run --name postgres-container -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=postgres -p 5432:5432 -d postgres
+  docker ps
+  docker exec -it postgres-container psql -U postgres
+  CREATE DATABASE downloader;
+
+
+bart.simpson.test.drive@gmail.com
+  ID de cliente = "769487861968-si2om2r5fj90m3rvec5grrkqv4iuemoj.apps.googleusercontent.com"
+  Secreto del cliente = "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"
+  Redirect URI = "https://developers.google.com/oauthplayground/"
+  Refresh token = "1//04sYJsgXPidMlCgYIARAAGAQSNwF-L9Irg4TOgP9gilAPvpWZLnsVWrdLRBW8TWh0hwC9KFyJKgNjwSib_nTewgVkX9VKsPRwAS0"
