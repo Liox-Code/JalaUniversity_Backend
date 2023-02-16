@@ -2,6 +2,7 @@ import express from 'express'
 import StoredFileController from './controller/storedFile.controller'
 import MessageBrokerController from './controller/messageBroker.controller'
 import cloudStorageAccountController from './controller/cloudStorageAccount.controller'
+import { errorHandler } from './middlewares/errorHandler'
 
 class App {
   public port: number
@@ -14,6 +15,7 @@ class App {
 
   public initConfig () {
     this.app.use(express.json({ limit: '5mb' }))
+    this.app.use(errorHandler)
   }
 
   public build () {

@@ -1,6 +1,7 @@
-import { Router, Request, Response } from 'express'
+import { Router, Request, Response, NextFunction } from 'express'
 import { StoredFileDTO } from '../dto/storedFile.dto'
 import { StoredFileService } from '../services/storedFile.service'
+import { HttpError } from '../middlewares/errorHandler'
 
 class StoredFileController {
   public router: Router
@@ -20,57 +21,70 @@ class StoredFileController {
     this.router.delete('/:id', this.deleteStoredFile)
   }
 
-  private createStoredFile = async (req: Request, res: Response) => {
-    const { fileId, driveId, webViewLink, webContentLink } = req.body
-
-    const storeFile = new StoredFileDTO(fileId, driveId, webViewLink, webContentLink)
-
-    const response = await this.storedFileService.createStoredFile(storeFile)
-
-    res.send(`StoredFile Created: ${response}`)
+  private createStoredFile = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { fileId, driveId, webViewLink, webContentLink } = req.body
+      const storeFile = new StoredFileDTO(fileId, driveId, webViewLink, webContentLink)
+      const response = await this.storedFileService.createStoredFile(storeFile)
+      res.send(`StoredFile Created: ${response}`)
+    } catch (error) {
+      next(new HttpError(500, error.message))
+    }
   }
 
-  private readAllStoredFiles = async (req: Request, res: Response) => {
-    const response = await this.storedFileService.readAllStoredFiles()
-    res.send(response)
+  private readAllStoredFiles = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const response = await this.storedFileService.readAllStoredFiles()
+      res.send(response)
+    } catch (error) {
+      next(new HttpError(500, error.message))
+    }
   }
 
-  private readStoredFile = async (req: Request, res: Response) => {
-    const { id } = req.params
+  private readStoredFile = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params
 
-    if (!id) return res.status(400).json({ error: 'It is needed a query parameter' })
-    if (typeof id !== 'string') return res.status(400).json({ error: 'Invalid query parameter' })
+      if (!id) throw new HttpError(400, 'It is needed a query parameter')
+      if (typeof id !== 'string') throw new HttpError(400, 'Invalid query parameter')
 
-    const response = await this.storedFileService.readStoredFile(id)
+      const response = await this.storedFileService.readStoredFile(id)
 
-    res.send(response)
+      res.send(response)
+    } catch (error) {
+      next(error)
+    }
   }
 
-  private updateStoredFile = async (req: Request, res: Response) => {
-    const { id } = req.params
-    const { fileId, driveId, webViewLink, webContentLink } = req.body
+  private updateStoredFile = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params
+      const { fileId, driveId, webViewLink, webContentLink } = req.body
 
-    if (!id) return res.status(400).json({ error: 'It is needed a query parameter' })
-    if (typeof id !== 'string') return res.status(400).json({ error: 'Invalid query parameter' })
+      if (!id) throw new HttpError(400, 'It is needed a query parameter')
+      if (typeof id !== 'string') throw new HttpError(400, 'Invalid query parameter')
 
-    const storeFile = new StoredFileDTO(fileId, driveId, webViewLink, webContentLink)
+      const storeFile = new StoredFileDTO(fileId, driveId, webViewLink, webContentLink)
 
-    const response = await this.storedFileService.updateStoredFile(id, storeFile)
+      const response = await this.storedFileService.updateStoredFile(id, storeFile)
 
-    res.send(`StoredFile Updated: ${response}`)
+      res.send(`StoredFile Updated: ${response}`)
+    } catch (error) {
+      next(error)
+    }
   }
 
-  private deleteStoredFile = async (req: Request, res: Response) => {
-    const { id } = req.params
-
-    if (!id) return res.status(400).json({ error: 'It is needed a query parameter' })
-    if (typeof id !== 'string') return res.status(400).json({ error: 'Invalid query parameter' })
-
-    const response = await this.storedFileService.deleteStoredFile(id)
-
-    if (!response) res.send('Error Erasing')
-
-    res.send(`Sucesfully deleted: ${id}`)
+  private deleteStoredFile = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params
+      if (!id) throw new HttpError(400, 'It is needed a query parameter')
+      if (typeof id !== 'string') throw new HttpError(400, 'Invalid query parameter')
+      const response = await this.storedFileService.deleteStoredFile(id)
+      if (!response) res.send('Error Erasing')
+      res.send(`Sucesfully deleted: ${id}`)
+    } catch (error) {
+      next(new HttpError(500, 'Error Erasing'))
+    }
   }
 }
 

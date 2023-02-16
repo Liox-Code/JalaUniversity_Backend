@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express'
+import { Router, Request, Response, NextFunction } from 'express'
 import { FileService } from '../services/file.service'
 import { StoreFileService } from '../services/storeFile.service'
 import multer from 'multer'
@@ -31,48 +31,58 @@ class FileController {
     // this.router.get('/drive/:id', this.readFileCloudStorage)
   }
 
-  private createFile = async (req: Request, res: Response) => {
-    const file = req.file as Express.Multer.File
-
-    const response = await this.storeFileService.storeFile(file)
-
-    res.status(200).json({ message: response })
+  private createFile = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const file = req.file as Express.Multer.File
+      const response = await this.storeFileService.storeFile(file)
+      res.status(200).json({ message: response })
+    } catch (error) {
+      next(error)
+    }
   }
 
-  private readFiles = async (req: Request, res: Response) => {
+  private readFiles = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const response = await this.fileService.readFiles()
       res.status(200).json({ message: response })
     } catch (error) {
-      console.error(error)
+      next(error)
     }
   }
 
-  private readFile = async (req: Request, res: Response) => {
+  private readFile = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params as { id: string }
     try {
       const response = await this.fileService.readFileById(id)
       res.status(200).json({ message: response })
     } catch (error) {
-      console.error(error)
+      next(error)
     }
   }
 
-  private updateFile = async (req: Request, res: Response) => {
-    const { id } = req.params as { id: string }
-    const file = req.file as Express.Multer.File
+  private updateFile = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params as { id: string }
+      const file = req.file as Express.Multer.File
 
-    const response = await this.fileService.updateFile(id, file)
+      const response = await this.fileService.updateFile(id, file)
 
-    res.status(200).json({ message: response })
+      res.status(200).json({ message: response })
+    } catch (error) {
+      next(error)
+    }
   }
 
-  private deleteFile = async (req: Request, res: Response) => {
-    const { id } = req.params as { id: string }
+  private deleteFile = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params as { id: string }
 
-    const response = await this.fileService.deleteFile(id)
+      const response = await this.fileService.deleteFile(id)
 
-    res.status(200).json({ message: response })
+      res.status(200).json({ message: response })
+    } catch (error) {
+      next(error)
+    }
   }
 
   // private readFileCloudStorage = async (req: Request, res: Response) => {

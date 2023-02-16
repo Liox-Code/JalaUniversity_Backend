@@ -1,5 +1,6 @@
-import { Router, Request, Response } from 'express'
+import { Router, Request, Response, NextFunction } from 'express'
 import { MessageBrokerService } from '../services/messageBroker.service'
+import { HttpError } from '../middlewares/errorHandler'
 
 class MessageBrokerController {
   public router: Router
@@ -17,19 +18,40 @@ class MessageBrokerController {
     this.router.get('/', this.consumeMessage)
   }
 
-  private publishMessage = async (req: Request, res: Response) => {
-    const { message } = req.query
+  private publishMessage = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { message } = req.params
 
-    if (!message) return res.status(400).json({ error: 'It is needed a query parameter' })
-    if (typeof message !== 'string') return res.status(400).json({ error: 'Invalid query parameter' })
+      if (!message) {
+        throw new HttpError(400, 'It is needed a param parameter')
+      }
 
-    const response = await this.messageBrokerService.publishMessage(message)
-    res.status(200).json({ message: `${response} published` })
+      if (typeof message !== 'string') {
+        throw new HttpError(400, 'Invalid param parameter')
+      }
+
+      const response = await this.messageBrokerService.publishMessage(message)
+      res.status(200).json({ message: `${response} published` })
+    } catch (error) {
+      next(error)
+    }
   }
 
-  private consumeMessage = async (req: Request, res: Response) => {
-    await this.messageBrokerService.consumeMessage()
-    res.status(200).json({ message: 'consumer created' })
+  private consumeMessage = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { message } = req.params
+      if (!message) {
+        throw new HttpError(400, 'It is needed a query parameter')
+      }
+
+      if (typeof message !== 'string') {
+        throw new HttpError(400, 'Invalid query parameter')
+      }
+      const response = await this.messageBrokerService.consumeMessage({ message })
+      res.status(200).json({ message: 'consumer created' })
+    } catch (error) {
+      next(error)
+    }
   }
 }
 
