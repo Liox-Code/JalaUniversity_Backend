@@ -32,7 +32,7 @@ class MessageBrokerManager {
       fileId: data.createdFile.fileId,
       name: data.createdFile.fileName,
       numberDownloads: 0,
-      size: 0,
+      size: data.createdFile.size,
       totalSizeDownloads: 0
     }
     await this.fileService.createFile(file)

@@ -1,6 +1,6 @@
 import { AppDataSource } from '../dataSource'
 import { IFileRepository } from '../../types/IFileRepository.type'
-import { EntityManager, FindManyOptions, Repository } from 'typeorm'
+import { FindManyOptions, Repository } from 'typeorm'
 import { FileMapper } from '../../mappers/file.mapper'
 import { FileDTO } from '../../dto/file.dto'
 import { FileEntity } from '../entities/file.entity'
@@ -8,11 +8,9 @@ import { HttpError } from '../../middlewares/errorHandler'
 
 export class FileRepository implements IFileRepository {
   private readonly repository: Repository<FileEntity>
-  private readonly manager: EntityManager
 
   constructor () {
     this.repository = AppDataSource.getRepository(FileEntity)
-    this.manager = AppDataSource.manager
   }
 
   createFile = async (file: FileDTO): Promise<FileDTO> => {
@@ -35,7 +33,7 @@ export class FileRepository implements IFileRepository {
   readFileById = async (fileId: string): Promise<FileDTO> => {
     if (!fileId) throw new HttpError(400, 'fileId not provided')
 
-    const foundFile = await this.repository.findOneBy({ id: fileId })
+    const foundFile = await this.repository.findOneBy({ fileId })
 
     if (!foundFile) throw new HttpError(400, `File with id ${fileId} not found`)
 

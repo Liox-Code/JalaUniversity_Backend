@@ -4,6 +4,7 @@ import { StoredFileMapper } from '../../mappers/storedFile.mapper'
 import { IStoredFileRepository } from '../../types/IStoredFileRepository.type'
 import { AppDataSource } from '../dataSource'
 import { StoredFileEntity } from '../entities/storedFile.entity'
+import { HttpError } from '../../middlewares/errorHandler'
 
 export class StoredFileRepository implements IStoredFileRepository {
   private readonly repository: Repository<StoredFileEntity>
@@ -21,7 +22,7 @@ export class StoredFileRepository implements IStoredFileRepository {
     const foundStoredFile = await this.repository.find()
 
     if (!foundStoredFile) {
-      throw new Error('Any StoredFile found')
+      throw new HttpError(400, 'Any StoredFile found')
     }
 
     const foundStoredFileDTO = foundStoredFile.map((storedFile) => {
@@ -35,7 +36,7 @@ export class StoredFileRepository implements IStoredFileRepository {
     const foundStoredFile = await this.repository.findOneBy({ id: storedFileId })
 
     if (!foundStoredFile) {
-      throw new Error(`StoredFile with id ${storedFileId} not found`)
+      throw new HttpError(400, `StoredFile with id ${storedFileId} not found`)
     }
 
     return StoredFileMapper.toDTO(foundStoredFile)
@@ -52,10 +53,24 @@ export class StoredFileRepository implements IStoredFileRepository {
     console.log(`foundStoredFile: ${JSON.stringify(foundStoredFile)}`)
 
     if (!foundStoredFile) {
-      throw new Error('StoredFile with fileId and driveId not found')
+      throw new HttpError(400, 'StoredFile with fileId and driveId not found')
     }
 
     return StoredFileMapper.toDTO(foundStoredFile)
+  }
+
+  readStoredFileByFileId = async (fileId: string) => {
+    if (!fileId) throw new HttpError(400, 'fileId not provided')
+
+    const foundStoredFile = await this.repository.findBy({ fileId })
+
+    if (!foundStoredFile) throw new HttpError(400, `foundStoredFile with fileId ${fileId} not found`)
+
+    const foundStoredFileDTO = foundStoredFile.map((storedFile) => {
+      return StoredFileMapper.toDTO(storedFile)
+    })
+
+    return foundStoredFileDTO
   }
 
   updateStoredFile = async (storedFileId: string, storedFile: StoredFileDTO) => {
@@ -64,7 +79,7 @@ export class StoredFileRepository implements IStoredFileRepository {
     const didAffect = (updatedStoredFile.affected && updatedStoredFile.affected > 0)
 
     if (!didAffect) {
-      throw new Error(`StoredFile ${storedFileId}, affected equal to 0`)
+      throw new HttpError(400, `StoredFile ${storedFileId}, affected equal to 0`)
     }
 
     return didAffect

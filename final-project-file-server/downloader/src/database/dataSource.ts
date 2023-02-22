@@ -2,6 +2,7 @@ import { DataSource } from 'typeorm'
 import { StoredFileEntity } from './entities/storedFile.entity'
 import { CloudStorageAccountEntity } from './entities/cloudStorageAccount.entity'
 import { FileEntity } from './entities/file.entity'
+import { DownloadEntity } from './entities/download.entity'
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -15,7 +16,8 @@ export const AppDataSource = new DataSource({
   entities: [
     StoredFileEntity,
     CloudStorageAccountEntity,
-    FileEntity
+    FileEntity,
+    DownloadEntity
   ],
   migrations: [],
   subscribers: []
