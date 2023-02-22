@@ -2,6 +2,7 @@ import { drive_v3, google } from 'googleapis'
 import { OAuth2Client } from 'google-auth-library'
 import { Readable } from 'stream'
 import { TAPICredentials } from '../types/IStoredFile.type'
+import { json } from 'express'
 
 export class GoogleAPIService {
   private oauth2Client: OAuth2Client
@@ -24,9 +25,11 @@ export class GoogleAPIService {
 
   public async uploadFile (file: Express.Multer.File) {
     const { originalname, mimetype, buffer } = file
+
     try {
       const requestBody = { name: originalname }
-      const media = { mimeType: mimetype, body: Readable.from(buffer) }
+      const bufferData = Buffer.from(buffer.data)
+      const media = { mimeType: mimetype, body: Readable.from(bufferData) }
 
       const file = await this.drive.files.create({ requestBody, media })
 

@@ -5,5 +5,6 @@ export interface IFileRepository {
   readFiles: () => Promise<FileDTO[]>
   readFileById: (fileId: string) => Promise<FileDTO>
   updateFile: (fileId: string, file: Express.Multer.File) => Promise<FileDTO>
+  updateFileStatus: (fileId: string, status: string) => Promise<true>
   deleteFile: (fileId: string) => Promise<boolean>
 }

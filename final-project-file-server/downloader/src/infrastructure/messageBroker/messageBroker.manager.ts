@@ -17,26 +17,22 @@ class MessageBrokerManager {
   }
 
   private messageAdmin = async (message: Record<string, unknown>):Promise<Record<string, unknown>> => {
-    console.log(`message: ${message}`)
-    console.log(`action: ${message.action}`)
-    if (message.action) {
-      await this.uploadFile(message.storedFiles as Record<string, unknown>[])
+    if (message.action === 'messageAllFilesUploaded') {
+      await this.uploadFile(message.data as Record<string, unknown>[])
     }
     return message
   }
 
-  private uploadFile = async (storedFiles: Record<string, unknown>[]) => {
-    const promises = storedFiles.map(async (file) => {
+  private uploadFile = async (data: Record<string, unknown>[]) => {
+    const promises = data.allStoredFiles.map(async (file) => {
       const fileDTO = new StoredFileDTO(file.fileId, file.cloudStorageAccountId, file.webViewLink, file.webContentLink)
       return await this.storedFileService.createStoredFile(fileDTO)
     })
     const result = await Promise.all(promises)
       .then((res) => {
-        console.log(`uploadFile then ${res}`)
         return res
       })
 
-    console.log(`uploadFile result ${result}`)
     console.log(result)
   }
 }

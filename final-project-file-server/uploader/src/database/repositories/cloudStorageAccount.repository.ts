@@ -6,6 +6,7 @@ import { CloudStorageAccountMapper } from '../../mappers/cloudStorageAccount.map
 import { CloudStorageAccountDTO } from '../../dto/cloudStorageAccount.dto'
 import { CloudStorageAccountEntity } from '../entities/cloudStorageAccount.entity'
 import { ObjectId } from 'mongodb'
+import { HttpError } from '../../middlewares/errorHandler'
 
 export class CloudStorageAccountRepository implements ICloudStorageAccountRepository {
   private readonly repository: Repository<CloudStorageAccountEntity>
@@ -20,14 +21,14 @@ export class CloudStorageAccountRepository implements ICloudStorageAccountReposi
   }
 
   readCloudStorageAccount = async (cloudStorageAccountId: string) => {
-    if (!cloudStorageAccountId) throw new Error('cloudStorageAccountId not provided')
+    if (!cloudStorageAccountId) throw new HttpError(500, 'cloudStorageAccountId not provided')
 
     const id: ObjectId = new ObjectId(cloudStorageAccountId)
 
     const foundCloudStorageAccount = await this.repository.findOneBy({ _id: id })
 
     if (!foundCloudStorageAccount) {
-      throw new Error(`Cloud Storage Account with id ${cloudStorageAccountId} not found`)
+      throw new HttpError(500, `Cloud Storage Account with id ${cloudStorageAccountId} not found`)
     }
 
     return CloudStorageAccountMapper.toDTO(foundCloudStorageAccount)
@@ -37,7 +38,7 @@ export class CloudStorageAccountRepository implements ICloudStorageAccountReposi
     const foundCloudStorageAccounts = await this.repository.find()
 
     if (!foundCloudStorageAccounts) {
-      throw new Error('Cloud Storage Accounts not found')
+      throw new HttpError(500, 'Cloud Storage Accounts not found')
     }
 
     const cloudStorageAccountsDTO = foundCloudStorageAccounts.map((account) => {
@@ -48,7 +49,7 @@ export class CloudStorageAccountRepository implements ICloudStorageAccountReposi
   }
 
   updateCloudStorageAccount = async (cloudStorageAccountId: string, cloudStorageAccount: CloudStorageAccountDTO) => {
-    if (!cloudStorageAccountId) throw new Error('cloudStorageAccountId not provided')
+    if (!cloudStorageAccountId) throw new HttpError(500, 'cloudStorageAccountId not provided')
 
     const id: ObjectId = new ObjectId(cloudStorageAccountId)
     const updatedCloudStorageAccount = await this.repository.update({ _id: id }, CloudStorageAccountMapper.toEntity(cloudStorageAccount))
@@ -56,14 +57,14 @@ export class CloudStorageAccountRepository implements ICloudStorageAccountReposi
     const didMatch = updatedCloudStorageAccount.raw.matchedCount > 0
 
     if (!didMatch) {
-      throw new Error(`Cloud Storage Account ${cloudStorageAccountId}, matchedCount equal to 0`)
+      throw new HttpError(500, `Cloud Storage Account ${cloudStorageAccountId}, matchedCount equal to 0`)
     }
 
     return didMatch
   }
 
   deleteCloudStorageAccount = async (cloudStorageAccountId: string) => {
-    if (!cloudStorageAccountId) throw new Error('cloudStorageAccountId not provided')
+    if (!cloudStorageAccountId) throw new HttpError(500, 'cloudStorageAccountId not provided')
 
     const id: ObjectId = new ObjectId(cloudStorageAccountId)
     const options: FindManyOptions<CloudStorageAccountEntity> = {

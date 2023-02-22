@@ -26,9 +26,18 @@ Databases Docker
 
   db.file_entity.drop()
 
+{
+  "email": "bart.simpson.test.drive@gmail.com",
+  "credentialClientID": "769487861968-si2om2r5fj90m3rvec5grrkqv4iuemoj.apps.googleusercontent.com",
+  "credentialSecret": "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",
+  "credentialRedirecrUri": "https://developers.google.com/oauthplayground/",
+  "credentialRefreshToken": "1//04sYJsgXPidMlCgYIARAAGAQSNwF-L9Irg4TOgP9gilAPvpWZLnsVWrdLRBW8TWh0hwC9KFyJKgNjwSib_nTewgVkX9VKsPRwAS0"
+}
 
-bart.simpson.test.drive@gmail.com
-  ID de cliente = "769487861968-si2om2r5fj90m3rvec5grrkqv4iuemoj.apps.googleusercontent.com"
-  Secreto del cliente = "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"
-  Redirect URI = "https://developers.google.com/oauthplayground/"
-  Refresh token = "1//04sYJsgXPidMlCgYIARAAGAQSNwF-L9Irg4TOgP9gilAPvpWZLnsVWrdLRBW8TWh0hwC9KFyJKgNjwSib_nTewgVkX9VKsPRwAS0"
+{
+  "email": "homero.simpson.test.drive@gmail.com",
+  "credentialClientID": "234716697029-h97nj0e2m5562tvjonfe42s11s1msij3.apps.googleusercontent.com",
+  "credentialSecret": "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",
+  "credentialRedirecrUri": "https://developers.google.com/oauthplayground/",
+  "credentialRefreshToken": "1//04APSy6QYjVr2CgYIARAAGAQSNwF-L9Ir2fl0ySHJqfOOtSmzVu0AmJH_XTIinWy9L2tTJ8Hg7I_U64nEI-XV8mFgqip5MRCiTzg"
+}

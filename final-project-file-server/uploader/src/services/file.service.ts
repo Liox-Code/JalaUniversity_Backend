@@ -24,6 +24,10 @@ export class FileService {
     return await this.file.updateFile(fileId, file)
   }
 
+  updateFileStatus = async (fileId: string, status: string) => {
+    return await this.file.updateFileStatus(fileId, status)
+  }
+
   deleteFile = async (fileId: string) => {
     return await this.file.deleteFile(fileId)
   }

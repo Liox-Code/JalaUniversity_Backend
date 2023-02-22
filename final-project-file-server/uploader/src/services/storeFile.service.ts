@@ -4,6 +4,8 @@ import { StoreFileRepository } from '../database/repositories/storeFile.reposito
 import { StoreFileDTO } from '../dto/storeFile.dto'
 import { GoogleAPIService } from './drive'
 import { MessageBrokerService } from './messageBroker.service'
+import { HttpError } from '../middlewares/errorHandler'
+import { FileDTO } from '../dto/file.dto'
 
 export class StoreFileService {
   private fileService: FileService
@@ -19,47 +21,66 @@ export class StoreFileService {
   }
 
   storeFile = async (file: Express.Multer.File) => {
-    const createdFile = await this.fileService.createFile(file)
-    const cloudStorageAccounts = await this.cloudStorageAccountService.readCloudStorageAccounts()
+    const createdFile = await this.storeFileMongoGridFS(file)
 
-    const promise = cloudStorageAccounts.map(async (account) => {
+    await this.fileService.updateFileStatus(createdFile.fileId, 'Replicating')
+
+    const messageStoredMongoGridFS = {
+      action: 'storedCloudStorage',
+      data: {
+        createdFile,
+        file
+      }
+    }
+    await this.messageBrokerService.publishMessage(messageStoredMongoGridFS)
+
+    return createdFile
+  }
+
+  storeFileMongoGridFS = async (file: Express.Multer.File) => {
+    const createdFile = await this.fileService.createFile(file)
+
+    return createdFile
+  }
+
+  storeFileCloudStorage = async (createdFile: FileDTO, file: Express.Multer.File) => {
+    const cloudStorageAccounts = await this.cloudStorageAccountService.readCloudStorageAccounts()
+    const allStoredFiles : StoreFileDTO[] = []
+
+    for (const storageAccount of cloudStorageAccounts) {
+      console.log('Start Uploading File')
+
       const drive = new GoogleAPIService({
-        credentialClientID: account.credentialClientID,
-        credentialRedirecrUri: account.credentialRedirecrUri,
-        credentialRefreshToken: account.credentialRefreshToken,
-        credentialSecret: account.credentialSecret
+        credentialClientID: storageAccount.credentialClientID,
+        credentialRedirecrUri: storageAccount.credentialRedirecrUri,
+        credentialRefreshToken: storageAccount.credentialRefreshToken,
+        credentialSecret: storageAccount.credentialSecret
       })
 
       const uploadedFile = await drive.uploadFile(file)
 
-      if (!uploadedFile || !uploadedFile.webViewLink || !uploadedFile.webContentLink) throw new Error('No files uploaded')
+      if (!uploadedFile || !uploadedFile.webViewLink || !uploadedFile.webContentLink) throw new HttpError(400, 'No files uploaded')
 
       const storeFileDTO = new StoreFileDTO(
-        account.cloudStorageAccountId,
+        storageAccount.cloudStorageAccountId,
         createdFile.fileId,
         uploadedFile.webViewLink,
         uploadedFile.webContentLink
       )
-
       const createdStoreFile = await this.storeFileRepository.createStoreFile(storeFileDTO)
-      return createdStoreFile
-    })
 
-    const storedFiles = await Promise.all(promise)
-      .then((response) => {
-        return response
-      })
-      .catch((error) => {
-        throw new Error(error)
-      })
-
-    const message = {
-      action: 'uploadFile',
-      storedFiles
+      allStoredFiles.push(createdStoreFile)
     }
 
-    this.messageBrokerService.publishMessage(message)
+    const messageAllFilesUploaded = {
+      action: 'messageAllFilesUploaded',
+      data: {
+        allStoredFiles
+      }
+    }
+    await this.messageBrokerService.publishMessage(messageAllFilesUploaded)
 
-    return storedFiles
+    await this.fileService.updateFileStatus(createdFile.fileId, 'Uploaded')
+    console.log('All uploaded sucessfully')
   }
 }

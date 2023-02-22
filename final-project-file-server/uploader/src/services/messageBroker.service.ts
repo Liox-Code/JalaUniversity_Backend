@@ -13,8 +13,8 @@ export class MessageBrokerService {
     return (response)
   }
 
-  consumeMessage = async () => {
-    const response = await this.messageBroker.consumeMessage(exchange)
+  consumeMessage = async (action: (message: Record<string, unknown>) => Promise<Record<string, unknown>>) => {
+    const response = await this.messageBroker.consumeMessage(exchange, action)
     return (response)
   }
 }

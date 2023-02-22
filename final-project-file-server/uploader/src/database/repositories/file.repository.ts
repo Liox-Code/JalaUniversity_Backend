@@ -6,6 +6,7 @@ import { FileDTO } from '../../dto/file.dto'
 import { FileEntity } from '../entities/file.entity'
 import { Readable } from 'stream'
 import { GridFSBucket, ObjectId, ReadPreference } from 'mongodb'
+import { HttpError } from '../../middlewares/errorHandler'
 
 export class FileRepository implements IFileRepository {
   private readonly repository: Repository<FileEntity>
@@ -17,8 +18,6 @@ export class FileRepository implements IFileRepository {
   }
 
   createFile = async (file: Express.Multer.File): Promise<FileDTO> => {
-    const status = 'status'
-
     const gridFSBucket = new GridFSBucket(client.db(DATABASE_NAME), {
       chunkSizeBytes: 1024,
       bucketName: 'fs',
@@ -37,7 +36,7 @@ export class FileRepository implements IFileRepository {
     fileEntity.fileName = file.originalname
     fileEntity.mimeType = file.mimetype
     fileEntity.size = file.size
-    fileEntity.status = status
+    fileEntity.status = 'started'
 
     await this.manager.save(fileEntity)
 
@@ -68,7 +67,7 @@ export class FileRepository implements IFileRepository {
     const fileDTOs: FileDTO[] = []
 
     for (const file of files) {
-      if (!file._id) throw new Error(`file ID ${file._id} is undefined`)
+      if (!file._id) throw new HttpError(400, `file ID ${file._id} is undefined`)
       const downloadStream = gridFSBucket.openDownloadStream(file._id)
       const buffer = await this.streamToBuffer(downloadStream)
       fileDTOs.push(FileMapper.toDTO(file, buffer))
@@ -86,18 +85,16 @@ export class FileRepository implements IFileRepository {
 
     const file = await this.manager.findOne(FileEntity, { where: { _id: new ObjectId(id) } })
     if (!file) {
-      throw new Error('File not found')
+      throw new HttpError(400, 'File not found')
     }
 
-    if (!file._id) throw new Error(`file ID ${file._id} is undefined`)
+    if (!file._id) throw new HttpError(400, `file ID ${file._id} is undefined`)
     const downloadStream = gridFSBucket.openDownloadStream(file._id)
     const buffer = await this.streamToBuffer(downloadStream)
     return FileMapper.toDTO(file, buffer)
   }
 
   updateFile = async (fileId: string, file: Express.Multer.File) => {
-    const status = 'status'
-
     const gridFSBucket = new GridFSBucket(client.db(DATABASE_NAME), {
       chunkSizeBytes: 1024,
       bucketName: 'fs',
@@ -120,7 +117,7 @@ export class FileRepository implements IFileRepository {
     fileEntity.fileName = file.originalname
     fileEntity.mimeType = file.mimetype
     fileEntity.size = file.size
-    fileEntity.status = status
+    fileEntity.status = ''
 
     await this.manager.save(fileEntity)
 
@@ -137,6 +134,21 @@ export class FileRepository implements IFileRepository {
     const buffer = await this.streamToBuffer(downloadStream)
 
     return FileMapper.toDTO(fileEntity, buffer)
+  }
+
+  updateFileStatus = async (fileId: string, status: string) => {
+    if (!fileId) throw new HttpError(500, 'file id not provided')
+
+    const id: ObjectId = new ObjectId(fileId)
+    const updatedFile = await this.repository.update({ _id: id }, { status })
+
+    const didMatch = updatedFile.raw.matchedCount > 0
+
+    if (!didMatch) {
+      throw new HttpError(500, `file id:${fileId}, matchedCount equal to 0`)
+    }
+
+    return didMatch
   }
 
   deleteFile = async (fileId: string) => {

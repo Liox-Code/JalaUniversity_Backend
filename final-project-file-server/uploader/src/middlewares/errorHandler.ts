@@ -16,12 +16,18 @@ export function errorHandler (
   response: Response,
   next: NextFunction
 ) {
-  console.log(error.message, error.status)
   const status = error.status || 500
   const message = error.message
+
   response.setHeader('Content-type', 'application/json')
   response.status(status).json({
     status,
     message
   })
+}
+
+export function errorHandlerRabbitMQ (
+  error: Error
+) {
+  console.log(error)
 }
