@@ -31,7 +31,16 @@ class MessageBrokerManager {
   private storedCloudStorage = async (data: Record<string, unknown>) => {
     const { createdFile, file } = data
     try {
-      await this.storeFileService.storeFileCloudStorage(createdFile, file)
+      const allStoredFiles = await this.storeFileService.storeFileCloudStorage(createdFile, file)
+
+      const messageAllFilesUploaded = {
+        action: 'messageAllFilesUploaded',
+        data: {
+          createdFile,
+          allStoredFiles
+        }
+      }
+      await this.messageBrokerService.publishMessage(messageAllFilesUploaded)
     } catch (error) {
       console.log(error)
     }

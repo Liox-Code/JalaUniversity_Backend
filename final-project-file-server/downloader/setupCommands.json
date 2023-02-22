@@ -18,3 +18,16 @@ bart.simpson.test.drive@gmail.com
   Secreto del cliente = "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"
   Redirect URI = "https://developers.google.com/oauthplayground/"
   Refresh token = "1//04sYJsgXPidMlCgYIARAAGAQSNwF-L9Irg4TOgP9gilAPvpWZLnsVWrdLRBW8TWh0hwC9KFyJKgNjwSib_nTewgVkX9VKsPRwAS0"
+
+{
+  "id": "63f5b026f539af850575b9ee",
+  "email": "homero.simpson.test.drive@gmail.com",
+  "numberDownloads": 1,
+  "totalSizeDownloads": 1
+}
+{
+  "id": "63f5b201b1b2f395aa1301d2",
+  "email": "bart.simpson.test.drive@gmail.com",
+  "numberDownloads": 2,
+  "totalSizeDownloads": 2
+}

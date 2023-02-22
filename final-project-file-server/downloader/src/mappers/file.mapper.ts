@@ -5,6 +5,7 @@ export class FileMapper {
   static toEntity (file: FileDTO): FileEntity {
     const fileEntity: FileEntity = {
       id: file.id,
+      fileId: file.fileId,
       name: file.name,
       size: file.size,
       numberDownloads: file.numberDownloads,
@@ -17,6 +18,7 @@ export class FileMapper {
   static toDTO (file: FileEntity): FileDTO {
     const fileDTO: FileDTO = {
       id: file.id,
+      fileId: file.fileId,
       name: file.name,
       size: file.size,
       numberDownloads: file.numberDownloads,

@@ -72,15 +72,10 @@ export class StoreFileService {
       allStoredFiles.push(createdStoreFile)
     }
 
-    const messageAllFilesUploaded = {
-      action: 'messageAllFilesUploaded',
-      data: {
-        allStoredFiles
-      }
-    }
-    await this.messageBrokerService.publishMessage(messageAllFilesUploaded)
-
     await this.fileService.updateFileStatus(createdFile.fileId, 'Uploaded')
+
     console.log('All uploaded sucessfully')
+
+    return allStoredFiles
   }
 }

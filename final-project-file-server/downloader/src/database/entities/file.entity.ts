@@ -6,6 +6,9 @@ export class FileEntity {
     id!: string
 
   @Column()
+    fileId!: string
+
+  @Column()
     name!: string
 
   @Column()
