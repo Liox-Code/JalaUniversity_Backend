@@ -1,6 +1,6 @@
 import { CloudStorageAccountDTO } from '../dto/cloudStorageAccount.dto'
 
-export interface ICloudStorageAccount {
+export interface ICloudStorageAccountRepository {
   createCloudStorageAccount: (cloudStorageAccountId: CloudStorageAccountDTO) => Promise<CloudStorageAccountDTO>
   readAllCloudStorageAccounts: () => Promise<CloudStorageAccountDTO[]>
   readCloudStorageAccount: (cloudStorageAccountId: string) => Promise<CloudStorageAccountDTO>

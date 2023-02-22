@@ -1,11 +1,11 @@
 import { FindManyOptions, Repository } from 'typeorm'
 import { CloudStorageAccountDTO } from '../../dto/cloudStorageAccount.dto'
 import { CloudStorageAccountMapper } from '../../mappers/cloudStorageAccount.mapper'
-import { ICloudStorageAccount } from '../../types/ICloudStorageAccount.type'
+import { ICloudStorageAccountRepository } from '../../types/ICloudStorageAccountRepository.type'
 import { CloudStorageAccountEntity } from '../entities/cloudStorageAccount.entity'
 import { AppDataSource } from '../dataSource'
 
-export class CloudStorageAccountRepository implements ICloudStorageAccount {
+export class CloudStorageAccountRepository implements ICloudStorageAccountRepository {
   private readonly repository: Repository<CloudStorageAccountEntity>
 
   constructor () {

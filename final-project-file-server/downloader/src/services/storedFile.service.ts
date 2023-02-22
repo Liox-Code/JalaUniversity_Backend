@@ -21,6 +21,10 @@ export class StoredFileService {
     return await this.storedFileRepository.readStoredFile(storedFileId)
   }
 
+  readStoredFileByAccountAndFile = async (fileId: string, driveId: string) => {
+    return await this.storedFileRepository.readStoredFileByAccountAndFile(fileId, driveId)
+  }
+
   updateStoredFile = async (storedFileId: string, storedFile: StoredFileDTO) => {
     return await this.storedFileRepository.updateStoredFile(storedFileId, storedFile)
   }

@@ -2,6 +2,7 @@ import express from 'express'
 import StoredFileController from './controller/storedFile.controller'
 import MessageBrokerController from './controller/messageBroker.controller'
 import cloudStorageAccountController from './controller/cloudStorageAccount.controller'
+import DonwloadFileController from './controller/donwloadFile.controller'
 import { errorHandler } from './middlewares/errorHandler'
 
 class App {
@@ -22,6 +23,7 @@ class App {
     this.app.use('/storedFile', StoredFileController)
     this.app.use('/messageBroker', MessageBrokerController)
     this.app.use('/cloud-storage-account', cloudStorageAccountController)
+    this.app.use('/donwload-file', DonwloadFileController)
   }
 
   public listen () {

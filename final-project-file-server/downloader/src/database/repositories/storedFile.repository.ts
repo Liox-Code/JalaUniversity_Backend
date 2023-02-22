@@ -1,4 +1,4 @@
-import { FindManyOptions, Repository } from 'typeorm'
+import { FindManyOptions, FindOptionsWhere, Repository } from 'typeorm'
 import { StoredFileDTO } from '../../dto/storedFile.dto'
 import { StoredFileMapper } from '../../mappers/storedFile.mapper'
 import { IStoredFileRepository } from '../../types/IStoredFileRepository.type'
@@ -36,6 +36,23 @@ export class StoredFileRepository implements IStoredFileRepository {
 
     if (!foundStoredFile) {
       throw new Error(`StoredFile with id ${storedFileId} not found`)
+    }
+
+    return StoredFileMapper.toDTO(foundStoredFile)
+  }
+
+  readStoredFileByAccountAndFile = async (fileId: string, driveId: string) => {
+    const options: FindOptionsWhere<StoredFileEntity> = {
+      fileId,
+      driveId
+    }
+
+    const foundStoredFile = await this.repository.findOneBy(options)
+
+    console.log(`foundStoredFile: ${JSON.stringify(foundStoredFile)}`)
+
+    if (!foundStoredFile) {
+      throw new Error('StoredFile with fileId and driveId not found')
     }
 
     return StoredFileMapper.toDTO(foundStoredFile)

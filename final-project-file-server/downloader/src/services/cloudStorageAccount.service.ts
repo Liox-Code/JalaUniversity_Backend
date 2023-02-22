@@ -1,9 +1,9 @@
-import { ICloudStorageAccount } from '../types/ICloudStorageAccount.type'
+import { ICloudStorageAccountRepository } from '../types/ICloudStorageAccountRepository.type'
 import { CloudStorageAccountRepository } from '../database/repositories/cloudStorageAccount.repository'
 import { CloudStorageAccountDTO } from '../dto/cloudStorageAccount.dto'
 
 export class CloudStorageAccountService {
-  private cloudStorageAccount: ICloudStorageAccount
+  private cloudStorageAccount: ICloudStorageAccountRepository
 
   constructor () {
     this.cloudStorageAccount = new CloudStorageAccountRepository()
