@@ -76,4 +76,41 @@ export class DownloadRepository implements IDownloadRepository {
 
     return DownloadMapper.toDTO(foundDownload)
   }
+
+  readTodayDownloadsByStorageAccountId = async (storageAccountId: string) => {
+    if (!storageAccountId) throw new HttpError(400, 'storageAccountId not provided')
+
+    const currentDate = new Date()
+    const startDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate())
+    const endDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() + 1)
+
+    const foundStorageAccount = await this.repository.findBy({
+      storedFileId: storageAccountId,
+      createdAt: Between(startDate, endDate)
+    })
+
+    if (!foundStorageAccount) throw new HttpError(400, `foundStorageAccount with storedFileId ${storageAccountId} not found`)
+
+    const foundStorageAccountDTO = foundStorageAccount.map((account) => {
+      return DownloadMapper.toDTO(account)
+    })
+
+    return foundStorageAccountDTO
+  }
+
+  readAllDownloadsByStorageAccountId = async (storageAccountId: string) => {
+    if (!storageAccountId) throw new HttpError(400, 'storedFileId not provided')
+
+    const foundStorageAccount = await this.repository.findBy({
+      storedFileId: storageAccountId
+    })
+
+    if (!foundStorageAccount) throw new HttpError(400, `storageAccount with storedFileId ${storageAccountId} not found`)
+
+    const foundStoredFileDTO = foundStorageAccount.map((storedFile) => {
+      return DownloadMapper.toDTO(storedFile)
+    })
+
+    return foundStoredFileDTO
+  }
 }

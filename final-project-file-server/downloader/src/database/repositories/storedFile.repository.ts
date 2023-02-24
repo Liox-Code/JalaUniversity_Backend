@@ -73,6 +73,20 @@ export class StoredFileRepository implements IStoredFileRepository {
     return foundStoredFileDTO
   }
 
+  readStoredFileByStorageAccountId = async (storageAccountId: string) => {
+    if (!storageAccountId) throw new HttpError(400, 'storageAccountId not provided')
+
+    const foundStorageAccount = await this.repository.findBy({ driveId: storageAccountId })
+
+    if (!foundStorageAccount) throw new HttpError(400, `foundStoredFile with storageAccountId ${storageAccountId} not found`)
+
+    const foundStorageAccountDTO = foundStorageAccount.map((storedFile) => {
+      return StoredFileMapper.toDTO(storedFile)
+    })
+
+    return foundStorageAccountDTO
+  }
+
   updateStoredFile = async (storedFileId: string, storedFile: StoredFileDTO) => {
     const updatedStoredFile = await this.repository.update({ id: storedFileId }, StoredFileMapper.toEntity(storedFile))
 

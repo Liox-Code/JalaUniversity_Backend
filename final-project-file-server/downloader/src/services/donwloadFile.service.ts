@@ -6,12 +6,12 @@ import { IDownloadRepository } from '../types/IDownloadRepository.type'
 import { DownloadDTO } from '../dto/download.dto'
 
 export class DonwloadFileService {
-  private storedFileRepository: StoredFileService
+  private storedFileService: StoredFileService
   private cloudStorageAccountRepository: CloudStorageAccountService
   private downloadRepository: IDownloadRepository
 
   constructor () {
-    this.storedFileRepository = new StoredFileService()
+    this.storedFileService = new StoredFileService()
     this.cloudStorageAccountRepository = new CloudStorageAccountService()
     this.downloadRepository = new DownloadRepository()
   }
@@ -24,7 +24,7 @@ export class DonwloadFileService {
       return currentTotalSizeDonwloads < totalSizeDownloads ? selectedAccount : account
     })
 
-    const storedFile = await this.storedFileRepository.readStoredFileByAccountAndFile(fileId, selectedAccount.id)
+    const storedFile = await this.storedFileService.readStoredFileByAccountAndFile(fileId, selectedAccount.id)
 
     if (storedFile && storedFile.id) {
       const download: DownloadDTO = {
@@ -47,6 +47,16 @@ export class DonwloadFileService {
 
   readAllDownloadsByStoredFileId = async (storedFileId: string) => {
     const downloads = await this.downloadRepository.readAllDownloadsByStoredFileId(storedFileId)
+    return downloads
+  }
+
+  readTodayDownloadsByStorageAccountId = async (storageAccountId: string) => {
+    const downloads = await this.downloadRepository.readTodayDownloadsByStorageAccountId(storageAccountId)
+    return downloads
+  }
+
+  readAllDownloadsByStorageAccountId = async (storageAccountId: string) => {
+    const downloads = await this.downloadRepository.readAllDownloadsByStorageAccountId(storageAccountId)
     return downloads
   }
 

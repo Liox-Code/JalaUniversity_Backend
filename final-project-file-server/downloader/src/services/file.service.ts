@@ -1,19 +1,19 @@
 import { IFileRepository } from '../types/IFileRepository.type'
 import { FileRepository } from '../database/repositories/file.repository'
 import { FileDTO } from '../dto/file.dto'
-import { DonwloadFileService } from '../services/donwloadFile.service'
+import { DownloadRepository } from '../database/repositories/download.repository'
 import { StoredFileService } from '../services/storedFile.service'
 import { DownloadDTO } from '../dto/download.dto'
 
 export class FileService {
   private fileRepository: IFileRepository
   private storedFileService: StoredFileService
-  private donwloadFileService: DonwloadFileService
+  private donwloadFileRepository: DownloadRepository
 
   constructor () {
     this.fileRepository = new FileRepository()
     this.storedFileService = new StoredFileService()
-    this.donwloadFileService = new DonwloadFileService()
+    this.donwloadFileRepository = new DownloadRepository()
   }
 
   createFile = async (file: FileDTO) => {
@@ -34,10 +34,10 @@ export class FileService {
 
     for (const storedFile of storedFileList) {
       if (storedFile.id) {
-        const foundTodayDownloads = await this.donwloadFileService.readTodayDownloadsByStoredFileId(storedFile.id)
+        const foundTodayDownloads = await this.donwloadFileRepository.readTodayDownloadsByStoredFileId(storedFile.id)
         allTodayDownloads.push(...foundTodayDownloads)
 
-        const foundDownloads = await this.donwloadFileService.readAllDownloadsByStoredFileId(storedFile.id)
+        const foundDownloads = await this.donwloadFileRepository.readAllDownloadsByStoredFileId(storedFile.id)
         allDownloads.push(...foundDownloads)
       }
     }

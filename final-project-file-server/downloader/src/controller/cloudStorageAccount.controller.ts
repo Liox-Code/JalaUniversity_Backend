@@ -50,7 +50,7 @@ class CloudStorageAccountController {
       if (!id) throw new HttpError(400, 'Parameter is needed')
       if (typeof id !== 'string') throw new HttpError(400, 'Invalid parameter')
 
-      const response = await this.cloudStorageAccountService.readCloudStorageAccount(id)
+      const response = await this.cloudStorageAccountService.readCloudStorageAccountById(id)
       res.status(200).json({ message: response })
     } catch (error) {
       next(error)

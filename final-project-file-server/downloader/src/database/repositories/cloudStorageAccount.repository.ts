@@ -4,6 +4,7 @@ import { CloudStorageAccountMapper } from '../../mappers/cloudStorageAccount.map
 import { ICloudStorageAccountRepository } from '../../types/ICloudStorageAccountRepository.type'
 import { CloudStorageAccountEntity } from '../entities/cloudStorageAccount.entity'
 import { AppDataSource } from '../dataSource'
+import { HttpError } from '../../middlewares/errorHandler'
 
 export class CloudStorageAccountRepository implements ICloudStorageAccountRepository {
   private readonly repository: Repository<CloudStorageAccountEntity>
@@ -21,7 +22,7 @@ export class CloudStorageAccountRepository implements ICloudStorageAccountReposi
     const foundCloudStorageAccount = await this.repository.find()
 
     if (!foundCloudStorageAccount) {
-      throw new Error('Any CloudStorageAccount found')
+      throw new HttpError(400, 'Any CloudStorageAccount found')
     }
 
     const cloudStorageAccountDTOs = foundCloudStorageAccount.map((cloudStorageAccount) => {
@@ -31,34 +32,44 @@ export class CloudStorageAccountRepository implements ICloudStorageAccountReposi
     return cloudStorageAccountDTOs
   }
 
+  readCloudStorageAccountById = async (cloudStorageAccountId: string): Promise<CloudStorageAccountDTO> => {
+    if (!cloudStorageAccountId) throw new HttpError(400, 'cloudStorageAccountId not provided')
+
+    const foundCloudStorageAccount = await this.repository.findOneBy({ id: cloudStorageAccountId })
+
+    if (!foundCloudStorageAccount) throw new HttpError(400, `cloudStorageAccount with id ${cloudStorageAccountId} not found`)
+
+    return CloudStorageAccountMapper.toDTO(foundCloudStorageAccount)
+  }
+
   readCloudStorageAccount = async (cloudStorageAccountId: string): Promise<CloudStorageAccountDTO> => {
-    if (!cloudStorageAccountId) throw new Error('cloudStorageAccountId not provided')
+    if (!cloudStorageAccountId) throw new HttpError(400, 'cloudStorageAccountId not provided')
 
     const foundCloudStorageAccount = await this.repository.findOneBy({ id: cloudStorageAccountId })
 
     if (!foundCloudStorageAccount) {
-      throw new Error(`Cloud Storage Account with id ${cloudStorageAccountId} not found`)
+      throw new HttpError(400, `Cloud Storage Account with id ${cloudStorageAccountId} not found`)
     }
 
     return CloudStorageAccountMapper.toDTO(foundCloudStorageAccount)
   }
 
   updateCloudStorageAccount = async (cloudStorageAccountId: string, cloudStorageAccount: CloudStorageAccountDTO): Promise<true> => {
-    if (!cloudStorageAccountId) throw new Error('cloudStorageAccountId not provided')
+    if (!cloudStorageAccountId) throw new HttpError(400, 'cloudStorageAccountId not provided')
 
     const updatedCloudStorageAccount = await this.repository.update({ id: cloudStorageAccountId }, CloudStorageAccountMapper.toEntity(cloudStorageAccount))
 
     const didAffect = (updatedCloudStorageAccount.affected && updatedCloudStorageAccount.affected > 0)
 
     if (!didAffect) {
-      throw new Error(`CloudStorageAccount ${cloudStorageAccountId}, affected equal to 0`)
+      throw new HttpError(400, `CloudStorageAccount ${cloudStorageAccountId}, affected equal to 0`)
     }
 
     return didAffect
   }
 
   deleteCloudStorageAccount = async (cloudStorageAccountId: string) => {
-    if (!cloudStorageAccountId) throw new Error('cloudStorageAccountId not provided')
+    if (!cloudStorageAccountId) throw new HttpError(400, 'cloudStorageAccountId not provided')
 
     const options: FindManyOptions<CloudStorageAccountEntity> = {
       where: { id: cloudStorageAccountId }
