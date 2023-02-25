@@ -1,5 +1,5 @@
 import { AppDataSource } from '../dataSource'
-import { FindManyOptions, Repository } from 'typeorm'
+import { Equal, FindManyOptions, FindOptionsWhere, Repository } from 'typeorm'
 
 import { ICloudStorageAccountRepository } from '../../types/ICloudStorageAccount.type'
 import { CloudStorageAccountMapper } from '../../mappers/cloudStorageAccount.mapper'
@@ -49,18 +49,19 @@ export class CloudStorageAccountRepository implements ICloudStorageAccountReposi
   }
 
   updateCloudStorageAccount = async (cloudStorageAccountId: string, cloudStorageAccount: CloudStorageAccountDTO) => {
-    if (!cloudStorageAccountId) throw new HttpError(500, 'cloudStorageAccountId not provided')
+    const foundCloudStorageAccount = await this.readCloudStorageAccount(cloudStorageAccountId)
 
-    const id: ObjectId = new ObjectId(cloudStorageAccountId)
-    const updatedCloudStorageAccount = await this.repository.update({ _id: id }, CloudStorageAccountMapper.toEntity(cloudStorageAccount))
+    if (!foundCloudStorageAccount) throw new HttpError(500, 'foundCloudStorageAccount not found')
 
-    const didMatch = updatedCloudStorageAccount.raw.matchedCount > 0
+    cloudStorageAccount.cloudStorageAccountId = foundCloudStorageAccount.cloudStorageAccountId
 
-    if (!didMatch) {
-      throw new HttpError(500, `Cloud Storage Account ${cloudStorageAccountId}, matchedCount equal to 0`)
+    const updatedCloudStorageAccount = await this.repository.save(CloudStorageAccountMapper.toEntity(cloudStorageAccount))
+
+    if (!updatedCloudStorageAccount) {
+      throw new HttpError(500, 'Not updated')
     }
 
-    return didMatch
+    return CloudStorageAccountMapper.toDTO(updatedCloudStorageAccount)
   }
 
   deleteCloudStorageAccount = async (cloudStorageAccountId: string) => {
