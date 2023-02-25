@@ -17,12 +17,7 @@ export class DonwloadFileService {
   }
 
   donwloadFile = async (fileId: string) => {
-    const cloudStorageAccounts = await this.cloudStorageAccountRepository.readCloudStorageAccounts()
-    const selectedAccount: CloudStorageAccountDTO = cloudStorageAccounts.reduce((selectedAccount, account) => {
-      const { totalSizeDownloads: currentTotalSizeDonwloads } = selectedAccount
-      const { totalSizeDownloads } = account
-      return currentTotalSizeDonwloads < totalSizeDownloads ? selectedAccount : account
-    })
+    const selectedAccount: CloudStorageAccountDTO = await this.loadBalance()
 
     const storedFile = await this.storedFileService.readStoredFileByAccountAndFile(fileId, selectedAccount.id)
 
@@ -38,6 +33,24 @@ export class DonwloadFileService {
     console.log(`storedFile: ${storedFile}`)
 
     return storedFile
+  }
+
+  loadBalance = async (): Promise<CloudStorageAccountDTO> => {
+    const maxConcurrentDownloads = 3
+    const cloudStorageAccounts = await this.cloudStorageAccountRepository.readCloudStorageAccounts()
+    const selectedAccount: CloudStorageAccountDTO = cloudStorageAccounts.reduce((selectedAccount, account) => {
+      const { numberDownloads: CurrentNumberDownloads, totalSizeDownloads: CurrentTotalSizeDownloads } = selectedAccount
+      const { numberDownloads, totalSizeDownloads } = account
+      const currentConcurrentDownloads = Math.floor(CurrentNumberDownloads / maxConcurrentDownloads)
+      const concurrentDownloads = Math.floor(numberDownloads / maxConcurrentDownloads)
+
+      if (currentConcurrentDownloads === concurrentDownloads) {
+        return CurrentTotalSizeDownloads < totalSizeDownloads ? selectedAccount : account
+      }
+
+      return currentConcurrentDownloads < concurrentDownloads ? selectedAccount : account
+    })
+    return selectedAccount
   }
 
   readTodayDownloadsByStoredFileId = async (storedFileId: string) => {
