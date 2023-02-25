@@ -32,13 +32,13 @@ export class FileRepository implements IFileRepository {
     const fileId = uploadStream.id
 
     const fileEntity = new FileEntity()
-    fileEntity._id = fileId
+    fileEntity.fileId = fileId
     fileEntity.fileName = file.originalname
     fileEntity.mimeType = file.mimetype
     fileEntity.size = file.size
     fileEntity.status = 'started'
 
-    await this.manager.save(fileEntity)
+    await this.repository.save(fileEntity)
 
     const finished = new Promise((resolve, reject) => {
       uploadStream.on('finish', resolve)
@@ -64,11 +64,12 @@ export class FileRepository implements IFileRepository {
     })
 
     const files = await this.manager.find(FileEntity)
+
     const fileDTOs: FileDTO[] = []
 
     for (const file of files) {
-      if (!file._id) throw new HttpError(400, `file ID ${file._id} is undefined`)
-      const downloadStream = gridFSBucket.openDownloadStream(file._id)
+      if (!file.fileId) throw new HttpError(400, `file ID ${file.fileId} is undefined`)
+      const downloadStream = gridFSBucket.openDownloadStream(file.fileId)
       const buffer = await this.streamToBuffer(downloadStream)
       fileDTOs.push(FileMapper.toDTO(file, buffer))
     }
@@ -83,28 +84,33 @@ export class FileRepository implements IFileRepository {
       readPreference: ReadPreference.primary
     })
 
-    const file = await this.manager.findOne(FileEntity, { where: { _id: new ObjectId(id) } })
+    const file = await this.repository.findOne({ where: { _id: new ObjectId(id) } })
     if (!file) {
       throw new HttpError(400, 'File not found')
     }
 
-    if (!file._id) throw new HttpError(400, `file ID ${file._id} is undefined`)
-    const downloadStream = gridFSBucket.openDownloadStream(file._id)
+    if (!file.fileId) throw new HttpError(400, `file ID ${file.fileId} is undefined`)
+    const downloadStream = gridFSBucket.openDownloadStream(file.fileId)
     const buffer = await this.streamToBuffer(downloadStream)
     return FileMapper.toDTO(file, buffer)
   }
 
-  updateFile = async (fileId: string, file: Express.Multer.File) => {
+  updateFile = async (fileDTO: FileDTO, file: Express.Multer.File) => {
+    if (!fileDTO) throw new HttpError(500, 'file not found')
+
+    const fileEntity = await FileMapper.toEntity(fileDTO)
+    const { id, fileId } = fileEntity
+
     const gridFSBucket = new GridFSBucket(client.db(DATABASE_NAME), {
       chunkSizeBytes: 1024,
       bucketName: 'fs',
       writeConcern: { w: 'majority' }
     })
 
-    const fileExists = await gridFSBucket.find({ _id: new ObjectId(fileId) }).toArray()
-    if (fileExists.length) {
-      await gridFSBucket.delete(new ObjectId(fileId))
-    }
+    const fileExists = await gridFSBucket.find({ _id: fileId }).toArray()
+    if (!fileExists.length) throw new HttpError(500, 'file not found on MongoGrid FS')
+
+    await gridFSBucket.delete(fileId)
 
     const readableStream = new Readable()
     readableStream.push(file.buffer)
@@ -112,14 +118,13 @@ export class FileRepository implements IFileRepository {
 
     const uploadStream = gridFSBucket.openUploadStreamWithId(new ObjectId(fileId), file.originalname)
 
-    const fileEntity = new FileEntity()
-    fileEntity._id = new ObjectId(fileId)
+    fileEntity.fileId = new ObjectId(fileId)
     fileEntity.fileName = file.originalname
     fileEntity.mimeType = file.mimetype
     fileEntity.size = file.size
-    fileEntity.status = ''
+    fileEntity.status = 'Saving Changes'
 
-    await this.manager.save(fileEntity)
+    await this.repository.save(fileEntity)
 
     const finished = new Promise((resolve, reject) => {
       uploadStream.on('finish', resolve)
@@ -139,8 +144,8 @@ export class FileRepository implements IFileRepository {
   updateFileStatus = async (fileId: string, status: string) => {
     if (!fileId) throw new HttpError(500, 'file id not provided')
 
-    const id: ObjectId = new ObjectId(fileId)
-    const updatedFile = await this.repository.update({ _id: id }, { status })
+    const parsedId: ObjectId = new ObjectId(fileId)
+    const updatedFile = await this.repository.update({ _id: parsedId }, { status })
 
     const didMatch = updatedFile.raw.matchedCount > 0
 
@@ -151,20 +156,26 @@ export class FileRepository implements IFileRepository {
     return didMatch
   }
 
-  deleteFile = async (fileId: string) => {
+  deleteFile = async (fileDTO: FileDTO) => {
+    if (!fileDTO) throw new HttpError(500, 'file not found')
+
+    const file = await FileMapper.toEntity(fileDTO)
+    const { id, fileId } = file
+
     const gridFSBucket = new GridFSBucket(client.db(DATABASE_NAME), {
       chunkSizeBytes: 1024,
       bucketName: 'fs',
       writeConcern: { w: 'majority' }
     })
 
-    const removedFile = await this.manager.delete(FileEntity, fileId)
+    const fileExists = await gridFSBucket.find({ _id: fileId }).toArray()
+    if (!fileExists.length) throw new HttpError(500, 'file not found on MongoGrid FS')
 
-    const removedGridFile = await gridFSBucket.delete(new ObjectId(fileId))
+    const removedFile = await this.repository.remove(file)
 
-    console.log(`removedFile: ${removedFile}, removedGridFile: ${removedGridFile}`)
+    await gridFSBucket.delete(fileId)
 
-    return true
+    return (removedFile)
   }
 
   streamToBuffer = async (stream: Readable): Promise<Buffer> => {

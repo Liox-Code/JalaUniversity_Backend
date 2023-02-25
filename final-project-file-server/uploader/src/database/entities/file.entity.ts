@@ -4,7 +4,10 @@ import { Column, ObjectIdColumn, Entity } from 'typeorm'
 @Entity()
 export class FileEntity {
   @ObjectIdColumn()
-    _id!: ObjectId
+    _id?: ObjectId
+
+  @Column()
+    fileId!: ObjectId
 
   @Column()
     fileName!: string

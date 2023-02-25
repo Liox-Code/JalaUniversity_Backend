@@ -17,7 +17,6 @@ class MessageBrokerManager {
   }
 
   private messageAdmin = async (message: Record<string, unknown>):Promise<Record<string, unknown>> => {
-    console.log(message)
     try {
       if (message.action === 'storedCloudStorage') {
         await this.storedCloudStorage(message.data)

@@ -16,19 +16,21 @@ export class FileService {
     return await this.file.readFiles()
   }
 
-  readFileById = async (fileId: string) => {
-    return await this.file.readFileById(fileId)
+  readFileById = async (id: string) => {
+    return await this.file.readFileById(id)
   }
 
-  updateFile = async (fileId: string, file: Express.Multer.File) => {
-    return await this.file.updateFile(fileId, file)
+  updateFile = async (id: string, file: Express.Multer.File) => {
+    const fileDTO = await this.readFileById(id)
+    return await this.file.updateFile(fileDTO, file)
   }
 
   updateFileStatus = async (fileId: string, status: string) => {
     return await this.file.updateFileStatus(fileId, status)
   }
 
-  deleteFile = async (fileId: string) => {
-    return await this.file.deleteFile(fileId)
+  deleteFile = async (id: string) => {
+    const fileDTO = await this.readFileById(id)
+    return await this.file.deleteFile(fileDTO)
   }
 }

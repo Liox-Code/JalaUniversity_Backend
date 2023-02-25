@@ -23,7 +23,7 @@ export class StoreFileService {
   storeFile = async (file: Express.Multer.File) => {
     const createdFile = await this.storeFileMongoGridFS(file)
 
-    await this.fileService.updateFileStatus(createdFile.fileId, 'Replicating')
+    await this.fileService.updateFileStatus(createdFile.id, 'Replicating')
 
     const messageStoredMongoGridFS = {
       action: 'storedCloudStorage',
@@ -72,7 +72,7 @@ export class StoreFileService {
       allStoredFiles.push(createdStoreFile)
     }
 
-    await this.fileService.updateFileStatus(createdFile.fileId, 'Uploaded')
+    await this.fileService.updateFileStatus(createdFile.id, 'Uploaded')
 
     console.log('All uploaded sucessfully')
 

@@ -5,7 +5,8 @@ import { ObjectId } from 'mongodb'
 export class FileMapper {
   static toEntity (file: FileDTO): FileEntity {
     const fileEntity: FileEntity = {
-      _id: new ObjectId(file.fileId),
+      _id: new ObjectId(file.id),
+      fileId: new ObjectId(file.fileId),
       fileName: file.fileName,
       mimeType: file.mimeType,
       size: file.size,
@@ -17,7 +18,8 @@ export class FileMapper {
 
   static toDTO (file: FileEntity, content: Buffer): FileDTO {
     const fileDTO: FileDTO = {
-      fileId: file._id.toString(),
+      id: file._id?.toString(),
+      fileId: file.fileId.toString(),
       fileName: file.fileName,
       mimeType: file.mimeType,
       size: file.size,

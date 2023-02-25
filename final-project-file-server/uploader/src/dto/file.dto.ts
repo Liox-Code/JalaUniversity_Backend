@@ -1,4 +1,5 @@
 export class FileDTO {
+  id?: string
   fileId: string
   fileName: string
   mimeType: string
@@ -7,6 +8,7 @@ export class FileDTO {
   content: Buffer
 
   constructor (
+    id: string,
     fileId: string,
     fileName: string,
     mimeType: string,
@@ -14,6 +16,7 @@ export class FileDTO {
     status: string,
     content: Buffer
   ) {
+    this.id = id
     this.fileId = fileId
     this.fileName = fileName
     this.mimeType = mimeType
