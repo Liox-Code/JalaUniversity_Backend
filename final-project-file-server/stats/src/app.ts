@@ -1,6 +1,7 @@
 import express from 'express'
 import StatController from './controller/stat.controller'
 import MessageBrokerController from './controller/messageBroker.controller'
+import { errorHandler } from './middlewares/errorHandler'
 
 class App {
   public port: number
@@ -13,6 +14,7 @@ class App {
 
   public initConfig () {
     this.app.use(express.json({ limit: '5mb' }))
+    this.app.use(errorHandler)
   }
 
   public build () {

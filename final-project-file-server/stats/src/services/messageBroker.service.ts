@@ -1,5 +1,5 @@
 import { MessageBroker } from '../infrastructure/messageBroker/messageBroker'
-import { fileExchange } from '../infrastructure/messageBroker/exchanges'
+import { exchange } from '../infrastructure/messageBroker/exchanges'
 
 export class MessageBrokerService {
   private messageBroker: MessageBroker
@@ -8,13 +8,13 @@ export class MessageBrokerService {
     this.messageBroker = new MessageBroker()
   }
 
-  publishMessage = async (message: string) => {
-    const response = await this.messageBroker.publishMessage(fileExchange, message)
+  publishMessage = async (message: Record<string, unknown>) => {
+    const response = await this.messageBroker.publishMessage(exchange, message)
     return (response)
   }
 
-  consumeMessage = async () => {
-    const response = await this.messageBroker.consumeMessage(fileExchange)
+  consumeMessage = async (action: (message: Record<string, unknown>) => Promise<Record<string, unknown>>) => {
+    const response = await this.messageBroker.consumeMessage(exchange, action)
     return (response)
   }
 }
