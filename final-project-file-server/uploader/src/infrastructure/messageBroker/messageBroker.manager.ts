@@ -1,4 +1,4 @@
-import { HttpError, errorHandlerRabbitMQ } from '../../middlewares/errorHandler'
+import { FileDTO } from '../../dto/file.dto'
 import { MessageBrokerService } from '../../services/messageBroker.service'
 import { StoreFileService } from '../../services/storeFile.service'
 
@@ -21,13 +21,16 @@ class MessageBrokerManager {
       if (message.action === 'storedCloudStorage') {
         await this.storedCloudStorage(message.data)
       }
+      if (message.action === 'updateStoredCloudStorage') {
+        await this.updateStoredCloudStorage(message.data)
+      }
     } catch (error) {
       console.log(error)
     }
     return message
   }
 
-  private storedCloudStorage = async (data: Record<string, unknown>) => {
+  private storedCloudStorage = async (data: { createdFile: FileDTO, file: Express.Multer.File }) => {
     const { createdFile, file } = data
     try {
       const allStoredFiles = await this.storeFileService.storeFileCloudStorage(createdFile, file)
@@ -40,6 +43,15 @@ class MessageBrokerManager {
         }
       }
       await this.messageBrokerService.publishMessage(messageAllFilesUploaded)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  private updateStoredCloudStorage = async (data: { createdFile: FileDTO, file: Express.Multer.File }) => {
+    const { file } = data
+    try {
+      console.log(file)
     } catch (error) {
       console.log(error)
     }

@@ -1,5 +1,6 @@
 import amqplib, { Channel, Connection } from 'amqplib'
 import { TExchange } from '../../types/infrastructure/exchanges.type'
+import { HttpError, errorHandlerRabbitMQ } from '../../middlewares/errorHandler'
 
 export class MessageBroker {
   static instance: MessageBroker | null
@@ -35,13 +36,14 @@ export class MessageBroker {
     }
   }
 
-  async publishMessage (exchange: TExchange, message: string) {
+  async publishMessage (exchange: TExchange, message: Record<string, unknown>) {
     try {
+      const messageString = JSON.stringify(message)
       await this._channel.assertExchange(exchange.name, exchange.type, { durable: false })
-      await this._channel.publish(exchange.name, '', Buffer.from(message))
+      await this._channel.publish(exchange.name, '', Buffer.from(messageString))
       return message
     } catch (error) {
-      throw new Error('Error on Publish Message of Message Broker on Uploader')
+      console.log('Error on Publish Message of Message Broker on Uploader')
     }
   }
 
@@ -55,13 +57,12 @@ export class MessageBroker {
       await this._channel.consume(assertQueue.queue, async (message) => {
         if (message?.content) {
           const messageContent = message.content.toString()
-          console.log(`The message is: ${message.content}`)
-          const result = await action(JSON.parse(messageContent))
-          console.log(`The result is: ${result.toString()}`)
+          await action(JSON.parse(messageContent))
         }
       }, { noAck: true })
     } catch (error) {
-      throw new Error('Error on Consume Message of Message Broker on Uploader')
+      const httpError = new HttpError(400, 'Error on conection of Message Broker Connection on Uploader')
+      errorHandlerRabbitMQ(httpError)
     }
   }
 }

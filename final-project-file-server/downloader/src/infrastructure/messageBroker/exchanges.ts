@@ -1,6 +1,6 @@
 import { TExchange } from '../../types/infrastructure/exchanges.type'
 
-export const fileExchange: TExchange = {
+export const exchange: TExchange = {
   name: 'file',
   type: 'fanout'
 }

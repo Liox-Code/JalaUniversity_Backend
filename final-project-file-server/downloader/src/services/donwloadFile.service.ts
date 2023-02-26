@@ -4,20 +4,26 @@ import { CloudStorageAccountService } from '../services/cloudStorageAccount.serv
 import { DownloadRepository } from '../database/repositories/download.repository'
 import { IDownloadRepository } from '../types/IDownloadRepository.type'
 import { DownloadDTO } from '../dto/download.dto'
+import { MessageBrokerService } from '../services/messageBroker.service'
+import { StoredFileDTO } from '../dto/storedFile.dto'
 
 export class DonwloadFileService {
   private storedFileService: StoredFileService
   private cloudStorageAccountRepository: CloudStorageAccountService
   private downloadRepository: IDownloadRepository
+  private messageBrokerService: MessageBrokerService
 
   constructor () {
     this.storedFileService = new StoredFileService()
     this.cloudStorageAccountRepository = new CloudStorageAccountService()
     this.downloadRepository = new DownloadRepository()
+    this.messageBrokerService = new MessageBrokerService()
   }
 
   donwloadFile = async (fileId: string) => {
+    console.log(fileId)
     const selectedAccount: CloudStorageAccountDTO = await this.loadBalance()
+    console.log(selectedAccount)
 
     const storedFile = await this.storedFileService.readStoredFileByAccountAndFile(fileId, selectedAccount.id)
 
@@ -27,10 +33,13 @@ export class DonwloadFileService {
       }
       await this.downloadRepository.createDownload(download)
     }
-
-    await this.updateCloudStorageAccount(selectedAccount, storedFile)
-
-    console.log(`storedFile: ${storedFile}`)
+    const messageAllFilesUploaded = {
+      action: 'calculateDonwloads',
+      data: {
+        account: selectedAccount
+      }
+    }
+    await this.messageBrokerService.publishMessage(messageAllFilesUploaded)
 
     return storedFile
   }
@@ -73,10 +82,7 @@ export class DonwloadFileService {
     return downloads
   }
 
-  updateCloudStorageAccount = async (cloudStorageAccount: CloudStorageAccountDTO, storedFile: StoredFileDTO) => {
-    const newCloudStorageAccount = { ...cloudStorageAccount }
-    newCloudStorageAccount.numberDownloads += 1
-    newCloudStorageAccount.totalSizeDownloads += 1
-    return await this.cloudStorageAccountRepository.updateCloudStorageAccount(newCloudStorageAccount.id, newCloudStorageAccount)
+  updateCloudStorageAccount = async (cloudStorageAccount: CloudStorageAccountDTO) => {
+    return await this.cloudStorageAccountRepository.updateCloudStorageAccount(cloudStorageAccount.id, cloudStorageAccount)
   }
 }

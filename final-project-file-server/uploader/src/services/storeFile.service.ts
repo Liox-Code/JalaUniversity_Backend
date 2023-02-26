@@ -44,6 +44,8 @@ export class StoreFileService {
   }
 
   storeFileCloudStorage = async (createdFile: FileDTO, file: Express.Multer.File) => {
+    if (!createdFile.id) throw new HttpError(400, 'Created File does not have id')
+
     const cloudStorageAccounts = await this.cloudStorageAccountService.readCloudStorageAccounts()
     const allStoredFiles : StoreFileDTO[] = []
 
@@ -63,7 +65,7 @@ export class StoreFileService {
 
       const storeFileDTO = new StoreFileDTO(
         storageAccount.cloudStorageAccountId,
-        createdFile.fileId,
+        createdFile.id,
         uploadedFile.webViewLink,
         uploadedFile.webContentLink
       )
