@@ -24,9 +24,35 @@ export class CloudStorageAccountService {
     return await this.cloudStorageAccountRepository.readAllCloudStorageAccounts()
   }
 
+  readAllCloudStorageAccountStats = async () => {
+    const cloudStorageAccounts = await this.cloudStorageAccountRepository.readAllCloudStorageAccounts()
+
+    const cloudStorageAccountsStatsPromise = cloudStorageAccounts.map(async (cloudStorageAccount) => {
+      const cloudStorageAccountStats = await this.getCloudStorageAccountStats(cloudStorageAccount)
+      return cloudStorageAccountStats
+    })
+
+    const cloudStorageAccountsStats = Promise.all(cloudStorageAccountsStatsPromise).then((res) => { return res })
+    return cloudStorageAccountsStats
+  }
+
   readCloudStorageAccountById = async (cloudStorageAccountId: string) => {
     const cloudStorageAccount = await this.cloudStorageAccountRepository.readCloudStorageAccountById(cloudStorageAccountId)
 
+    const cloudStorageAccountStats = await this.getCloudStorageAccountStats(cloudStorageAccount)
+
+    return cloudStorageAccountStats
+  }
+
+  updateCloudStorageAccount = async (cloudStorageAccountId: string, cloudStorageAccount: CloudStorageAccountDTO) => {
+    return await this.cloudStorageAccountRepository.updateCloudStorageAccount(cloudStorageAccountId, cloudStorageAccount)
+  }
+
+  deleteCloudStorageAccount = async (cloudStorageAccountId: string) => {
+    return await this.cloudStorageAccountRepository.deleteCloudStorageAccount(cloudStorageAccountId)
+  }
+
+  getCloudStorageAccountStats = async (cloudStorageAccount: CloudStorageAccountDTO) => {
     const cloudStorageAccountsList = await this.storedFileService.readStoredFileByStorageAccountId(cloudStorageAccount.id)
 
     const allDownloads: DownloadDTO[] = []
@@ -42,25 +68,16 @@ export class CloudStorageAccountService {
       }
     }
 
-    const numberDonwloads = allDownloads.length
     const numberTodayDonwloads = allTodayDownloads.length
     const mbDonwloadedToday = cloudStorageAccount.totalSizeDownloads * numberTodayDonwloads
-    const mbDonwloadedTotal = cloudStorageAccount.totalSizeDownloads * numberDonwloads
 
     return {
+      Id: cloudStorageAccount.id,
       Email: cloudStorageAccount.email,
-      NumberDonwloads: numberDonwloads,
+      NumberDonwloads: cloudStorageAccount.numberDownloads,
       NumberTodayDonwloads: numberTodayDonwloads,
       MBDonwloadedToday: mbDonwloadedToday,
-      MBDonwloadedTotal: mbDonwloadedTotal
+      MBDonwloadedTotal: cloudStorageAccount.totalSizeDownloads
     }
-  }
-
-  updateCloudStorageAccount = async (cloudStorageAccountId: string, cloudStorageAccount: CloudStorageAccountDTO) => {
-    return await this.cloudStorageAccountRepository.updateCloudStorageAccount(cloudStorageAccountId, cloudStorageAccount)
-  }
-
-  deleteCloudStorageAccount = async (cloudStorageAccountId: string) => {
-    return await this.cloudStorageAccountRepository.deleteCloudStorageAccount(cloudStorageAccountId)
   }
 }

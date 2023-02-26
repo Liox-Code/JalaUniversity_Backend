@@ -36,7 +36,7 @@ class CloudStorageAccountController {
 
   private readCloudStorageAccounts = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const response = await this.cloudStorageAccountService.readCloudStorageAccounts()
+      const response = await this.cloudStorageAccountService.readAllCloudStorageAccountStats()
       res.status(200).json({ message: response })
     } catch (error) {
       next(error)
