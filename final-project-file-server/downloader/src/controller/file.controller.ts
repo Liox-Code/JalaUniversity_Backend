@@ -42,7 +42,7 @@ class FileController {
   private readFile = async (req: Request, res: Response, next: NextFunction) => {
     const { id } = req.params as { id: string }
     try {
-      const response = await this.fileService.readFileById(id)
+      const response = await this.fileService.readFileStats(id)
       res.status(200).json({ message: response })
     } catch (error) {
       next(error)

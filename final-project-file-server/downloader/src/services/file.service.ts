@@ -26,6 +26,11 @@ export class FileService {
 
   readFileById = async (fileId: string) => {
     const file = await this.fileRepository.readFileById(fileId)
+    return file
+  }
+
+  readFileStats = async (fileId: string) => {
+    const file = await this.fileRepository.readFileById(fileId)
 
     const storedFileList = await this.storedFileService.readStoredFileByFileId(file.fileId)
 

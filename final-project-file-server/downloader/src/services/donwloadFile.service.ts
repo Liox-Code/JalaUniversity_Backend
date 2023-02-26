@@ -1,31 +1,37 @@
 import { CloudStorageAccountDTO } from '../dto/cloudStorageAccount.dto'
 import { StoredFileService } from '../services/storedFile.service'
 import { CloudStorageAccountService } from '../services/cloudStorageAccount.service'
+import { FileService } from '../services/file.service'
 import { DownloadRepository } from '../database/repositories/download.repository'
 import { IDownloadRepository } from '../types/IDownloadRepository.type'
 import { DownloadDTO } from '../dto/download.dto'
 import { MessageBrokerService } from '../services/messageBroker.service'
 import { StoredFileDTO } from '../dto/storedFile.dto'
+import { HttpError } from '../middlewares/errorHandler'
 
 export class DonwloadFileService {
   private storedFileService: StoredFileService
-  private cloudStorageAccountRepository: CloudStorageAccountService
+  private cloudStorageAccountService: CloudStorageAccountService
+  private fileService: FileService
   private downloadRepository: IDownloadRepository
   private messageBrokerService: MessageBrokerService
 
   constructor () {
     this.storedFileService = new StoredFileService()
-    this.cloudStorageAccountRepository = new CloudStorageAccountService()
+    this.cloudStorageAccountService = new CloudStorageAccountService()
+    this.fileService = new FileService()
     this.downloadRepository = new DownloadRepository()
     this.messageBrokerService = new MessageBrokerService()
   }
 
   donwloadFile = async (fileId: string) => {
-    console.log(fileId)
     const selectedAccount: CloudStorageAccountDTO = await this.loadBalance()
-    console.log(selectedAccount)
+    const donwloadedFile = await this.fileService.readFileById(fileId)
 
-    const storedFile = await this.storedFileService.readStoredFileByAccountAndFile(fileId, selectedAccount.id)
+    if (!selectedAccount.id) throw new HttpError(400, `There was not found the account with id ${selectedAccount.id}`)
+    if (!donwloadedFile.id) throw new HttpError(400, `There was not found the file with id ${donwloadedFile.id}`)
+
+    const storedFile = await this.storedFileService.readStoredFileByAccountAndFile(donwloadedFile.id, selectedAccount.id)
 
     if (storedFile && storedFile.id) {
       const download: DownloadDTO = {
@@ -36,7 +42,8 @@ export class DonwloadFileService {
     const messageAllFilesUploaded = {
       action: 'calculateDonwloads',
       data: {
-        account: selectedAccount
+        account: selectedAccount,
+        file: donwloadedFile
       }
     }
     await this.messageBrokerService.publishMessage(messageAllFilesUploaded)
@@ -46,7 +53,7 @@ export class DonwloadFileService {
 
   loadBalance = async (): Promise<CloudStorageAccountDTO> => {
     const maxConcurrentDownloads = 3
-    const cloudStorageAccounts = await this.cloudStorageAccountRepository.readCloudStorageAccounts()
+    const cloudStorageAccounts = await this.cloudStorageAccountService.readCloudStorageAccounts()
     const selectedAccount: CloudStorageAccountDTO = cloudStorageAccounts.reduce((selectedAccount, account) => {
       const { numberDownloads: CurrentNumberDownloads, totalSizeDownloads: CurrentTotalSizeDownloads } = selectedAccount
       const { numberDownloads, totalSizeDownloads } = account
@@ -83,6 +90,6 @@ export class DonwloadFileService {
   }
 
   updateCloudStorageAccount = async (cloudStorageAccount: CloudStorageAccountDTO) => {
-    return await this.cloudStorageAccountRepository.updateCloudStorageAccount(cloudStorageAccount.id, cloudStorageAccount)
+    return await this.cloudStorageAccountService.updateCloudStorageAccount(cloudStorageAccount.id, cloudStorageAccount)
   }
 }

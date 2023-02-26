@@ -1,7 +1,7 @@
 import { MessageBrokerService } from '../../services/messageBroker.service'
 import { StatService } from '../../services/stat.service'
 import { CloudStorageAccountDTO } from '../../dto/cloudStorageAccount.dto'
-import { StoredFileDTO } from '../../dto/storedFile.dto'
+import { FileDTO } from '../../dto/file.dto'
 
 class MessageBrokerManager {
   messageBrokerService: MessageBrokerService
@@ -21,7 +21,7 @@ class MessageBrokerManager {
     try {
       console.log('message received')
       if (message.action === 'calculateDonwloads') {
-        const data = message.data as { account: CloudStorageAccountDTO, storedFile: StoredFileDTO }
+        const data = message.data as { account: CloudStorageAccountDTO, file: FileDTO }
         await this.calculateDonwloads(data)
       }
       console.log(message.action)
@@ -31,11 +31,10 @@ class MessageBrokerManager {
     return message
   }
 
-  private calculateDonwloads = async (data: { account: CloudStorageAccountDTO, storedFile: StoredFileDTO }) => {
-    const { account, storedFile } = data
+  private calculateDonwloads = async (data: { account: CloudStorageAccountDTO, file: FileDTO }) => {
+    const { account, file } = data
     console.log(account)
-    await this.statService.calculateCloudStorageAccount(account)
-    await this.statService.calculateFile()
+    await this.statService.calculateStats(account, file)
   }
 }
 

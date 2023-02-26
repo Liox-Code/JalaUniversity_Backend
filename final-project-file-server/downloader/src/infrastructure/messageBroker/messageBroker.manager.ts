@@ -7,6 +7,7 @@ import { FileUploder, StoreFileUploder, CloudStorageAccountUploder } from '../..
 import { CloudStorageAccountDTO } from '../../dto/cloudStorageAccount.dto'
 import { DonwloadFileService } from '../../services/donwloadFile.service'
 import { CloudStorageAccountService } from '../../services/cloudStorageAccount.service'
+import { HttpError } from '../../middlewares/errorHandler'
 
 class MessageBrokerManager {
   messageBrokerService: MessageBrokerService
@@ -37,7 +38,7 @@ class MessageBrokerManager {
         await this.uploadFile(message.data as {createdFile: FileUploder, allStoredFiles: StoreFileUploder[]})
       }
       if (message.action === 'statsCalculated') {
-        await this.statsCalculated(message.data as {account: CloudStorageAccountDTO})
+        await this.statsCalculated(message.data as {account: CloudStorageAccountDTO, file: FileDTO})
       }
     } catch (error) {
       console.log(error)
@@ -79,13 +80,14 @@ class MessageBrokerManager {
     console.log(`result: ${JSON.stringify(result)}`)
   }
 
-  private statsCalculated = async (data: {account: CloudStorageAccountDTO}) => {
-    const { account } = data
-    this.updateCloudStorageAccount(account)
-  }
+  private statsCalculated = async (data: {account: CloudStorageAccountDTO, file: FileDTO}) => {
+    const { account, file } = data
 
-  private updateCloudStorageAccount = async (cloudStorageAccount: CloudStorageAccountDTO) => {
-    await this.donwloadFileService.updateCloudStorageAccount(cloudStorageAccount)
+    if (!account.id) throw new HttpError(400, 'Accoun id not found')
+    if (!file.id) throw new HttpError(400, 'File id not found')
+
+    await this.cloudStorageAccountService.updateCloudStorageAccount(account.id, account)
+    await this.fileService.updateFile(file.id, file)
   }
 }
 

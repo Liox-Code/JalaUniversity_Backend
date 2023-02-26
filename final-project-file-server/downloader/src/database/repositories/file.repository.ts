@@ -33,7 +33,7 @@ export class FileRepository implements IFileRepository {
   readFileById = async (fileId: string): Promise<FileDTO> => {
     if (!fileId) throw new HttpError(400, 'fileId not provided')
 
-    const foundFile = await this.repository.findOneBy({ fileId })
+    const foundFile = await this.repository.findOneBy({ id: fileId })
 
     if (!foundFile) throw new HttpError(400, `File with id ${fileId} not found`)
 
