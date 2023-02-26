@@ -4,6 +4,7 @@ import { FileDTO } from '../dto/file.dto'
 import { DownloadRepository } from '../database/repositories/download.repository'
 import { StoredFileService } from '../services/storedFile.service'
 import { DownloadDTO } from '../dto/download.dto'
+import { HttpError } from '../middlewares/errorHandler'
 
 export class FileService {
   private fileRepository: IFileRepository
@@ -29,35 +30,24 @@ export class FileService {
     return file
   }
 
+  readAllFileStats = async () => {
+    const files = await this.fileRepository.readFiles()
+
+    const filesStatsPromise = files.map(async (file) => {
+      const fileStats = await this.getFileStats(file)
+      return fileStats
+    })
+
+    const filesStats = Promise.all(filesStatsPromise).then((res) => { return res })
+    return filesStats
+  }
+
   readFileStats = async (fileId: string) => {
     const file = await this.fileRepository.readFileById(fileId)
 
-    const storedFileList = await this.storedFileService.readStoredFileByFileId(file.fileId)
+    const fileStats = await this.getFileStats(file)
 
-    const allDownloads: DownloadDTO[] = []
-    const allTodayDownloads: DownloadDTO[] = []
-
-    for (const storedFile of storedFileList) {
-      if (storedFile.id) {
-        const foundTodayDownloads = await this.donwloadFileRepository.readTodayDownloadsByStoredFileId(storedFile.id)
-        allTodayDownloads.push(...foundTodayDownloads)
-
-        const foundDownloads = await this.donwloadFileRepository.readAllDownloadsByStoredFileId(storedFile.id)
-        allDownloads.push(...foundDownloads)
-      }
-    }
-
-    const numberDonwloads = allDownloads.length
-    const numberTodayDonwloads = allTodayDownloads.length
-    const mbDonwloadedToday = file.size * allTodayDownloads.length
-    const mbDonwloadedTotal = file.size * allDownloads.length
-
-    return {
-      NumberDonwloads: numberDonwloads,
-      NumberTodayDonwloads: numberTodayDonwloads,
-      MBDonwloadedToday: mbDonwloadedToday,
-      MBDonwloadedTotal: mbDonwloadedTotal
-    }
+    return fileStats
   }
 
   updateFile = async (fileId: string, file: FileDTO) => {
@@ -66,5 +56,29 @@ export class FileService {
 
   deleteFile = async (fileId: string) => {
     return await this.fileRepository.deleteFile(fileId)
+  }
+
+  getFileStats = async (file: FileDTO) => {
+    if (!file.id) throw new HttpError(400, 'file does not have id')
+
+    const storedFileList = await this.storedFileService.readStoredFileByFileId(file.id)
+
+    const allTodayDownloads: DownloadDTO[] = []
+
+    for (const storedFile of storedFileList) {
+      if (storedFile.id) {
+        const foundTodayDownloads = await this.donwloadFileRepository.readTodayDownloadsByStoredFileId(storedFile.id)
+        allTodayDownloads.push(...foundTodayDownloads)
+      }
+    }
+
+    const numberTodayDonwloads = allTodayDownloads.length
+    const mbDonwloadedToday = file.size * allTodayDownloads.length
+
+    return {
+      ...file,
+      NumberTodayDonwloads: numberTodayDonwloads,
+      MBDonwloadedToday: mbDonwloadedToday
+    }
   }
 }

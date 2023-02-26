@@ -62,7 +62,11 @@ export class StoredFileRepository implements IStoredFileRepository {
   readStoredFileByFileId = async (fileId: string) => {
     if (!fileId) throw new HttpError(400, 'fileId not provided')
 
-    const foundStoredFile = await this.repository.findBy({ fileId })
+    const options: FindOptionsWhere<StoredFileEntity> = {
+      fileId
+    }
+
+    const foundStoredFile = await this.repository.findBy(options)
 
     if (!foundStoredFile) throw new HttpError(400, `foundStoredFile with fileId ${fileId} not found`)
 

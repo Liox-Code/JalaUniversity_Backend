@@ -32,8 +32,10 @@ class FileController {
 
   private readFiles = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const response = await this.fileService.readFiles()
-      res.status(200).json({ message: response })
+      const todayResponse = await this.fileService.readAllFileStats()
+      res.status(200).json({
+        message: todayResponse
+      })
     } catch (error) {
       next(error)
     }
