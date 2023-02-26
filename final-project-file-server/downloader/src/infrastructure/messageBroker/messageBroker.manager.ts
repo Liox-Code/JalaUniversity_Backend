@@ -3,21 +3,24 @@ import { MessageBrokerService } from '../../services/messageBroker.service'
 import { StoredFileService } from '../../services/storedFile.service'
 import { FileService } from '../../services/file.service'
 import { FileDTO } from '../../dto/file.dto'
-import { FileUploder, StoreFileUploder } from '../../types/uploader/uploader.type'
+import { FileUploder, StoreFileUploder, CloudStorageAccountUploder } from '../../types/uploader/uploader.type'
 import { CloudStorageAccountDTO } from '../../dto/cloudStorageAccount.dto'
 import { DonwloadFileService } from '../../services/donwloadFile.service'
+import { CloudStorageAccountService } from '../../services/cloudStorageAccount.service'
 
 class MessageBrokerManager {
   messageBrokerService: MessageBrokerService
   storedFileService: StoredFileService
   fileService: FileService
   donwloadFileService: DonwloadFileService
+  cloudStorageAccountService: CloudStorageAccountService
 
   constructor () {
     this.messageBrokerService = new MessageBrokerService()
     this.storedFileService = new StoredFileService()
     this.fileService = new FileService()
     this.donwloadFileService = new DonwloadFileService()
+    this.cloudStorageAccountService = new CloudStorageAccountService()
     this.init()
   }
 
@@ -27,16 +30,30 @@ class MessageBrokerManager {
 
   private messageAdmin = async (message: Record<string, unknown>):Promise<Record<string, unknown>> => {
     try {
+      if (message.action === 'createCloudStorage') {
+        await this.createCloudStorage(message.data as {account: CloudStorageAccountUploder})
+      }
       if (message.action === 'messageAllFilesUploaded') {
         await this.uploadFile(message.data as {createdFile: FileUploder, allStoredFiles: StoreFileUploder[]})
       }
       if (message.action === 'statsCalculated') {
-        await this.statsCalculated(message.data as {cloudStorageAccount: CloudStorageAccountDTO})
+        await this.statsCalculated(message.data as {account: CloudStorageAccountDTO})
       }
     } catch (error) {
       console.log(error)
     }
     return message
+  }
+
+  private createCloudStorage = async (data: {account: CloudStorageAccountUploder}) => {
+    const { account } = data
+    const cloudStorageAccount: CloudStorageAccountDTO = {
+      id: account.cloudStorageAccountId,
+      email: account.email,
+      numberDownloads: 0,
+      totalSizeDownloads: 0
+    }
+    await this.cloudStorageAccountService.createCloudStorageAccount(cloudStorageAccount)
   }
 
   private uploadFile = async (data: {createdFile: FileUploder, allStoredFiles: StoreFileUploder[]}) => {
