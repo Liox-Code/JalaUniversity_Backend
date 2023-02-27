@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "commonjs",
+    // "strictNullChecks": true,
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
+    "sourceMap": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "removeComments": true,
+    "incremental": true,
+    "noImplicitAny": true,
+    "types": ["reflect-metadata","jest", "@types/jest", "ts-jest"],
+    "lib": ["es2020", "DOM"],
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*","tests/**/*"],
+  "exclude": ["node_modules", "dist"]
+}
