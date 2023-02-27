@@ -7,9 +7,9 @@ class DonwloadFileController {
   storedFileService: DonwloadFileService
 
   constructor () {
+    this.storedFileService = new DonwloadFileService()
     this.router = Router()
     this.initRoutes()
-    this.storedFileService = new DonwloadFileService()
   }
 
   private initRoutes () {

@@ -24,6 +24,7 @@ class FileController {
     try {
       const file = req.body as FileDTO
       const response = await this.fileService.createFile(file)
+
       res.status(200).json({ message: response })
     } catch (error) {
       next(error)

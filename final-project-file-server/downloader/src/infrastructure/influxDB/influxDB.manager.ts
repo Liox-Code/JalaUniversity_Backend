@@ -1,14 +1,5 @@
-import { StoredFileDTO } from '../../dto/storedFile.dto'
-import { MessageBrokerService } from '../../services/messageBroker.service'
-import { StoredFileService } from '../../services/storedFile.service'
-import { FileService } from '../../services/file.service'
-import { FileDTO } from '../../dto/file.dto'
-import { FileUploder, StoreFileUploder, CloudStorageAccountUploder } from '../../types/uploader/uploader.type'
-import { CloudStorageAccountDTO } from '../../dto/cloudStorageAccount.dto'
-import { DonwloadFileService } from '../../services/donwloadFile.service'
-import { CloudStorageAccountService } from '../../services/cloudStorageAccount.service'
-import { HttpError } from '../../middlewares/errorHandler'
 import { InfluxDB, Point } from '@influxdata/influxdb-client'
+import { FileDTO } from '../../dto/file.dto'
 
 export class InfluxDBManager {
   influxClient: InfluxDB
@@ -16,18 +7,19 @@ export class InfluxDBManager {
   constructor () {
     this.influxClient = new InfluxDB({
       url: 'http://localhost:8086',
-      token: 'mytoken'
+      token: 'changeme'
     })
   }
 
-  testInflux = async () => {
+  fileSize = async (file: FileDTO) => {
+    console.log('fileSize')
     try {
-      const writeApi = this.influxClient.getWriteApi('my-org', 'my-bucket')
-      writeApi.useDefaultTags({ host: 'server1' })
+      const writeApi = this.influxClient.getWriteApi('changeme', 'changeme')
+      writeApi.useDefaultTags({ host: 'influxdb' })
 
-      const point = new Point('temperature')
-        .tag('location', 'room1')
-        .floatField('value', 22.5)
+      const point = new Point('fileSize')
+        .tag('location', 'downloader')
+        .floatField('value', file.size)
         .timestamp(new Date())
 
       writeApi.writePoint(point)
@@ -35,7 +27,6 @@ export class InfluxDBManager {
     } catch (error) {
       console.log(error)
     }
-    return message
   }
 }
 

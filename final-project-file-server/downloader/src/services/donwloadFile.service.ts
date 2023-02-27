@@ -8,6 +8,7 @@ import { DownloadDTO } from '../dto/download.dto'
 import { MessageBrokerService } from '../services/messageBroker.service'
 import { StoredFileDTO } from '../dto/storedFile.dto'
 import { HttpError } from '../middlewares/errorHandler'
+import { InfluxDBManager } from '../infrastructure/influxDB/influxDB.manager'
 
 export class DonwloadFileService {
   private storedFileService: StoredFileService
@@ -15,6 +16,7 @@ export class DonwloadFileService {
   private fileService: FileService
   private downloadRepository: IDownloadRepository
   private messageBrokerService: MessageBrokerService
+  influxDBManager: InfluxDBManager
 
   constructor () {
     this.storedFileService = new StoredFileService()
@@ -22,6 +24,7 @@ export class DonwloadFileService {
     this.fileService = new FileService()
     this.downloadRepository = new DownloadRepository()
     this.messageBrokerService = new MessageBrokerService()
+    this.influxDBManager = new InfluxDBManager()
   }
 
   donwloadFile = async (fileId: string) => {
@@ -38,6 +41,8 @@ export class DonwloadFileService {
         storedFileId: storedFile.id
       }
       await this.downloadRepository.createDownload(download)
+
+      await this.influxDBManager.fileSize(donwloadedFile)
     }
     const messageAllFilesUploaded = {
       action: 'calculateDonwloads',
