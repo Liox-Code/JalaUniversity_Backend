@@ -111,4 +111,13 @@ export class StoredFileRepository implements IStoredFileRepository {
     const removeResponse = await this.repository.remove(storedFile)
     return (removeResponse.length > 0)
   }
+
+  deleteStoredFileByCloudStorageAccount = async (cloudStorageAccountId: string) => {
+    const options: FindManyOptions<StoredFileEntity> = {
+      where: { driveId: cloudStorageAccountId }
+    }
+    const storedFile = await this.repository.find(options)
+    const removeResponse = await this.repository.remove(storedFile)
+    return (removeResponse.length > 0)
+  }
 }

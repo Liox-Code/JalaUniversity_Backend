@@ -9,4 +9,5 @@ export interface IStoredFileRepository {
   readStoredFileByStorageAccountId: (storageAccountId: string) => Promise<StoredFileDTO[]>
   updateStoredFile: (storedFileId: string, storedFile: StoredFileDTO) => Promise<true>
   deleteStoredFile: (storedFileId: string) => Promise<boolean>
+  deleteStoredFileByCloudStorageAccount: (cloudStorageAccountId: string) => Promise<boolean>
 }

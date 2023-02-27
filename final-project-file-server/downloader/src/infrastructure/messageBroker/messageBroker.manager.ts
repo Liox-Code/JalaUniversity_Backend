@@ -34,8 +34,14 @@ class MessageBrokerManager {
       if (message.action === 'createCloudStorage') {
         await this.createCloudStorage(message.data as {account: CloudStorageAccountUploder})
       }
+      if (message.action === 'deleteCloudStorage') {
+        await this.deleteCloudStorage(message.data as {cloudStorageAccountId: string})
+      }
       if (message.action === 'messageAllFilesUploaded') {
         await this.uploadFile(message.data as {createdFile: FileUploder, allStoredFiles: StoreFileUploder[]})
+      }
+      if (message.action === 'allFilesUploadedNewAccount') {
+        await this.allFilesUploadedNewAccount(message.data as {storedFile: StoreFileUploder})
       }
       if (message.action === 'statsCalculated') {
         await this.statsCalculated(message.data as {account: CloudStorageAccountDTO, file: FileDTO})
@@ -55,6 +61,12 @@ class MessageBrokerManager {
       totalSizeDownloads: 0
     }
     await this.cloudStorageAccountService.createCloudStorageAccount(cloudStorageAccount)
+  }
+
+  private deleteCloudStorage = async (data: {cloudStorageAccountId: string}) => {
+    const { cloudStorageAccountId } = data
+    await this.cloudStorageAccountService.deleteCloudStorageAccount(cloudStorageAccountId)
+    await this.storedFileService.deleteStoredFileByCloudStorageAccount(cloudStorageAccountId)
   }
 
   private uploadFile = async (data: {createdFile: FileUploder, allStoredFiles: StoreFileUploder[]}) => {
@@ -78,6 +90,14 @@ class MessageBrokerManager {
       })
 
     console.log(`result: ${JSON.stringify(result)}`)
+  }
+
+  private allFilesUploadedNewAccount = async (data: {storedFile: StoreFileUploder}) => {
+    const { storedFile } = data
+
+    const storedFileDTO = new StoredFileDTO(storedFile.fileId, storedFile.cloudStorageAccountId, storedFile.webViewLink, storedFile.webContentLink)
+
+    await this.storedFileService.createStoredFile(storedFileDTO)
   }
 
   private statsCalculated = async (data: {account: CloudStorageAccountDTO, file: FileDTO}) => {

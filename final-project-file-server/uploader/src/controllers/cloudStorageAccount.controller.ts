@@ -81,9 +81,11 @@ class CloudStorageAccountController {
 
       const response = await this.cloudStorageAccountService.deleteCloudStorageAccount(id)
 
-      if (!response) throw new HttpError(409, 'Unable to delete the resource')
+      res.status(200).json({ message: 'Sucesfully' })
 
-      res.status(200).json({ message: `Sucesfully deleted: ${response}` })
+      // if (!response) throw new HttpError(409, 'Unable to delete the resource')
+
+      // res.status(200).json({ message: `Sucesfully deleted: ${response}` })
     } catch (error) {
       next(error)
     }

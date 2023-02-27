@@ -23,7 +23,7 @@ export class GoogleAPIService {
     })
   }
 
-  public async uploadFile (file: Express.Multer.File) {
+  public async uploadFile (file: { originalname: string, mimetype: string, buffer: Buffer }) {
     const { originalname, mimetype, buffer } = file
 
     try {
@@ -64,7 +64,7 @@ export class GoogleAPIService {
     }
   }
 
-  public async readFiles (pageSize: number, pageToken?: string) {
+  public async readFiles (pageSize?: number, pageToken?: string) {
     try {
       const response = await this.drive.files.list({
         q: 'trashed = false',
@@ -80,9 +80,9 @@ export class GoogleAPIService {
     }
   }
 
-  public async deleteFile (fileId: string) {
+  public async deleteFile (driveFileId: string) {
     try {
-      await this.drive.files.delete({ fileId })
+      await this.drive.files.delete({ fileId: driveFileId })
     } catch (error) {
       console.error(error)
     }

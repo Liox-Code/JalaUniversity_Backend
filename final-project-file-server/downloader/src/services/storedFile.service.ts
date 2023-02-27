@@ -40,4 +40,8 @@ export class StoredFileService {
   deleteStoredFile = async (storedFileId: string) => {
     return await this.storedFileRepository.deleteStoredFile(storedFileId)
   }
+
+  deleteStoredFileByCloudStorageAccount = async (storedFileId: string) => {
+    return await this.storedFileRepository.deleteStoredFileByCloudStorageAccount(storedFileId)
+  }
 }
