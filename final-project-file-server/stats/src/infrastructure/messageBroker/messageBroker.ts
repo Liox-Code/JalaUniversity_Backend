@@ -55,7 +55,6 @@ export class MessageBroker {
       await this._channel.bindQueue(assertQueue.queue, exchange.name, '')
 
       await this._channel.consume(assertQueue.queue, async (message) => {
-        console.log(message + '|||||||||||||||||||||||||||||||||||||||||||||')
         if (message?.content) {
           const messageContent = message.content.toString()
           await action(JSON.parse(messageContent))

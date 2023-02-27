@@ -110,8 +110,6 @@ export class StoreFileService {
 
       const storedFile = await this.storeFileRepository.readStoredFileByAccountAndFile(file.id, cloudStorageAccount.cloudStorageAccountId)
 
-      console.log(storedFile)
-
       const updatedFile = await drive.updateCloudFile(storedFile.cloudFileId, {
         originalname: file.fileName,
         mimetype: file.mimeType,

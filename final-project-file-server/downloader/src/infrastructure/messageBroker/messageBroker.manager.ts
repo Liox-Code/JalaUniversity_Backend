@@ -96,7 +96,6 @@ class MessageBrokerManager {
     const { file } = data
     try {
       await this.fileService.deleteFile(file.id)
-      console.log(file)
     } catch (error) {
       console.log(error)
     }
@@ -121,8 +120,6 @@ class MessageBrokerManager {
       .then((res) => {
         return res
       })
-
-    console.log(`result: ${JSON.stringify(result)}`)
   }
 
   private allFilesUploadedNewAccount = async (data: {storedFile: StoreFileUploder}) => {

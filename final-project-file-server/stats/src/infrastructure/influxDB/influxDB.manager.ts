@@ -13,7 +13,6 @@ export class InfluxDBManager {
   }
 
   fileSize = async (cloudStorageAccount: CloudStorageAccountType, file: FileType) => {
-    console.log('fileSize')
     try {
       const writeApi = this.influxClient.getWriteApi('changeme', 'changeme')
       writeApi.useDefaultTags({ host: 'influxdb' })

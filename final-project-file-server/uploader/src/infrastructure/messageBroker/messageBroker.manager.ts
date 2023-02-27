@@ -35,7 +35,7 @@ class MessageBrokerManager {
         await this.newCloudStorageAccount(message.data as { file: FileDTO, cloudStorageAccount: CloudStorageAccountDTO })
       }
       if (message.action === 'deleteAllFilesOnCloud') {
-        await this.deleteAllFilesOnCloud(message.data as {cloudStorageAccountId: CloudStorageAccountDTO})
+        await this.deleteAllFilesOnCloud(message.data as {cloudStorageAccount: CloudStorageAccountDTO})
       }
     } catch (error) {
       console.log(error)

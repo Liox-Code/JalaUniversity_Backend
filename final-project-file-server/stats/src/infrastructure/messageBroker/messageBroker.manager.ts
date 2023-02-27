@@ -23,7 +23,6 @@ class MessageBrokerManager {
         const data = message.data as { account: CloudStorageAccountDTO, file: FileDTO }
         await this.calculateDonwloads(data)
       }
-      console.log(message.action)
     } catch (error) {
       console.log(error)
     }
@@ -32,7 +31,6 @@ class MessageBrokerManager {
 
   private calculateDonwloads = async (data: { account: CloudStorageAccountDTO, file: FileDTO }) => {
     const { account, file } = data
-    console.log(account)
     await this.statService.calculateStats(account, file)
   }
 }
