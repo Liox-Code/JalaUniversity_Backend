@@ -1,4 +1,4 @@
-import { FileService } from './file.service'
+import { FileRepository } from '../database/repositories/file.repository'
 import { StoreFileRepository } from '../database/repositories/storeFile.repository'
 import { CloudStorageAccountRepository } from '../database/repositories/cloudStorageAccount.repository'
 import { StoreFileDTO } from '../dto/storeFile.dto'
@@ -9,13 +9,13 @@ import { FileDTO } from '../dto/file.dto'
 import { CloudStorageAccountDTO } from '../dto/cloudStorageAccount.dto'
 
 export class StoreFileService {
-  private fileService: FileService
+  private fileRepository: FileRepository
   private cloudStorageAccountRepository: CloudStorageAccountRepository
   private messageBrokerService: MessageBrokerService
   private storeFileRepository: StoreFileRepository
 
   constructor () {
-    this.fileService = new FileService()
+    this.fileRepository = new FileRepository()
     this.cloudStorageAccountRepository = new CloudStorageAccountRepository()
     this.messageBrokerService = new MessageBrokerService()
     this.storeFileRepository = new StoreFileRepository()
@@ -24,7 +24,7 @@ export class StoreFileService {
   storeFile = async (file: Express.Multer.File) => {
     const createdFile = await this.storeFileMongoGridFS(file)
 
-    await this.fileService.updateFileStatus(createdFile.id, 'Replicating')
+    await this.fileRepository.updateFileStatus(createdFile.id, 'Replicating')
 
     const messageStoredMongoGridFS = {
       action: 'storedCloudStorage',
@@ -38,7 +38,7 @@ export class StoreFileService {
   }
 
   storeFileMongoGridFS = async (file: Express.Multer.File) => {
-    const createdFile = await this.fileService.createFile(file)
+    const createdFile = await this.fileRepository.createFile(file)
 
     return createdFile
   }
@@ -57,7 +57,7 @@ export class StoreFileService {
       allStoredFiles.push(createdStoreFile)
     }
 
-    await this.fileService.updateFileStatus(createdFile.id, 'Uploaded')
+    await this.fileRepository.updateFileStatus(createdFile.id, 'Uploaded')
 
     console.log('All uploaded sucessfully')
 
@@ -80,11 +80,12 @@ export class StoreFileService {
       buffer: createdFile.content
     })
 
-    if (!uploadedFile || !uploadedFile.webViewLink || !uploadedFile.webContentLink) throw new HttpError(400, 'No files uploaded')
+    if (!uploadedFile || !uploadedFile.id || !uploadedFile.webViewLink || !uploadedFile.webContentLink) throw new HttpError(400, 'No files uploaded')
 
     const storeFileDTO = new StoreFileDTO(
       cloudStorageAccount.cloudStorageAccountId,
       createdFile.id,
+      uploadedFile.id,
       uploadedFile.webViewLink,
       uploadedFile.webContentLink
     )
@@ -94,7 +95,52 @@ export class StoreFileService {
     return createdStoreFile
   }
 
-  deleteStorageFile = async (cloudStorageAccountId: string) => {
+  updateCloudFile = async (file: FileDTO): Promise<StoreFileDTO> => {
+    if (!file.id) throw new HttpError(400, 'Update File does not have id')
+
+    const allCloudStorageAccounts = await this.cloudStorageAccountRepository.readCloudStorageAccounts()
+
+    allCloudStorageAccounts.map(async (cloudStorageAccount) => {
+      const drive = new GoogleAPIService({
+        credentialClientID: cloudStorageAccount.credentialClientID,
+        credentialRedirecrUri: cloudStorageAccount.credentialRedirecrUri,
+        credentialRefreshToken: cloudStorageAccount.credentialRefreshToken,
+        credentialSecret: cloudStorageAccount.credentialSecret
+      })
+
+      const storedFile = await this.storeFileRepository.readStoredFileByAccountAndFile(file.id, cloudStorageAccount.cloudStorageAccountId)
+
+      console.log(storedFile)
+
+      const updatedFile = await drive.updateCloudFile(storedFile.cloudFileId, {
+        originalname: file.fileName,
+        mimetype: file.mimeType,
+        buffer: file.content
+      })
+
+      return updatedFile
+    })
+
+    // if (!uploadedFile || !uploadedFile.id || !uploadedFile.webViewLink || !uploadedFile.webContentLink) throw new HttpError(400, 'No files uploaded')
+
+    // const storeFileDTO = new StoreFileDTO(
+    //   cloudStorageAccount.cloudStorageAccountId,
+    //   file.id,
+    //   uploadedFile.id,
+    //   uploadedFile.webViewLink,
+    //   uploadedFile.webContentLink
+    // )
+
+    // const createdStoreFile = await this.storeFileRepository.createStoreFile(storeFileDTO)
+
+    // return createdStoreFile
+  }
+
+  deleteStoreFileByCloudStorageAccount = async (cloudStorageAccountId: string) => {
     await this.storeFileRepository.deleteStoreFileByCloudStorageAccount(cloudStorageAccountId)
+  }
+
+  deleteStoreFileByFile = async (fileId: string) => {
+    await this.storeFileRepository.deleteStoreFileByFile(fileId)
   }
 }

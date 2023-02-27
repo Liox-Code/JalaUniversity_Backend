@@ -7,6 +7,7 @@ export class StoreFileMapper {
     const storeFileEntity: StoreFileEntity = {
       fileId: new ObjectId(storeFile.fileId),
       cloudStorageAccountId: new ObjectId(storeFile.cloudStorageAccountId),
+      cloudFileId: storeFile.cloudFileId,
       webContentLink: storeFile.webContentLink,
       webViewLink: storeFile.webViewLink
     }
@@ -18,6 +19,7 @@ export class StoreFileMapper {
     const storeFileDTO: StoreFileDTO = {
       fileId: storeFile.fileId.toString(),
       cloudStorageAccountId: storeFile.cloudStorageAccountId.toString(),
+      cloudFileId: storeFile.cloudFileId,
       webContentLink: storeFile.webContentLink,
       webViewLink: storeFile.webViewLink
     }

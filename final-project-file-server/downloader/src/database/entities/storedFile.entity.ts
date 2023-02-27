@@ -12,6 +12,9 @@ export class StoredFileEntity {
     driveId!: string
 
   @Column()
+    cloudFileId!: string
+
+  @Column()
     webViewLink!: string
 
   @Column()

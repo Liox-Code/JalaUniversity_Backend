@@ -37,6 +37,12 @@ class MessageBrokerManager {
       if (message.action === 'deleteCloudStorage') {
         await this.deleteCloudStorage(message.data as {cloudStorageAccountId: string})
       }
+      if (message.action === 'updateFile') {
+        await this.updateFile(message.data as { file: FileDTO })
+      }
+      if (message.action === 'deleteFile') {
+        await this.deleteFile(message.data as { file: FileDTO })
+      }
       if (message.action === 'messageAllFilesUploaded') {
         await this.uploadFile(message.data as {createdFile: FileUploder, allStoredFiles: StoreFileUploder[]})
       }
@@ -69,6 +75,33 @@ class MessageBrokerManager {
     await this.storedFileService.deleteStoredFileByCloudStorageAccount(cloudStorageAccountId)
   }
 
+  private updateFile = async (data: { file: FileUploder }) => {
+    const { file } = data
+    const fileDTO: FileDTO = {
+      id: file.id,
+      fileId: file.fileId,
+      name: file.fileName,
+      numberDownloads: 0,
+      size: file.size,
+      totalSizeDownloads: 0
+    }
+    try {
+      await this.fileService.updateFile(fileDTO.id, fileDTO)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  private deleteFile = async (data: { file: FileUploder }) => {
+    const { file } = data
+    try {
+      await this.fileService.deleteFile(file.id)
+      console.log(file)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   private uploadFile = async (data: {createdFile: FileUploder, allStoredFiles: StoreFileUploder[]}) => {
     const file: FileDTO = {
       id: data.createdFile.id,
@@ -81,7 +114,7 @@ class MessageBrokerManager {
     await this.fileService.createFile(file)
 
     const promises = data.allStoredFiles.map(async (file) => {
-      const storedFileDTO = new StoredFileDTO(file.fileId, file.cloudStorageAccountId, file.webViewLink, file.webContentLink)
+      const storedFileDTO = new StoredFileDTO(file.fileId, file.cloudStorageAccountId, file.cloudFileId, file.webViewLink, file.webContentLink)
       return await this.storedFileService.createStoredFile(storedFileDTO)
     })
     const result = await Promise.all(promises)
@@ -95,7 +128,7 @@ class MessageBrokerManager {
   private allFilesUploadedNewAccount = async (data: {storedFile: StoreFileUploder}) => {
     const { storedFile } = data
 
-    const storedFileDTO = new StoredFileDTO(storedFile.fileId, storedFile.cloudStorageAccountId, storedFile.webViewLink, storedFile.webContentLink)
+    const storedFileDTO = new StoredFileDTO(storedFile.fileId, storedFile.cloudStorageAccountId, storedFile.cloudFileId, storedFile.webViewLink, storedFile.webContentLink)
 
     await this.storedFileService.createStoredFile(storedFileDTO)
   }

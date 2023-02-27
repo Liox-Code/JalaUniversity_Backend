@@ -20,6 +20,7 @@ export interface CloudStorageAccountUploder {
 export interface StoreFileUploder {
   cloudStorageAccountId: string
   fileId: string
+  cloudFileId: string
   webViewLink: string
   webContentLink: string
 }

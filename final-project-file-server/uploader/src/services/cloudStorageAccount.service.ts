@@ -83,7 +83,7 @@ export class CloudStorageAccountService {
       }
     } while (nextPageToken)
 
-    await this.storeFileService.deleteStorageFile(cloudStorageAccountId)
+    await this.storeFileService.deleteStoreFileByCloudStorageAccount(cloudStorageAccountId)
 
     await this.cloudStorageAccountRepository.deleteCloudStorageAccount(cloudStorageAccountId)
 

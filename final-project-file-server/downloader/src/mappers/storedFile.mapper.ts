@@ -7,6 +7,7 @@ export class StoredFileMapper {
       id: storedFile.id,
       fileId: storedFile.fileId,
       driveId: storedFile.driveId,
+      cloudFileId: storedFile.cloudFileId,
       webViewLink: storedFile.webViewLink,
       webContentLink: storedFile.webContentLink
     }
@@ -19,6 +20,7 @@ export class StoredFileMapper {
       id: storedFile.id,
       fileId: storedFile.fileId,
       driveId: storedFile.driveId,
+      cloudFileId: storedFile.cloudFileId,
       webViewLink: storedFile.webViewLink,
       webContentLink: storedFile.webContentLink
     }

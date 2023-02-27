@@ -3,6 +3,7 @@ import { FileEntity } from '../database/entities/file.entity'
 
 export class FileMapper {
   static toEntity (file: FileDTO): FileEntity {
+    console.log(file)
     const fileEntity: FileEntity = {
       id: file.id,
       fileId: file.fileId,
@@ -11,6 +12,7 @@ export class FileMapper {
       numberDownloads: file.numberDownloads,
       totalSizeDownloads: file.totalSizeDownloads
     }
+    console.log(fileEntity)
 
     return fileEntity
   }

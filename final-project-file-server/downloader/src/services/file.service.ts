@@ -55,6 +55,7 @@ export class FileService {
   }
 
   deleteFile = async (fileId: string) => {
+    await this.storedFileService.deleteStoreFileByFile(fileId)
     return await this.fileRepository.deleteFile(fileId)
   }
 

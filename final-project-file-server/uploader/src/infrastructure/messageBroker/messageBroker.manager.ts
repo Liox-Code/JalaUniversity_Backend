@@ -2,14 +2,17 @@ import { CloudStorageAccountDTO } from '../../dto/cloudStorageAccount.dto'
 import { FileDTO } from '../../dto/file.dto'
 import { MessageBrokerService } from '../../services/messageBroker.service'
 import { StoreFileService } from '../../services/storeFile.service'
+import { FileService } from '../../services/file.service'
 
 class MessageBrokerManager {
   messageBrokerService: MessageBrokerService
   storeFileService: StoreFileService
+  fileService: FileService
 
   constructor () {
     this.messageBrokerService = new MessageBrokerService()
     this.storeFileService = new StoreFileService()
+    this.fileService = new FileService()
     this.init()
   }
 
@@ -20,13 +23,13 @@ class MessageBrokerManager {
   private messageAdmin = async (message: Record<string, unknown>):Promise<Record<string, unknown>> => {
     try {
       if (message.action === 'storedCloudStorage') {
-        await this.storedCloudStorage(message.data)
+        await this.storedCloudStorage(message.data as { createdFile: FileDTO })
       }
       if (message.action === 'updateStoredCloudStorage') {
-        await this.updateStoredCloudStorage(message.data)
+        await this.updateStoredCloudStorage(message.data as { createdFile: FileDTO, file: Express.Multer.File })
       }
       if (message.action === 'newCloudStorageAccount') {
-        await this.newCloudStorageAccount(message.data)
+        await this.newCloudStorageAccount(message.data as { file: FileDTO, cloudStorageAccount: CloudStorageAccountDTO })
       }
     } catch (error) {
       console.log(error)

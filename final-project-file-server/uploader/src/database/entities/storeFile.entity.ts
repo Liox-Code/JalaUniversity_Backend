@@ -13,6 +13,9 @@ export class StoreFileEntity {
     fileId!: ObjectId
 
   @Column()
+    cloudFileId!: string
+
+  @Column()
     webViewLink!: string
 
   @Column()

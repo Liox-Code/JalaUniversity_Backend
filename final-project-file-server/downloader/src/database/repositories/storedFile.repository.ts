@@ -120,4 +120,13 @@ export class StoredFileRepository implements IStoredFileRepository {
     const removeResponse = await this.repository.remove(storedFile)
     return (removeResponse.length > 0)
   }
+
+  deleteStoreFileByFile = async (fileId: string) => {
+    const options: FindManyOptions<StoredFileEntity> = {
+      where: { fileId }
+    }
+    const storedFile = await this.repository.find(options)
+    const removeResponse = await this.repository.remove(storedFile)
+    return (removeResponse.length > 0)
+  }
 }

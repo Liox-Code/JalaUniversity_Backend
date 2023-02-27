@@ -2,7 +2,7 @@ import { drive_v3, google } from 'googleapis'
 import { OAuth2Client } from 'google-auth-library'
 import { Readable } from 'stream'
 import { TAPICredentials } from '../types/IStoredFile.type'
-import { json } from 'express'
+import { Console } from 'console'
 
 export class GoogleAPIService {
   private oauth2Client: OAuth2Client
@@ -77,6 +77,26 @@ export class GoogleAPIService {
     } catch (error) {
       console.error(error)
       throw error
+    }
+  }
+
+  public async updateCloudFile (cloudFileId: string, file: { originalname: string, mimetype: string, buffer: Buffer }) {
+    const { originalname, mimetype, buffer } = file
+
+    try {
+      const requestBody = { name: originalname }
+      const bufferData = Buffer.from(buffer)
+      const media = { mimeType: mimetype, body: Readable.from(bufferData) }
+
+      const updatedFile = await this.drive.files.update({
+        fileId: cloudFileId,
+        media,
+        requestBody
+      })
+
+      return updatedFile.data
+    } catch (error) {
+      console.error(error)
     }
   }
 
