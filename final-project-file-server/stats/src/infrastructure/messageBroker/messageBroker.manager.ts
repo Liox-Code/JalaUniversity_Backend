@@ -19,7 +19,6 @@ class MessageBrokerManager {
 
   private messageAdmin = async (message: Record<string, unknown>):Promise<Record<string, unknown>> => {
     try {
-      console.log('message received')
       if (message.action === 'calculateDonwloads') {
         const data = message.data as { account: CloudStorageAccountDTO, file: FileDTO }
         await this.calculateDonwloads(data)
