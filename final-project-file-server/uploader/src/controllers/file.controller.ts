@@ -2,6 +2,7 @@ import { Router, Request, Response, NextFunction } from 'express'
 import { FileService } from '../services/file.service'
 import { StoreFileService } from '../services/storeFile.service'
 import multer from 'multer'
+import { InfluxDBManager } from '../infrastructure/influxDB/influxDB.manager'
 
 class FileController {
   public router: Router
@@ -9,10 +10,12 @@ class FileController {
   private storeFileService
   // private cloudStorageService
   private upload
+  influxDBManager: InfluxDBManager
 
   constructor () {
     this.fileService = new FileService()
     this.storeFileService = new StoreFileService()
+    this.influxDBManager = new InfluxDBManager()
     // this.cloudStorageService = new GoogleAPIService()
     this.upload = multer({ storage: multer.memoryStorage() })
     this.router = Router()
@@ -31,6 +34,7 @@ class FileController {
     try {
       const file = req.file as Express.Multer.File
       const response = await this.storeFileService.storeFile(file)
+      await this.influxDBManager.fileSize(response)
       res.status(200).json({ message: response })
     } catch (error) {
       next(error)
