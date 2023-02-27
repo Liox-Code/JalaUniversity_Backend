@@ -26,6 +26,11 @@ Databases Docker
 
   db.file_entity.drop()
 
+//INFLUXDB
+docker exec -it final-project-file-server-influxdb-1 bash
+influx
+show databases
+
 {
   "email": "bart.simpson.test.drive@gmail.com",
   "credentialClientID": "769487861968-si2om2r5fj90m3rvec5grrkqv4iuemoj.apps.googleusercontent.com",

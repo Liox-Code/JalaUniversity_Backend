@@ -2,16 +2,19 @@ import { CloudStorageAccountDTO } from '../../dto/cloudStorageAccount.dto'
 import { FileDTO } from '../../dto/file.dto'
 import { MessageBrokerService } from '../../services/messageBroker.service'
 import { StoreFileService } from '../../services/storeFile.service'
+import { CloudStorageAccountService } from '../../services/cloudStorageAccount.service'
 import { FileService } from '../../services/file.service'
 
 class MessageBrokerManager {
   messageBrokerService: MessageBrokerService
   storeFileService: StoreFileService
+  cloudStorageAccountService: CloudStorageAccountService
   fileService: FileService
 
   constructor () {
     this.messageBrokerService = new MessageBrokerService()
     this.storeFileService = new StoreFileService()
+    this.cloudStorageAccountService = new CloudStorageAccountService()
     this.fileService = new FileService()
     this.init()
   }
@@ -30,6 +33,9 @@ class MessageBrokerManager {
       }
       if (message.action === 'newCloudStorageAccount') {
         await this.newCloudStorageAccount(message.data as { file: FileDTO, cloudStorageAccount: CloudStorageAccountDTO })
+      }
+      if (message.action === 'deleteAllFilesOnCloud') {
+        await this.deleteAllFilesOnCloud(message.data as {cloudStorageAccountId: CloudStorageAccountDTO})
       }
     } catch (error) {
       console.log(error)
@@ -79,6 +85,12 @@ class MessageBrokerManager {
     } catch (error) {
       console.log(error)
     }
+  }
+
+  private deleteAllFilesOnCloud = async (data: {cloudStorageAccount: CloudStorageAccountDTO}) => {
+    const { cloudStorageAccount: cloudStorageAccountId } = data
+    await this.cloudStorageAccountService.deleteAllFilesOnCloudAccount(cloudStorageAccountId)
+    console.log('All Files deleted Successfully')
   }
 }
 

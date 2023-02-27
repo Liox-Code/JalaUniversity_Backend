@@ -63,6 +63,30 @@ export class CloudStorageAccountService {
   deleteCloudStorageAccount = async (cloudStorageAccountId: string) => {
     const cloudStorageAccount = await this.cloudStorageAccountRepository.readCloudStorageAccount(cloudStorageAccountId)
 
+    const messageDeleteAcountFiles = {
+      action: 'deleteAllFilesOnCloud',
+      data: {
+        cloudStorageAccount
+      }
+    }
+
+    await this.messageBrokerService.publishMessage(messageDeleteAcountFiles)
+
+    await this.storeFileService.deleteStoreFileByCloudStorageAccount(cloudStorageAccountId)
+
+    await this.cloudStorageAccountRepository.deleteCloudStorageAccount(cloudStorageAccountId)
+
+    const message = {
+      action: 'deleteCloudStorage',
+      data: {
+        cloudStorageAccountId
+      }
+    }
+
+    await this.messageBrokerService.publishMessage(message)
+  }
+
+  deleteAllFilesOnCloudAccount = async (cloudStorageAccount: CloudStorageAccountDTO) => {
     const drive = new GoogleAPIService({
       credentialClientID: cloudStorageAccount.credentialClientID,
       credentialRedirecrUri: cloudStorageAccount.credentialRedirecrUri,
@@ -82,18 +106,5 @@ export class CloudStorageAccountService {
         await drive.deleteFile(file.id)
       }
     } while (nextPageToken)
-
-    await this.storeFileService.deleteStoreFileByCloudStorageAccount(cloudStorageAccountId)
-
-    await this.cloudStorageAccountRepository.deleteCloudStorageAccount(cloudStorageAccountId)
-
-    const messageCreatedAccount = {
-      action: 'deleteCloudStorage',
-      data: {
-        cloudStorageAccountId
-      }
-    }
-
-    await this.messageBrokerService.publishMessage(messageCreatedAccount)
   }
 }

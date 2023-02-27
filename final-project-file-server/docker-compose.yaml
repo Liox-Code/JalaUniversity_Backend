@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+
+  influxdb:
+    image: influxdb:2.1
+    ports:
+      - "8086:8086"
+    environment:
+      - INFLUXDB_DB=grafana
+      - INFLUXDB_ADMIN_USER=admin
+      - INFLUXDB_ADMIN_PASSWORD=admin
+      - INFLUXDB_USER=grafana
+      - INFLUXDB_USER_PASSWORD=grafana
+      # - DOCKER_INFLUXDB_INIT_MODE=setup
+      # - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      # - DOCKER_INFLUXDB_INIT_PASSWORD=admin
+      # - DOCKER_INFLUXDB_INIT_ORG=fileorg
+      # - DOCKER_INFLUXDB_INIT_BUCKET=filebucket
+      # - DOCKER_INFLUXDB_INIT_RETENTION=1d
+      # - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=filetoken
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    links:
+      - influxdb
+    depends_on:
+      - influxdb
