@@ -120,20 +120,6 @@ export class StoreFileService {
 
       return updatedFile
     })
-
-    // if (!uploadedFile || !uploadedFile.id || !uploadedFile.webViewLink || !uploadedFile.webContentLink) throw new HttpError(400, 'No files uploaded')
-
-    // const storeFileDTO = new StoreFileDTO(
-    //   cloudStorageAccount.cloudStorageAccountId,
-    //   file.id,
-    //   uploadedFile.id,
-    //   uploadedFile.webViewLink,
-    //   uploadedFile.webContentLink
-    // )
-
-    // const createdStoreFile = await this.storeFileRepository.createStoreFile(storeFileDTO)
-
-    // return createdStoreFile
   }
 
   deleteStoreFileByCloudStorageAccount = async (cloudStorageAccountId: string) => {

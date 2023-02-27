@@ -1,18 +1,15 @@
 import { Router, Request, Response, NextFunction } from 'express'
 import { DonwloadFileService } from '../services/donwloadFile.service'
-// import { InfluxDBManager } from '../infrastructure/influxDB/influxDB.manager'
 import { HttpError } from '../middlewares/errorHandler'
 
 class DonwloadFileController {
   public router: Router
   storedFileService: DonwloadFileService
-  // influxDBManager: InfluxDBManager
 
   constructor () {
     this.router = Router()
     this.initRoutes()
     this.storedFileService = new DonwloadFileService()
-    // this.influxDBManager = new InfluxDBManager()
   }
 
   private initRoutes () {
@@ -21,7 +18,6 @@ class DonwloadFileController {
 
   private download = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // await this.influxDBManager.testInflux()
       const { id } = req.params
 
       if (!id) throw new HttpError(400, 'It is needed a query parameter')
